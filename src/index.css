@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes pulse-glow {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px #570df8aa);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px #570df8aa);
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px #570df8aa);
+  }
+}
+
+.animate-pulse {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
