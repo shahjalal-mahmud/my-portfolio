@@ -1,4 +1,4 @@
-import { FaGithub, FaLinkedin, FaTwitter, FaHeart } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -31,7 +31,7 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-2 text-primary">Follow Me</h3>
           <div className="flex justify-center md:justify-start gap-5 mt-2 text-xl">
             <a
-              href="https://github.com/yourprofile"
+              href="https://github.com/shahjalal-mahmud"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
@@ -40,7 +40,7 @@ const Footer = () => {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/yourprofile"
+              href="https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -49,13 +49,13 @@ const Footer = () => {
               <FaLinkedin />
             </a>
             <a
-              href="https://twitter.com/yourprofile"
+              href="https://www.facebook.com/ShahjalalMahmud100/"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Twitter"
+              aria-label="Facebook"
               className="hover:text-primary transition-colors"
             >
-              <FaTwitter />
+              <FaFacebook />
             </a>
           </div>
         </div>
