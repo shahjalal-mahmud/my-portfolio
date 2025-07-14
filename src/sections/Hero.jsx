@@ -54,7 +54,7 @@ const Hero = () => {
         >
           <div className="relative group animate-float">
             <img
-              src="/src/assets/img/profile.jpg"
+              src="/public/img/profile.jpg"
               alt="Profile"
               className="w-64 h-64 sm:w-72 sm:h-72 rounded-full shadow-2xl border-4 border-primary object-cover transition-transform duration-500 group-hover:scale-105"
             />

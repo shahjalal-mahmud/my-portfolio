@@ -8,7 +8,7 @@ const NotFound = () => {
         {/* Animated Illustration */}
         <div className="flex justify-center">
           <img
-            src="/src/assets/img/Oops.png"
+            src="/public/img/Oops.png"
             alt="Lost in space"
             className="w-72 md:w-96 animate-float"
           />
