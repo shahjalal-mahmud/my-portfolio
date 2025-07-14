@@ -1,18 +1,10 @@
 // src/components/GitHubStats.jsx
 import GitHubCalendar from "react-github-calendar";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 
 const GitHubStats = () => {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-  const html = document.querySelector("html");
-  if (html) {
-    setIsDark(html.classList.contains("dark"));
-  }
-}, []);
-
-
+  const { isDark } = useContext(ThemeContext);
   const username = "shahjalal-mahmud";
 
   return (
@@ -22,7 +14,6 @@ const GitHubStats = () => {
           GitHub Contributions
         </h2>
 
-        {/* Contribution Heatmap */}
         <div className="overflow-x-auto pb-10" data-aos="zoom-in">
           <GitHubCalendar
             username={username}
@@ -30,30 +21,35 @@ const GitHubStats = () => {
             blockMargin={5}
             color="#570df8"
             fontSize={14}
-            theme={isDark ? "dark" : "light"}
+            colorScheme={isDark ? "dark" : "light"} // ✅ Reacts to toggle
           />
         </div>
 
-        {/* Profile Stats Card */}
-        <div className="flex flex-col lg:flex-row justify-center items-center gap-6" data-aos="fade-up">
+        <div
+          className="flex flex-col lg:flex-row justify-center items-center gap-6"
+          data-aos="fade-up"
+        >
           <img
-            src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=${isDark ? "tokyonight" : "default"}&hide_border=false&border_radius=10`}
+            src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=${
+              isDark ? "tokyonight" : "default"
+            }&hide_border=false&border_radius=10`}
             alt="GitHub Stats"
             className="max-w-full rounded-xl shadow-md"
           />
-
-          {/* Most Used Languages */}
           <img
-            src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=${isDark ? "tokyonight" : "default"}&hide_border=false&border_radius=10`}
+            src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=${
+              isDark ? "tokyonight" : "default"
+            }&hide_border=false&border_radius=10`}
             alt="Top Languages"
             className="max-w-full rounded-xl shadow-md"
           />
         </div>
 
-        {/* Streak Stats */}
         <div className="pt-10" data-aos="fade-up">
           <img
-            src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=${isDark ? "tokyonight" : "default"}&hide_border=false&border_radius=10`}
+            src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=${
+              isDark ? "tokyonight" : "default"
+            }&hide_border=false&border_radius=10`}
             alt="GitHub Streak Stats"
             className="max-w-full rounded-xl shadow-md mx-auto"
           />
