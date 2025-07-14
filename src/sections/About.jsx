@@ -50,8 +50,8 @@ const About = () => {
               <FaDownload className="text-primary" />
               <a
                 href="/cv.pdf"
+                download="Shahjalal_CV.pdf"
                 className="underline hover:text-primary transition"
-                download
               >
                 Download CV
               </a>
