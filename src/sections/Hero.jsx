@@ -3,6 +3,7 @@ import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 const Hero = () => {
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-base-200 to-base-100 pt-24 px-6">
+
       <div className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center gap-12">
 
         {/* Text Content */}
