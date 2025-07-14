@@ -1,4 +1,4 @@
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 const Hero = () => {
   return (
@@ -40,9 +40,9 @@ const Hero = () => {
 
           {/* Social Icons */}
           <div className="flex justify-center lg:justify-start gap-6 text-2xl pt-6 text-gray-700 dark:text-gray-300">
-            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaGithub /></a>
-            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaLinkedin /></a>
-            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaTwitter /></a>
+            <a href="https://github.com/shahjalal-mahmud" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaGithub /></a>
+            <a href="https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaLinkedin /></a>
+            <a href="https://www.facebook.com/ShahjalalMahmud100/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaFacebook /></a>
           </div>
         </div>
 
