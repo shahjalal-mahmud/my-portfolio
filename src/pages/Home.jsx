@@ -8,6 +8,7 @@ import Projects from "../sections/Projects";
 import GitHubStats from "../components/GitHubStats";
 import Contact from "../sections/Contact";
 import Footer from "../components/Footer";
+import TestimonialsCertificates from "../sections/TestimonialsCertificates";
 
 const Home = () => {
   return (
@@ -19,6 +20,7 @@ const Home = () => {
       <Roadmap />
       <Skills />
       <Projects />
+      <TestimonialsCertificates/>
       <GitHubStats />
       <Contact />
       <Footer />
