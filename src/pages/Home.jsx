@@ -10,6 +10,8 @@ import Contact from "../sections/Contact";
 import Footer from "../components/Footer";
 import TestimonialsCertificates from "../sections/TestimonialsCertificates";
 import EducationTimeline from "../components/EducationTimeline";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   return (
@@ -26,6 +28,7 @@ const Home = () => {
       <GitHubStats />
       <Contact />
       <Footer />
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 };

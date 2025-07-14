@@ -1,4 +1,4 @@
-import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaGithub, FaLinkedin} from "react-icons/fa";
 
 const Hero = () => {
   return (
@@ -54,7 +54,7 @@ const Hero = () => {
         >
           <div className="relative group animate-float">
             <img
-              src="/public/img/profile.jpg"
+              src="/img/profile.jpg"
               alt="Profile"
               className="w-64 h-64 sm:w-72 sm:h-72 rounded-full shadow-2xl border-4 border-primary object-cover transition-transform duration-500 group-hover:scale-105"
             />
