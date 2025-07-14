@@ -9,6 +9,7 @@ import GitHubStats from "../components/GitHubStats";
 import Contact from "../sections/Contact";
 import Footer from "../components/Footer";
 import TestimonialsCertificates from "../sections/TestimonialsCertificates";
+import EducationTimeline from "../components/EducationTimeline";
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
       <Navbar />
       <Hero />
       <About />
+      <EducationTimeline/>
       <Experience />
       <Roadmap />
       <Skills />

@@ -9,11 +9,13 @@ import Footer from "./components/Footer";
 import Experience from "./components/Experience";
 import Roadmap from "./components/Roadmap";
 import GitHubStats from "./components/GitHubStats";
+import EducationTimeline from './components/EducationTimeline';
 
 function App() {
   const sections = [
     { component: <Hero key="hero" />, name: "Hero" },
     { component: <About key="about" />, name: "About" },
+    { component: <EducationTimeline key="education"/>, name: "Education"},
     { component: <Experience key="experience" />, name: "Experience" },
     { component: <Roadmap key="roadmap" />, name: "Roadmap" },
     { component: <Skills key="skills" />, name: "Skills" },
