@@ -16,7 +16,7 @@ const projects = [
     description: "A health monitoring app with step counter, calorie tracker, and daily goals. Uses sensors & Firebase.",
     skills: ["Kotlin", "Firebase", "Sensor API"],
     extras: ["MVVM", "LiveData", "Jetpack Navigation"],
-    image: "/projects/healthtracker.png",
+    image: "/projects/healthtracker.avif",
     github: "https://github.com/yourusername/health-tracker",
     live: "#",
   },
@@ -25,7 +25,7 @@ const projects = [
     description: "Android app for fresh graduates to search local jobs. Integrated job API with filters and bookmarks.",
     skills: ["Kotlin", "Jetpack Compose", "REST API"],
     extras: ["Retrofit", "Hilt", "MVVM"],
-    image: "/projects/jobfinder.png",
+    image: "/projects/jobfinder.webp",
     github: "https://github.com/yourusername/jobfinder-bd",
     live: "#",
   },
@@ -45,9 +45,14 @@ const Projects = () => {
               data-aos="zoom-in-up"
               data-aos-delay={index * 100}
             >
-              <figure className="overflow-hidden">
-                <img src={project.image} alt={project.name} className="w-full h-48 object-cover" />
+              <figure className="w-full h-48 overflow-hidden rounded-t-xl">
+                <img
+                  src={project.image}
+                  alt={project.name}
+                  className="w-full h-full object-cover object-center"
+                />
               </figure>
+
               <div className="card-body text-left">
                 <h3 className="text-xl font-bold">{project.name}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">{project.description}</p>
