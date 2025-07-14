@@ -7,7 +7,10 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import ThemeProvider from "./context/ThemeProvider";
 
-AOS.init({ duration: 1000 });
+AOS.init({ 
+  duration: 800,
+  offset: 120,
+ });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
