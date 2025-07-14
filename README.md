@@ -67,6 +67,8 @@ This project showcases my journey as an Android and Full-Stack Developer — wit
 git clone https://github.com/shahjalal-mahmud/my-portfolio.git
 cd my-portfolio
 
+---
+
 ## 📬 Contact  
 Want to connect?  
 
