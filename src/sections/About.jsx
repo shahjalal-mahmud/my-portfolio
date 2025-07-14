@@ -23,7 +23,7 @@ const About = () => {
           data-aos="fade-left"
         >
           <h2 className="text-4xl font-bold">About Me</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg text-gray-800 dark:text-gray-300">
             I’m a passionate software enthusiast currently pursuing Computer Science. I love building sleek and modern apps for the web and mobile using the latest tech.
           </p>
 
