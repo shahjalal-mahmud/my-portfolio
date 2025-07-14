@@ -7,8 +7,8 @@ This project showcases my journey as an Android and Full-Stack Developer — wit
 
 ## 📍 Live Preview
 
-🔗 **[View My Portfolio](https://your-portfolio-url.com)**  
-🛠️ _Hosted with Vite + GitHub Pages / Netlify / Vercel (customize this)_
+🔗 **[View My Portfolio](https://shahjalal-portfolio.netlify.app/)**  
+🛠️ _Hosted with Netlify
 
 ---
 
