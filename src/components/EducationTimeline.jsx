@@ -1,7 +1,12 @@
-// src/components/EducationTimeline.jsx
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+
 const EducationTimeline = () => {
   return (
-    <section id="education" className="bg-base-100 dark:bg-base-200 text-gray-900 dark:text-white px-6 pt-12 pb-24">
+    <section
+      id="education"
+      className="bg-base-100 dark:bg-base-200 text-gray-900 dark:text-white px-6 pt-12 pb-24"
+    >
       <div
         className="max-w-6xl mx-auto px-4"
         data-aos="fade-up"
@@ -52,25 +57,33 @@ const EducationTimeline = () => {
               return (
                 <div
                   key={idx}
-                  className={`relative flex flex-col lg:flex-row items-center ${isLeft ? "lg:justify-start" : "lg:justify-end"
-                    }`}
+                  className={`relative flex flex-col lg:flex-row items-center ${
+                    isLeft ? "lg:justify-start" : "lg:justify-end"
+                  }`}
                   data-aos={isLeft ? "fade-right" : "fade-left"}
                   data-aos-delay={idx * 100}
                 >
                   {/* Dot */}
                   <div className="absolute top-5 lg:top-1/2 lg:-translate-y-1/2 left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-4 border-white dark:border-base-100 z-20"></div>
 
-                  {/* Timeline Content */}
-                  <div
-                    className={`bg-white dark:bg-base-300 shadow-lg rounded-lg p-6 w-full lg:w-[45%] z-10 ${isLeft ? "lg:mr-auto" : "lg:ml-auto"
-                      }`}
+                  {/* Timeline Content with animation */}
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className={`bg-white dark:bg-base-300 shadow-lg hover:shadow-2xl rounded-xl p-6 w-full lg:w-[45%] z-10 transition-all duration-300 ease-in-out ${
+                      isLeft ? "lg:mr-auto" : "lg:ml-auto"
+                    }`}
                   >
                     <div className="text-sm text-primary font-semibold mb-1">
                       {item.year}
                     </div>
-                    <h4 className="text-xl font-bold">{item.title}</h4>
-                    <p className="text-gray-700 dark:text-gray-300">{item.desc}</p>
-                  </div>
+                    <h4 className="text-xl font-bold text-gray-900 dark:text-white">
+                      {item.title}
+                    </h4>
+                    <p className="text-gray-800 dark:text-gray-300">
+                      {item.desc}
+                    </p>
+                  </motion.div>
                 </div>
               );
             })}
