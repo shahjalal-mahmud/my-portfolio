@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
+import '../styles/glitch.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +40,7 @@ const Navbar = () => {
       </div>
 
       {/* Right Side: Theme Toggle + Mobile Menu Button */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-6 ml-2 sm:ml-4 md:ml-6">
         <ThemeToggle />
 
         {/* Mobile Menu Icon */}
@@ -53,9 +54,8 @@ const Navbar = () => {
 
       {/* Mobile Menu Drawer */}
       <div
-        className={`lg:hidden fixed top-0 right-0 h-full w-64 bg-base-100 shadow-xl transform ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out`}
+        className={`lg:hidden fixed top-0 right-0 h-full w-64 bg-base-100 shadow-xl transform ${isOpen ? "translate-x-0" : "translate-x-full"
+          } transition-transform duration-300 ease-in-out`}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <h2 className="text-xl font-bold text-primary">Menu</h2>
