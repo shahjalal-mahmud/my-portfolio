@@ -103,12 +103,15 @@ const About = () => {
             <h3 className="text-xl font-semibold mb-3">Tech Stack</h3>
             <div className="flex flex-wrap gap-2 justify-center md:justify-start">
               {["Kotlin", "Jetpack Compose", "Java", "XML", "Firebase", "Git", "LeetCode", "CodeForces", "Android Studio", "Figma"].map((tech, idx) => (
-                <span
+                <motion.span
                   key={idx}
-                  className="bg-gray-200 dark:bg-gray-700 dark:text-white text-sm px-3 py-1 rounded-full shadow-sm hover:bg-primary hover:text-white transition"
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="bg-gray-200 dark:bg-gray-700 dark:text-white text-sm px-3 py-1 rounded-full shadow-sm cursor-pointer transition-colors duration-300 ease-in-out hover:bg-primary hover:text-white"
                 >
                   {tech}
-                </span>
+                </motion.span>
               ))}
             </div>
           </div>
@@ -155,12 +158,15 @@ const About = () => {
                 <h4 className="text-xl font-semibold mb-3">Tech Stack</h4>
                 <div className="flex flex-wrap gap-2">
                   {["Kotlin", "Jetpack Compose", "Java", "XML", "Firebase", "Git", "LeetCode", "CodeForces", "Android Studio", "Figma"].map((tech, idx) => (
-                    <span
+                    <motion.span
                       key={idx}
-                      className="bg-gray-200 dark:bg-gray-700 dark:text-white text-sm px-3 py-1 rounded-full shadow-sm hover:bg-primary hover:text-white transition"
+                      whileHover={{ scale: 1.08 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      className="bg-gray-200 dark:bg-gray-700 dark:text-white text-sm px-3 py-1 rounded-full shadow-sm cursor-pointer transition-colors duration-300 ease-in-out hover:bg-primary hover:text-white"
                     >
                       {tech}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
               </div>
