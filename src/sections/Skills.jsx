@@ -1,47 +1,55 @@
 import {
   FaAndroid,
-  FaReact,
-  FaNode,
-  FaCode,
-  FaDatabase,
   FaJava,
   FaGithub,
-  FaCss3,
-  FaHtml5,
-  FaPython,
-  FaCuttlefish,
+  FaBolt,
+  FaCloud,
   FaLaptopCode,
   FaUsers,
-  FaCloud,
-  FaBolt,
+  FaPuzzlePiece,
 } from "react-icons/fa";
+import { BiPlug, BiData } from "react-icons/bi";
+import { MdArchitecture } from "react-icons/md";
 // eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import SkillMatrix from "../components/SkillMatrix";
 
 const skills = [
-  { name: "Kotlin", icon: <FaAndroid />, category: "App Development", level: 90 },
-  { name: "Jetpack Compose", icon: <FaAndroid />, category: "App Development", level: 85 },
-  { name: "Java", icon: <FaJava />, category: "Programming", level: 80 },
-  { name: "C", icon: <FaCuttlefish />, category: "Programming", level: 75 },
-  { name: "C++", icon: <FaCode />, category: "Programming", level: 70 },
-  { name: "Python", icon: <FaPython />, category: "Programming", level: 65 },
-  { name: "DSA", icon: <FaBolt />, category: "Problem Solving", level: 80 },
-  { name: "HTML", icon: <FaHtml5 />, category: "Frontend", level: 95 },
-  { name: "CSS", icon: <FaCss3 />, category: "Frontend", level: 90 },
-  { name: "Tailwind CSS", icon: <FaCss3 />, category: "Frontend", level: 85 },
-  { name: "React.js", icon: <FaReact />, category: "Frontend", level: 80 },
-  { name: "Node.js", icon: <FaNode />, category: "Backend", level: 70 },
-  { name: "Express.js", icon: <FaNode />, category: "Backend", level: 70 },
-  { name: "MongoDB", icon: <FaDatabase />, category: "Backend", level: 65 },
-  { name: "Firebase", icon: <FaCloud />, category: "Backend", level: 75 },
-  { name: "Git & GitHub", icon: <FaGithub />, category: "Tools", level: 85 },
-  { name: "VS Code", icon: <FaLaptopCode />, category: "Tools", level: 90 },
-  { name: "Communication", icon: <FaUsers />, category: "Soft Skills", level: 80 },
-  { name: "Teamwork", icon: <FaUsers />, category: "Soft Skills", level: 85 },
+  { name: "Kotlin", icon: <FaAndroid />, category: "Android Development", level: 90 },
+  { name: "Jetpack Compose", icon: <FaAndroid />, category: "Android Development", level: 85 },
+  { name: "Android SDK", icon: <FaAndroid />, category: "Android Development", level: 80 },
+  { name: "Room Database", icon: <BiData />, category: "Android Development", level: 75 },
+  { name: "Retrofit", icon: <BiPlug />, category: "Android Development", level: 80 },
+  { name: "Coroutines/Flow", icon: <FaBolt />, category: "Android Development", level: 75 },
+  { name: "MVVM Architecture", icon: <MdArchitecture />, category: "Android Development", level: 80 },
+
+  { name: "Java", icon: <FaJava />, category: "Programming & Problem Solving", level: 80 },
+  { name: "Data Structures", icon: <FaBolt />, category: "Programming & Problem Solving", level: 85 },
+  { name: "Algorithms", icon: <FaBolt />, category: "Programming & Problem Solving", level: 80 },
+
+  { name: "Git & GitHub", icon: <FaGithub />, category: "Tools & Collaboration", level: 85 },
+  { name: "Firebase", icon: <FaCloud />, category: "Tools & Collaboration", level: 75 },
+  { name: "Android Studio", icon: <FaLaptopCode />, category: "Tools & Collaboration", level: 90 },
+  { name: "Problem Solving", icon: <FaPuzzlePiece />, category: "Tools & Collaboration", level: 90 },
+  { name: "Collaboration", icon: <FaUsers />, category: "Tools & Collaboration", level: 85 },
+];
+
+const categories = [
+  "All",
+  "Android Development",
+  "Programming & Problem Solving",
+  "Tools & Collaboration",
 ];
 
 const Skills = () => {
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredSkills =
+    activeCategory === "All"
+      ? skills
+      : skills.filter((skill) => skill.category === activeCategory);
+
   return (
     <>
       <section
@@ -49,19 +57,42 @@ const Skills = () => {
         className="py-24 px-6 bg-base-200 text-gray-900 dark:text-white"
       >
         <div className="max-w-7xl mx-auto">
-          <h2
-            className="text-4xl font-extrabold text-center mb-16"
-            data-aos="fade-up"
-          >
+          <h2 className="text-4xl font-extrabold text-center mb-12" data-aos="fade-up">
             My Skills
           </h2>
 
-          <div
+          {/* Animated Tabs */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12" data-aos="fade-up">
+            {categories.map((cat, index) => (
+              <motion.button
+                key={index}
+                onClick={() => setActiveCategory(cat)}
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className={`px-5 py-2 text-sm font-semibold rounded-full border transition-all duration-300 shadow-sm backdrop-blur-md
+                ${
+                  activeCategory === cat
+                    ? "bg-gradient-to-r from-primary to-secondary text-white border-transparent"
+                    : "bg-base-100 dark:bg-base-300 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-primary hover:text-white"
+                }`}
+              >
+                {cat}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Animated Skill Cards */}
+          <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8"
             data-aos="fade-up"
             data-aos-delay="100"
+            key={activeCategory}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            {skills.map((skill, index) => (
+            {filteredSkills.map((skill, index) => (
               <div
                 key={index}
                 className="bg-base-100 dark:bg-base-300 border border-primary rounded-xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
@@ -96,7 +127,7 @@ const Skills = () => {
                 </p>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
