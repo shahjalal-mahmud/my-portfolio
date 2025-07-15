@@ -1,4 +1,4 @@
-import { FaFacebook, FaGithub, FaLinkedin} from "react-icons/fa";
+import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa";
 
 const Hero = () => {
   return (
@@ -21,7 +21,9 @@ const Hero = () => {
           </h1>
 
           <p className="text-md sm:text-lg text-gray-800 dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            I build modern Android apps using <strong className="text-primary">Kotlin</strong> & <strong className="text-primary">Jetpack Compose</strong>. Currently diving into full-stack development to create powerful digital products from end to end.
+            A passionate <strong className="text-primary">Android Developer</strong> and CSE student at Northern University of Business & Technology, Khulna. I build sleek 
+            apps with <strong className="text-primary">Kotlin</strong> & <strong className="text-primary">Jetpack Compose</strong>, solve problems with <strong className="text-primary">DSA</strong>, 
+            and thrive on turning ideas into reality. Let’s create something amazing!
           </p>
 
           {/* Tags or Badges */}

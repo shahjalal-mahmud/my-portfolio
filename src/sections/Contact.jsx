@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaLinkedin, FaGithub, FaFacebook } from "react-icons/fa";
 import emailjs from "emailjs-com";
 import { toast } from "react-toastify";
-import { FaTwitter } from "react-icons/fa";
 
 const Contact = () => {
   const formRef = useRef();
@@ -62,7 +61,7 @@ const Contact = () => {
 
             <div className="flex items-center gap-6 mt-6">
               <a
-                href="https://linkedin.com/in/yourprofile"
+                href="https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
@@ -71,7 +70,7 @@ const Contact = () => {
                 <FaLinkedin className="text-3xl" />
               </a>
               <a
-                href="https://github.com/yourprofile"
+                href="https://github.com/shahjalal-mahmud"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub"
@@ -80,13 +79,13 @@ const Contact = () => {
                 <FaGithub className="text-3xl" />
               </a>
               <a
-                href="https://twitter.com/yourprofile"
+                href="https://www.facebook.com/ShahjalalMahmud100/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Twitter"
                 className="hover:text-primary transition-colors duration-300"
               >
-                <FaTwitter className="text-3xl" />
+                <FaFacebook className="text-3xl" />
               </a>
             </div>
           </div>

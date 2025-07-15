@@ -1,14 +1,21 @@
-// src/components/About.jsx
 import {
   FaMapMarkerAlt,
   FaEnvelope,
   FaDownload,
   FaUserGraduate,
 } from "react-icons/fa";
+import { useState } from "react";
 
 const About = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => setIsExpanded(!isExpanded);
+
   return (
-    <section id="about" className="py-24 px-6 bg-base-100 dark:bg-base-200 text-gray-900 dark:text-white">
+    <section
+      id="about"
+      className="py-24 px-6 bg-base-100 dark:bg-base-200 text-gray-900 dark:text-white"
+    >
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
         {/* Profile Image */}
         <div
@@ -29,9 +36,40 @@ const About = () => {
           data-aos="fade-left"
         >
           <h2 className="text-4xl font-extrabold">About Me</h2>
+
           <p className="text-md sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-            I'm a curious and passionate software developer currently pursuing my Bachelor's in Computer Science. I specialize in Android development using <span className="text-primary font-semibold">Kotlin & Jetpack Compose</span>, and I’m expanding into full-stack development using modern web technologies.
+            I’m a 2nd-year Computer Science student at Northern University of
+            Business & Technology, Khulna, with a deep love for Android app
+            development. Currently, I’m mastering Kotlin and Jetpack Compose to
+            build intuitive, high-performance mobile apps.
+            {isExpanded && (
+              <>
+                {" "}
+                To sharpen my problem-solving skills, I regularly practice Data
+                Structures & Algorithms on LeetCode and CodeForces. I believe in
+                learning by doing, so I constantly work on real-world projects
+                that challenge me and add value.
+                <br />
+                <br />
+                I initially explored the MERN stack, but Android development
+                truly captivated me—where creativity meets functionality. Now,
+                I’m fully committed to becoming a skilled Android Developer,
+                crafting apps that simplify and enhance daily life.
+                <br />
+                <br />
+                When I’m not coding, I’m either learning new tech, collaborating
+                on projects, or brainstorming solutions to interesting problems.
+                Let’s connect and build something impactful together!
+              </>
+            )}
           </p>
+
+          <button
+            onClick={toggleExpanded}
+            className="text-primary underline text-sm font-medium transition hover:text-secondary"
+          >
+            {isExpanded ? "See Less" : "See More"}
+          </button>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mt-4">
             <div className="flex items-center gap-3">
@@ -66,12 +104,12 @@ const About = () => {
                 "Kotlin",
                 "Jetpack Compose",
                 "Java",
-                "React",
-                "Tailwind CSS",
+                "XML",
                 "Firebase",
                 "Git",
-                "Node.js",
-                "MongoDB",
+                "LeetCode",
+                "CodeForces",
+                "Android Studio",
                 "Figma",
               ].map((tech, idx) => (
                 <span
