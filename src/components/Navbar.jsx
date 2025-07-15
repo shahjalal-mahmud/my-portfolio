@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
-import '../styles/glitch.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
