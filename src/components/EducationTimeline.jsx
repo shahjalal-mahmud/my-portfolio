@@ -19,13 +19,13 @@ const EducationTimeline = () => {
             {[
               {
                 title: "MSc in Computer Science",
-                year: "2025 - 2027",
-                desc: "XYZ University (Coming Soon)",
+                year: "2027 - 2029",
+                desc: "Khulna University (Coming Soon)",
               },
               {
                 title: "BSc in Computer Science & Engineering",
-                year: "2021 - 2025",
-                desc: "North Western University, Khulna",
+                year: "2022 - 2027",
+                desc: "Northern University of Business and Technology, Khulna",
               },
               {
                 title: "Freelance Android Developer",
@@ -40,12 +40,12 @@ const EducationTimeline = () => {
               {
                 title: "HSC (Science)",
                 year: "2019 - 2021",
-                desc: "ABC College, Dhaka",
+                desc: "Govt. Brajalal College, Khulna",
               },
               {
                 title: "SSC (Science)",
                 year: "2017 - 2019",
-                desc: "XYZ High School, Khulna",
+                desc: "Govt. Jalma Chakrakhali High School",
               },
             ].map((item, idx) => {
               const isLeft = idx % 2 === 0;
