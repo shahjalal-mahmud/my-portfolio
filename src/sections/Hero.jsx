@@ -1,4 +1,7 @@
 import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+import { Typewriter } from "react-simple-typewriter";
 
 const Hero = () => {
   return (
@@ -13,7 +16,15 @@ const Hero = () => {
           data-aos-duration="1200"
         >
           <h2 className="text-md sm:text-lg tracking-wider uppercase text-primary font-semibold">
-            Android & Web Developer
+            <Typewriter
+              words={["Android App Developer", "DSA Problem Solver", "Tech Explorer"]}
+              loop={true}
+              cursor
+              cursorStyle="|"
+              typeSpeed={80}
+              deleteSpeed={50}
+              delaySpeed={1500}
+            />
           </h2>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-gray-900 dark:text-white drop-shadow-sm">
@@ -26,12 +37,18 @@ const Hero = () => {
             and thrive on turning ideas into reality. Let’s create something amazing!
           </p>
 
-          {/* Tags or Badges */}
+          {/* Tech Stack Badges */}
           <div className="flex flex-wrap justify-center lg:justify-start gap-2 text-sm">
-            <span className="bg-primary text-white px-3 py-1 rounded-full">Kotlin</span>
-            <span className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-3 py-1 rounded-full">Jetpack Compose</span>
-            <span className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-3 py-1 rounded-full">Web Dev</span>
-            <span className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-3 py-1 rounded-full">React</span>
+            {["Kotlin", "Jetpack Compose", "Firebase", "DSA"].map((tech, idx) => (
+              <motion.span
+                key={idx}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-gray-200 dark:bg-gray-700 dark:text-white text-sm px-3 py-1 rounded-full shadow hover:bg-primary hover:text-white transition"
+              >
+                {tech}
+              </motion.span>
+            ))}
           </div>
 
           {/* Buttons */}
@@ -42,13 +59,26 @@ const Hero = () => {
 
           {/* Social Icons */}
           <div className="flex justify-center lg:justify-start gap-6 text-2xl pt-6 text-gray-700 dark:text-gray-300">
-            <a href="https://github.com/shahjalal-mahmud" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaGithub /></a>
-            <a href="https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaLinkedin /></a>
-            <a href="https://www.facebook.com/ShahjalalMahmud100/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition"><FaFacebook /></a>
+            {[
+              { icon: <FaGithub />, href: "https://github.com/shahjalal-mahmud" },
+              { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/" },
+              { icon: <FaFacebook />, href: "https://www.facebook.com/ShahjalalMahmud100/" },
+            ].map((item, idx) => (
+              <motion.a
+                key={idx}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.2, color: "#3b82f6" }}
+                className="transition"
+              >
+                {item.icon}
+              </motion.a>
+            ))}
           </div>
         </div>
 
-        {/* Profile Image Section */}
+        {/* Profile Image */}
         <div
           className="flex-1 flex justify-center"
           data-aos="zoom-in"
@@ -67,8 +97,8 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Down Indicator */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce">
+      {/* Scroll Down - Desktop only */}
+      <div className="hidden lg:block absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce">
         <a href="#about" className="text-gray-500 dark:text-gray-300 text-sm">↓ Scroll Down</a>
       </div>
     </div>
