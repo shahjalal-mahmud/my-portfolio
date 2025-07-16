@@ -6,6 +6,7 @@ import { FaArrowLeft, FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 import Gallery from "./ProjectDetails/Gallery";
 import Features from "./ProjectDetails/Features";
 import TechStack from "./ProjectDetails/TechStack";
+import Skills from "./ProjectDetails/Skills";
 // import Documentation from "./ProjectDetails/Documentation";
 // import ReadmeInfo from "./ProjectDetails/ReadmeInfo";
 // import ProblemStatement from "./ProjectDetails/ProblemStatement";
@@ -45,6 +46,7 @@ const ProjectDetails = () => {
       <Gallery images={project.media} />
       <Features features={project.features} />
       <TechStack techStack={project.techStack} />
+      <Skills skills={project.skills} extras={project.extras} />
 
       {/* <Documentation doc={project.documentation} />
       <ReadmeInfo content={project.readme} />
