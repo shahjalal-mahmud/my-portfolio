@@ -1,6 +1,8 @@
+// src/pages/Home.jsx
 import Navbar from "../components/Navbar";
 import Hero from "../sections/Hero";
 import About from "../sections/About";
+import EducationTimeline from "../components/EducationTimeline";
 import Experience from "../components/Experience";
 import Roadmap from "../components/Roadmap";
 import Skills from "../sections/Skills";
@@ -9,7 +11,6 @@ import GitHubStats from "../components/GitHubStats";
 import Contact from "../sections/Contact";
 import Footer from "../components/Footer";
 import TestimonialsCertificates from "../sections/TestimonialsCertificates";
-import EducationTimeline from "../components/EducationTimeline";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -19,12 +20,12 @@ const Home = () => {
       <Navbar />
       <Hero />
       <About />
-      <EducationTimeline/>
+      <EducationTimeline />
       <Experience />
       <Roadmap />
       <Skills />
       <Projects />
-      <TestimonialsCertificates/>
+      <TestimonialsCertificates />
       <GitHubStats />
       <Contact />
       <Footer />
