@@ -1,34 +1,7 @@
 // src/components/Projects.jsx
 import { Link } from "react-router-dom";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
-
-const projects = [
-  {
-    slug: "studysync",
-    name: "StudySync App",
-    description: "An Android productivity app...",
-    skills: ["Kotlin", "Jetpack Compose", "Firebase"],
-    extras: ["MVVM", "Room", "Coroutines", "Retrofit"],
-    image: "/projects/prodorshok/prodorshok_logo.png",
-    github: "https://github.com/yourusername/studysync-app",
-    live: "https://play.google.com/store/apps/details?id=com.yourdomain.studysync",
-    story: "Built for students to manage tasks...",
-    features: ["Task Management", "Notes", "Reminders"],
-    documentation: "Available on GitHub",
-    readme: "README.md in repo",
-    problem: "Students miss deadlines...",
-    objective: "Make studying more organized",
-    scope: "University students",
-    flowchart: "Diagram available",
-    architecture: "MVVM + Room",
-    challenges: "Sync issues",
-    limitations: "Android only",
-    contributions: "Solo project",
-    future: "AI-based study assistant",
-    conclusion: "Increased productivity by 30%",
-  },
-  // more projects...
-];
+import projects from "../components/ProjectsData";
 
 export default function Projects() {
   return (
