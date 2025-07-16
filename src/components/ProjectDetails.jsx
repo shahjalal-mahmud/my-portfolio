@@ -9,16 +9,17 @@ import TechStack from "./ProjectDetails/TechStack";
 import Skills from "./ProjectDetails/Skills";
 // import Documentation from "./ProjectDetails/Documentation";
 // import ReadmeInfo from "./ProjectDetails/ReadmeInfo";
-// import ProblemStatement from "./ProjectDetails/ProblemStatement";
-// import Objective from "./ProjectDetails/Objective";
-// import Scope from "./ProjectDetails/Scope";
+import Problem from "./ProjectDetails/Problem";
+import Objective from "./ProjectDetails/Objective";
+import Scope from "./ProjectDetails/Scope";
 // import Flowchart from "./ProjectDetails/Flowchart";
 // import Architecture from "./ProjectDetails/Architecture";
-// import Challenges from "./ProjectDetails/Challenges";
-// import Limitations from "./ProjectDetails/Limitations";
-// import Contributions from "./ProjectDetails/Contributions";
+import Challenges from "./ProjectDetails/Challenges";
+import Limitations from "./ProjectDetails/Limitations";
+import Contributions from "./ProjectDetails/Contributions";
 // import FutureWork from "./ProjectDetails/FutureWork";
-// import Conclusion from "./ProjectDetails/Conclusion";
+import Conclusion from "./ProjectDetails/Conclusion";
+import Metrics from "./ProjectDetails/Metrics";
 
 const ProjectDetails = () => {
   const { slug } = useParams();
@@ -48,18 +49,19 @@ const ProjectDetails = () => {
       <TechStack techStack={project.techStack} />
       <Skills skills={project.skills} extras={project.extras} />
 
-      {/* <Documentation doc={project.documentation} />
-      <ReadmeInfo content={project.readme} />
-      <ProblemStatement text={project.problem} />
+      <Problem text={project.problem} />
       <Objective text={project.objective} />
       <Scope text={project.scope} />
-      <Flowchart text={project.flowchart} />
-      <Architecture text={project.architecture} />
       <Challenges text={project.challenges} />
       <Limitations text={project.limitations} />
       <Contributions text={project.contributions} />
-      <FutureWork text={project.future} />
-      <Conclusion text={project.conclusion} /> */}
+      <Conclusion text={project.conclusion} />
+      <Metrics list={project.metrics} />
+
+      {/* <Documentation doc={project.documentation} />
+      <ReadmeInfo content={project.readme} />
+      <Flowchart text={project.flowchart} />
+      <FutureWork text={project.future} /> */}
 
       <div className="flex gap-4 mt-10">
         <a href={project.github} className="btn btn-outline" target="_blank" rel="noopener noreferrer"><FaGithub /> GitHub</a>

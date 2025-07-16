@@ -1,10 +1,10 @@
-// src/components/ProjectDetails/Contributions.jsx
+// src/components/ProjectDetails/Problem.jsx
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import SectionWrapper from "./SectionWrapper";
 
-const Contributions = ({ text }) => (
-  <SectionWrapper title="🧠 Contributions">
+const Problem = ({ text }) => (
+  <SectionWrapper title="❗ The Problem">
     <motion.p
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -17,4 +17,4 @@ const Contributions = ({ text }) => (
   </SectionWrapper>
 );
 
-export default Contributions;
+export default Problem;
