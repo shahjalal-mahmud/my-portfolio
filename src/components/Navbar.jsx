@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
+import ThemeSelector from "./ThemeSelector";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -13,10 +14,8 @@ const Navbar = () => {
     { name: "About", id: "about" },
     { name: "Education", id: "education" },
     { name: "Experience", id: "experience" },
-    { name: "Career Roadmap", id: "roadmap" },
     { name: "Skills", id: "skills" },
     { name: "Projects", id: "projects" },
-    { name: "GitHub", id: "github" },
     { name: "Contact", id: "contact" },
   ];
 
@@ -24,9 +23,7 @@ const Navbar = () => {
     setIsOpen(false);
 
     if (location.pathname !== "/") {
-      // Navigate to home then scroll
       navigate("/", { replace: false });
-      // Delay scroll after route change
       setTimeout(() => {
         scrollToSection(id);
       }, 100);
@@ -66,9 +63,18 @@ const Navbar = () => {
         ))}
       </div>
 
-      {/* Right Side: Theme Toggle + Mobile Menu Button */}
-      <div className="flex items-center gap-6 ml-2 sm:ml-4 md:ml-6">
-        <ThemeToggle />
+      {/* Right Side: Theme Controls + Mobile Menu Button */}
+      <div className="flex items-center gap-4 ml-2 sm:ml-4 md:ml-6">
+        {/* Desktop Theme Selector - Hidden on mobile */}
+        <div className="hidden lg:flex">
+          <ThemeSelector />
+        </div>
+        
+        {/* Mobile Theme Toggle - Shows only toggle button */}
+        <div className="lg:hidden">
+          <ThemeToggle />
+        </div>
+        
         <button
           className="lg:hidden text-xl"
           onClick={() => setIsOpen(!isOpen)}
@@ -89,18 +95,27 @@ const Navbar = () => {
             <FaTimes />
           </button>
         </div>
-        <ul className="flex flex-col p-4 space-y-4">
-          {navLinks.map((link, idx) => (
-            <li key={idx}>
-              <button
-                onClick={() => handleNavClick(link.id)}
-                className="block text-base font-medium hover:text-primary transition-colors"
-              >
-                {link.name}
-              </button>
-            </li>
-          ))}
-        </ul>
+        
+        {/* Mobile Menu Content */}
+        <div className="h-full flex flex-col">
+          <ul className="flex-1 flex flex-col p-4 space-y-4">
+            {navLinks.map((link, idx) => (
+              <li key={idx}>
+                <button
+                  onClick={() => handleNavClick(link.id)}
+                  className="block text-base font-medium hover:text-primary transition-colors"
+                >
+                  {link.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+          
+          {/* Theme Selector in Mobile Menu */}
+          <div className="p-4 border-t">
+            <ThemeSelector />
+          </div>
+        </div>
       </div>
     </nav>
   );

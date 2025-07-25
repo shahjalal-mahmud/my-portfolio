@@ -1,11 +1,30 @@
 @import "tailwindcss";
-@plugin "daisyui";
 
+/* DaisyUI Plugin and Theme Configuration */
+@plugin "daisyui" {
+  themes: all;
+}
+@theme {
+  /* Animation and Keyframe Definitions */
+  --animation-float: float 6s ease-in-out infinite;
+  --keyframes-float: {
+    from: {
+      transform: "translateY(0px)";
+    }
+    "50%": {
+      transform: "translateY(-10px)";
+    }
+    to: {
+      transform: "translateY(0px)";
+    }
+  };
+}
 
 html {
   scroll-behavior: smooth;
 }
 
+/* Custom Animation Definitions */
 @keyframes pulse-glow {
   0% {
     transform: scale(1);
@@ -21,6 +40,11 @@ html {
   }
 }
 
+/* Apply custom animation utility class */
 .animate-pulse {
   animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+body {
+  font-family: var(--user-font, "Inter"), sans-serif;
 }

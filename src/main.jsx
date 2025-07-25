@@ -5,7 +5,7 @@ import App from "./App.jsx";
 import "./index.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import ThemeProvider from "./context/ThemeProvider";
+import { ThemeProvider } from './context/ThemeContext'; 
 
 AOS.init({ 
   duration: 800,

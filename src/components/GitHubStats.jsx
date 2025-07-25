@@ -1,10 +1,7 @@
 // src/components/GitHubStats.jsx
 import GitHubCalendar from "react-github-calendar";
-import { useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext";
 
 const GitHubStats = () => {
-  const { isDark } = useContext(ThemeContext);
   const username = "shahjalal-mahmud";
 
   return (
@@ -23,14 +20,13 @@ const GitHubStats = () => {
           className="overflow-x-auto pb-12 flex justify-center"
           data-aos="zoom-in"
         >
-          <div className="rounded-xl bg-base-100 p-6 shadow-md border border-base-300 dark:border-base-100 w-full max-w-3xl">
+          <div className="rounded-xl bg-base-100 p-6 shadow-md border border-base-300 w-full max-w-3xl">
             <GitHubCalendar
               username={username}
               blockSize={17}
               blockMargin={6}
-              color="#570df8"
+              color="hsl(var(--p))" // Using primary color from DaisyUI
               fontSize={15}
-              colorScheme={isDark ? "dark" : "light"}
             />
           </div>
         </div>
@@ -40,20 +36,16 @@ const GitHubStats = () => {
           className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center items-center"
           data-aos="fade-up"
         >
-          <div className="bg-base-100 border border-base-300 dark:border-base-100 rounded-2xl shadow-md p-4">
+          <div className="bg-base-100 border border-base-300 rounded-2xl shadow-md p-4">
             <img
-              src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=${
-                isDark ? "tokyonight" : "default"
-              }&hide_border=true&border_radius=20`}
+              src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=&hide_border=true&border_radius=20`}
               alt="GitHub Stats"
               className="w-full h-auto rounded-xl"
             />
           </div>
-          <div className="bg-base-100 border border-base-300 dark:border-base-100 rounded-2xl shadow-md p-4">
+          <div className="bg-base-100 border border-base-300 rounded-2xl shadow-md p-4">
             <img
-              src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=${
-                isDark ? "tokyonight" : "default"
-              }&hide_border=true&border_radius=20`}
+              src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&hide_border=true&border_radius=20`}
               alt="Top Languages"
               className="w-full h-auto rounded-xl"
             />
@@ -62,13 +54,11 @@ const GitHubStats = () => {
 
         {/* GitHub Streak - matching width */}
         <div
-          className="mt-12 mx-auto bg-base-100 border border-base-300 dark:border-base-100 rounded-2xl shadow-md p-4 max-w-3xl"
+          className="mt-12 mx-auto bg-base-100 border border-base-300 rounded-2xl shadow-md p-4 max-w-3xl"
           data-aos="fade-up"
         >
           <img
-            src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=${
-              isDark ? "tokyonight" : "default"
-            }&hide_border=true&border_radius=20`}
+            src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&hide_border=true&border_radius=20`}
             alt="GitHub Streak Stats"
             className="w-full h-auto rounded-xl"
           />
