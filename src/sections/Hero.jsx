@@ -5,7 +5,7 @@ import { Typewriter } from "react-simple-typewriter";
 
 const Hero = () => {
   return (
-    <section id="hero" className="min-h-screen flex items-center pt-24 px-6">
+    <section id="hero" className="min-h-screen flex items-center pt-4 px-6">
       <div className="max-w-7xl mx-auto w-full">
         <div className="flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-16">
           {/* Text Content */}
