@@ -1,4 +1,3 @@
-// src/components/SkillMatrix.jsx
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useEffect, useState } from "react";
+import { useTheme } from "../context/ThemeContext";
 
 ChartJS.register(
   RadialLinearScale,
@@ -21,22 +20,8 @@ ChartJS.register(
 );
 
 const SkillMatrix = () => {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const updateTheme = () => {
-      setIsDark(document.documentElement.classList.contains("dark"));
-    };
-
-    updateTheme();
-    const observer = new MutationObserver(updateTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const { theme } = useTheme();
+  const isDark = theme === "dark" || theme.includes("dark") || theme.includes("night");
 
   const data = {
     labels: [
@@ -69,13 +54,13 @@ const SkillMatrix = () => {
     scales: {
       r: {
         angleLines: {
-          color: isDark ? "#444" : "#ccc",
+          color: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
         },
         grid: {
-          color: isDark ? "#555" : "#e5e5e5",
+          color: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)",
         },
         pointLabels: {
-          color: isDark ? "#ddd" : "#333",
+          color: isDark ? "#e5e7eb" : "#1f2937",
           font: {
             size: 14,
             weight: "bold",
@@ -83,7 +68,7 @@ const SkillMatrix = () => {
         },
         ticks: {
           backdropColor: "transparent",
-          color: isDark ? "#aaa" : "#555",
+          color: isDark ? "#9ca3af" : "#6b7280",
           stepSize: 20,
           beginAtZero: true,
         },
@@ -92,7 +77,7 @@ const SkillMatrix = () => {
     plugins: {
       legend: {
         labels: {
-          color: isDark ? "#fff" : "#000",
+          color: isDark ? "#f3f4f6" : "#111827",
           font: {
             weight: "600",
           },
@@ -112,18 +97,15 @@ const SkillMatrix = () => {
   };
 
   return (
-    <section id="skill-matrix" className="py-20 px-6 bg-base-100 dark:bg-base-200">
+    <section id="skill-matrix" className="py-12 md:py-20 px-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-4xl font-bold mb-10" data-aos="fade-up">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-10">
           Skill Matrix
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="100">
+        <p className="opacity-90 mb-6 md:mb-8">
           A visual representation of my technical proficiency across key development areas.
         </p>
-        <div
-          className="relative w-full h-[400px] sm:h-[500px] p-4 rounded-xl bg-base-200 dark:bg-base-300 shadow-lg"
-          data-aos="zoom-in"
-        >
+        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] p-4 rounded-xl bg-base-200 shadow-lg">
           <Radar data={data} options={options} />
         </div>
       </div>
