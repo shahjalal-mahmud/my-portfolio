@@ -2,6 +2,8 @@ import { useRef } from "react";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaLinkedin, FaGithub, FaFacebook } from "react-icons/fa";
 import emailjs from "emailjs-com";
 import { toast } from "react-toastify";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
 const Contact = () => {
   const formRef = useRef();
@@ -11,10 +13,10 @@ const Contact = () => {
 
     emailjs
       .sendForm(
-        "service_9c09v8d", // e.g., "service_xxxxx"
-        "template_z5hgwcs", // e.g., "template_abcd"
+        "service_9c09v8d",
+        "template_z5hgwcs",
         formRef.current,
-        "JLbxXRTE6OGFflAQB" // e.g., "2QKexampleKEY"
+        "JLbxXRTE6OGFflAQB"
       )
       .then(
         () => {
@@ -29,85 +31,79 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="w-full py-20 px-6 bg-base-200 dark:bg-gray-900" data-aos="fade-up">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+    <section id="contact" className="w-full py-16 md:py-20 px-6 bg-base-200">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16">
         {/* Contact Info */}
-        <div className="flex flex-col justify-center" data-aos="fade-right" data-aos-delay="200">
-          <h2 className="text-4xl font-extrabold mb-6 text-gray-900 dark:text-white transition-colors duration-500">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col justify-center"
+        >
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-4 md:mb-6">
             Get In Touch
           </h2>
-          <p className="mb-8 text-gray-700 dark:text-gray-300 leading-relaxed transition-colors duration-500">
-            I’m currently open to freelance projects and full-time opportunities. 
+          <p className="mb-6 md:mb-8 leading-relaxed opacity-90">
+            I'm currently open to freelance projects and full-time opportunities.
             Whether you want to say hi, discuss a project, or collaborate, my inbox is always open.
           </p>
 
-          <div className="space-y-6 text-gray-700 dark:text-gray-300 transition-colors duration-500">
+          <div className="space-y-4 md:space-y-6">
             <div className="flex items-center gap-4">
-              <FaEnvelope className="text-primary text-xl" />
-              <a href="mailto:shahjalal@gmail.com" className="hover:text-primary underline transition-colors duration-300">
+              <FaEnvelope className="text-primary text-xl flex-shrink-0" />
+              <a href="mailto:shahjalal@gmail.com" className="link link-hover">
                 mahmud.nubtk@gmail.com
               </a>
             </div>
             <div className="flex items-center gap-4">
-              <FaPhone className="text-primary text-xl" />
-              <a href="tel:+880123456789" className="hover:text-primary underline transition-colors duration-300">
+              <FaPhone className="text-primary text-xl flex-shrink-0" />
+              <a href="tel:+880123456789" className="link link-hover">
                 +880 18897-93146
               </a>
             </div>
             <div className="flex items-center gap-4">
-              <FaMapMarkerAlt className="text-primary text-xl" />
+              <FaMapMarkerAlt className="text-primary text-xl flex-shrink-0" />
               <span>Khulna, Bangladesh</span>
             </div>
 
             <div className="flex items-center gap-6 mt-6">
-              <a
-                href="https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-                className="hover:text-primary transition-colors duration-300"
-              >
-                <FaLinkedin className="text-3xl" />
-              </a>
-              <a
-                href="https://github.com/shahjalal-mahmud"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="GitHub"
-                className="hover:text-primary transition-colors duration-300"
-              >
-                <FaGithub className="text-3xl" />
-              </a>
-              <a
-                href="https://www.facebook.com/ShahjalalMahmud100/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Twitter"
-                className="hover:text-primary transition-colors duration-300"
-              >
-                <FaFacebook className="text-3xl" />
-              </a>
+              {[
+                { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/", label: "LinkedIn" },
+                { icon: <FaGithub />, href: "https://github.com/shahjalal-mahmud", label: "GitHub" },
+                { icon: <FaFacebook />, href: "https://www.facebook.com/ShahjalalMahmud100/", label: "Facebook" }
+              ].map((social, i) => (
+                <motion.a
+                  key={i}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={social.label}
+                  whileHover={{ y: -3 }}
+                  className="text-2xl md:text-3xl hover:text-primary transition-colors"
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Contact Form */}
-        <form
+        <motion.form
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
           ref={formRef}
           onSubmit={handleSendEmail}
-          className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg"
-          data-aos="fade-left"
-          data-aos-delay="400"
+          className="card bg-base-100 shadow-lg p-6 md:p-8"
         >
-          <h3 className="text-2xl font-semibold mb-8 text-gray-900 dark:text-white">
+          <h3 className="text-2xl font-semibold mb-8 text-base-content">
             Send me a message
           </h3>
 
-          {/* Input fields (same as before) */}
-          {/* You must add name="fieldName" to each field to match EmailJS template */}
-
+          {/* Name Field */}
           <div className="mb-6">
-            <label htmlFor="name" className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="name" className="block mb-2 font-medium text-base-content">
               Name
             </label>
             <input
@@ -116,12 +112,13 @@ const Contact = () => {
               type="text"
               placeholder="Your full name"
               required
-              className="w-full px-4 py-3 rounded-md border bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700"
+              className="input input-bordered w-full"
             />
           </div>
 
+          {/* Email Field */}
           <div className="mb-6">
-            <label htmlFor="email" className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="email" className="block mb-2 font-medium text-base-content">
               Email
             </label>
             <input
@@ -130,12 +127,13 @@ const Contact = () => {
               type="email"
               placeholder="you@example.com"
               required
-              className="w-full px-4 py-3 rounded-md border bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700"
+              className="input input-bordered w-full"
             />
           </div>
 
+          {/* Subject Field */}
           <div className="mb-6">
-            <label htmlFor="subject" className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="subject" className="block mb-2 font-medium text-base-content">
               Subject
             </label>
             <input
@@ -143,12 +141,13 @@ const Contact = () => {
               id="subject"
               type="text"
               placeholder="Subject of your message"
-              className="w-full px-4 py-3 rounded-md border bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700"
+              className="input input-bordered w-full"
             />
           </div>
 
+          {/* Message Field */}
           <div className="mb-6">
-            <label htmlFor="message" className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="message" className="block mb-2 font-medium text-base-content">
               Message
             </label>
             <textarea
@@ -157,17 +156,18 @@ const Contact = () => {
               rows="5"
               placeholder="Write your message here..."
               required
-              className="w-full px-4 py-3 rounded-md border bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 resize-none"
+              className="textarea textarea-bordered w-full resize-none"
             />
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 bg-primary text-white font-semibold rounded-md hover:bg-primary-dark transition-colors duration-300"
+            className="btn btn-primary w-full"
           >
             Send Message
           </button>
-        </form>
+        </motion.form>
       </div>
     </section>
   );
