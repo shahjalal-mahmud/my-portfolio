@@ -10,31 +10,37 @@ const Roadmap = () => {
 
   const steps = [
     {
-      year: "2021",
-      title: "Started BSc in CSE",
-      desc: "Began Computer Science studies at NUBTK with a passion for solving problems and exploring programming fundamentals.",
+      year: "August 2023",
+      title: "Started BSc in CSE at NUBTK",
+      desc: "Admitted into the CSE program at NUBTK with a deep interest in learning technology and solving real-world problems.",
     },
     {
-      year: "2022",
-      title: "Explored Android Development",
-      desc: "Built my first Android app using Java, later transitioning to Kotlin and gaining familiarity with Android Studio.",
+      year: "January 2024",
+      title: "Explored Fullstack Web Development",
+      desc: "Completed a fullstack MERN course and built several web projects using React, Node.js, MongoDB, and Firebase. Gained foundational experience but didn’t feel fully aligned with web dev as a long-term path.",
     },
     {
-      year: "2023",
-      title: "Mastered Jetpack Compose",
-      desc: "Built modern Android apps with MVVM architecture, integrated Firebase, and improved UI/UX using Jetpack Compose.",
+      year: "December 2024",
+      title: "Shifted Focus to Android Development",
+      desc: "Built my first Android app using Java and XML to improve customer management for a mobile servicing store. This hands-on experience inspired me to deep dive into the Android ecosystem.",
     },
     {
-      year: "2024",
-      title: "Learning Full-Stack Web Dev",
-      desc: "Started working with React, Tailwind, Firebase, and MongoDB to build full-stack web applications and dashboards.",
+      year: "February 2025",
+      title: "Learning Kotlin & Jetpack Compose",
+      desc: "Transitioned to Kotlin and Jetpack Compose for building modern, scalable Android apps. Applied best practices like MVVM, Room DB, and Firebase integration.",
     },
     {
-      year: "2025",
-      title: "Internships & Startup Projects",
-      desc: "Actively applying for internships, building a solid portfolio, and working on real-world startup ideas with a team.",
+      year: "May 2025",
+      title: "Built AI Career Guidance App",
+      desc: "Worked as part of the UIHP Cohort to develop a real-world AI-powered career guidance platform, combining modern Android development with smart features.",
     },
+    // {
+    //   year: "Jully 2025",
+    //   title: "Building Campus Utility App",
+    //   desc: "Currently developing a student-focused university app that includes login/profile, attendance tracking, notice board, push notifications, class routine, CT & assignment reminders, and smart academic task management.",
+    // },
   ];
+
 
   return (
     <section id="roadmap" className="py-16 md:py-24 px-6">

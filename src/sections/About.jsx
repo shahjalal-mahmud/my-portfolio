@@ -97,7 +97,21 @@ const About = () => {
           <div className="pt-6">
             <h3 className="text-xl font-semibold mb-3">Tech Stack</h3>
             <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-              {["Kotlin", "Jetpack Compose", "Java", "Firebase", "Git", "LeetCode", "CodeForces", "Android Studio",].map((tech, idx) => (
+              {[
+                "Kotlin",
+                "Jetpack Compose",
+                "Firebase",
+                "Firestore",
+                "React",
+                "Tailwind CSS",
+                "Git",
+                "Room DB",
+                "Retrofit",
+                "Coroutines",
+                "Android Studio",
+                "LeetCode",
+                "CodeForces"
+              ].map((tech, idx) => (
                 <motion.span
                   key={idx}
                   whileHover={{ scale: 1.08 }}
@@ -154,7 +168,20 @@ const About = () => {
               <div>
                 <h4 className="text-xl font-semibold mb-3">Tech Stack</h4>
                 <div className="flex flex-wrap gap-2">
-                  {["Kotlin", "Jetpack Compose", "Java", "XML", "Firebase", "Git", "LeetCode", "CodeForces", "Android Studio", "Figma"].map((tech, idx) => (
+                  {["Kotlin",
+                    "Jetpack Compose",
+                    "Firebase",
+                    "Firestore",
+                    "React",
+                    "Tailwind CSS",
+                    "Git",
+                    "Room DB",
+                    "Retrofit",
+                    "Coroutines",
+                    "Android Studio",
+                    "LeetCode",
+                    "CodeForces"
+                  ].map((tech, idx) => (
                     <motion.span
                       key={idx}
                       whileHover={{ scale: 1.08 }}

@@ -10,7 +10,7 @@ import Projects from "../sections/Projects";
 import GitHubStats from "../components/GitHubStats";
 import Contact from "../sections/Contact";
 import Footer from "../components/Footer";
-import TestimonialsCertificates from "../sections/TestimonialsCertificates";
+// import TestimonialsCertificates from "../sections/TestimonialsCertificates";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,7 +25,7 @@ const Home = () => {
       <Roadmap />
       <Skills />
       <Projects />
-      <TestimonialsCertificates />
+      {/* <TestimonialsCertificates /> */}
       <GitHubStats />
       <Contact />
       <Footer />

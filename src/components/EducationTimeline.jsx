@@ -5,18 +5,21 @@ const EducationTimeline = () => {
   const timelineItems = [
     {
       title: "BSc in Computer Science & Engineering",
-      year: "2022 - 2027",
+      year: "2023 - 2027",
       desc: "Northern University of Business and Technology, Khulna",
+      result: "CGPA 3.975 out of 4",
     },
     {
       title: "HSC (Science)",
       year: "2019 - 2021",
       desc: "Govt. Brajalal College, Khulna",
+      result: "GPA 5 out of 5",
     },
     {
       title: "SSC (Science)",
       year: "2017 - 2019",
       desc: "Govt. Jalma Chakrakhali High School",
+      result: "GPA 5 out of 5",
     },
   ];
 
@@ -57,6 +60,7 @@ const EducationTimeline = () => {
                     </div>
                     <h4 className="text-xl font-bold">{item.title}</h4>
                     <p className="opacity-90">{item.desc}</p>
+                    <p className="opacity-75">Grade: {item.result}</p>
                   </motion.div>
                 </div>
               );

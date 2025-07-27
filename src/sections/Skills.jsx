@@ -7,15 +7,22 @@ import {
   FaLaptopCode,
   FaUsers,
   FaPuzzlePiece,
+  FaReact,
+  FaDatabase,
+  FaEdit,
 } from "react-icons/fa";
 import { BiPlug, BiData } from "react-icons/bi";
-import { MdArchitecture } from "react-icons/md";
+import { MdArchitecture, MdDevices, MdEmail } from "react-icons/md";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { SiCplusplus, SiJavascript, SiTailwindcss } from "react-icons/si";
+import { GiClick } from "react-icons/gi";
+import { RiRouteFill } from "react-icons/ri";
 
 const Skills = () => {
   const skills = [
+     // 🤖 Android Development
     { name: "Kotlin", icon: <FaAndroid />, category: "Android Development", level: 90 },
     { name: "Jetpack Compose", icon: <FaAndroid />, category: "Android Development", level: 85 },
     { name: "Android SDK", icon: <FaAndroid />, category: "Android Development", level: 80 },
@@ -23,19 +30,38 @@ const Skills = () => {
     { name: "Retrofit", icon: <BiPlug />, category: "Android Development", level: 80 },
     { name: "Coroutines/Flow", icon: <FaBolt />, category: "Android Development", level: 75 },
     { name: "MVVM Architecture", icon: <MdArchitecture />, category: "Android Development", level: 80 },
-    { name: "Java", icon: <FaJava />, category: "Programming & Problem Solving", level: 80 },
+
+    // 🌐 Web Development
+    { name: "React", icon: <FaReact />, category: "Web Development", level: 85 },
+    { name: "Tailwind CSS", icon: <SiTailwindcss />, category: "Web Development", level: 80 },
+    { name: "DaisyUI", icon: <SiTailwindcss />, category: "Web Development", level: 75 },
+    { name: "Firebase Auth", icon: <FaCloud />, category: "Web Development", level: 80 },
+    { name: "Firestore", icon: <FaDatabase />, category: "Web Development", level: 80 },
+    { name: "JavaScript (ES6+)", icon: <SiJavascript />, category: "Web Development", level: 80 },
+    { name: "Responsive UI/UX", icon: <MdDevices />, category: "Web Development", level: 85 },
+    { name: "CRUD Operations", icon: <FaEdit />, category: "Web Development", level: 85 },
+    { name: "Framer Motion", icon: <GiClick />, category: "Web Development", level: 70 },
+    { name: "Routing (React Router)", icon: <RiRouteFill />, category: "Web Development", level: 75 },
+
+    // 💻 Programming & Problem Solving
+    { name: "C++", icon: <SiCplusplus />, category: "Programming & Problem Solving", level: 85 },  
+    { name: "Java", icon: <FaJava />, category: "Programming & Problem Solving", level: 75 },  
     { name: "Data Structures", icon: <FaBolt />, category: "Programming & Problem Solving", level: 85 },
     { name: "Algorithms", icon: <FaBolt />, category: "Programming & Problem Solving", level: 80 },
+
+    // 🛠️ Tools & Collaboration
     { name: "Git & GitHub", icon: <FaGithub />, category: "Tools & Collaboration", level: 85 },
     { name: "Firebase", icon: <FaCloud />, category: "Tools & Collaboration", level: 75 },
     { name: "Android Studio", icon: <FaLaptopCode />, category: "Tools & Collaboration", level: 90 },
     { name: "Problem Solving", icon: <FaPuzzlePiece />, category: "Tools & Collaboration", level: 90 },
     { name: "Collaboration", icon: <FaUsers />, category: "Tools & Collaboration", level: 85 },
+    { name: "Client Communication", icon: <MdEmail />, category: "Tools & Collaboration", level: 80 },
   ];
 
   const categories = [
     "All",
     "Android Development",
+    "Web Development",
     "Programming & Problem Solving",
     "Tools & Collaboration",
   ];
