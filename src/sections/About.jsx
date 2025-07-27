@@ -15,7 +15,7 @@ const About = () => {
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
 
   return (
-    <section id="about" className="py-16 md:py-24 px-6 relative">
+    <section id="about" className="py-16 md:py-24 px-6 relative bg-base-200">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 lg:gap-16">
         {/* Profile Image */}
         <div className="w-full md:w-1/2 flex justify-center">
