@@ -148,10 +148,10 @@ const projects = [
     media: [
       "/projects/teacher-portfolio/hero.png",
       "/projects/teacher-portfolio/about.png",
-      "/projects/teacher-portfolio/timeline.png",
-      "/projects/teacher-portfolio/publications.png",
-      "/projects/teacher-portfolio/admin-modal.png",
-      "/projects/teacher-portfolio/dashboard.png"
+      "/projects/teacher-portfolio/awards.png",
+      "/projects/teacher-portfolio/review.png",
+      "/projects/teacher-portfolio/contact.png",
+      "/projects/teacher-portfolio/footer.png"
     ],
     github: "https://github.com/shahjalal-mahmud/portfolio-nag-sir",
     live: "https://anindyanag.netlify.app/",

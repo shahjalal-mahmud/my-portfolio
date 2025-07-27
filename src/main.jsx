@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App.jsx";
+import { RouterProvider } from "react-router-dom";
 import "./index.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ThemeProvider } from './context/ThemeContext'; 
+import router from "./routes/router.jsx";
 
 AOS.init({ 
   duration: 800,
@@ -14,10 +14,8 @@ AOS.init({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
       <ThemeProvider>
-        <App />
+        <RouterProvider router={router} />
       </ThemeProvider>
-    </BrowserRouter>
   </React.StrictMode>
 );
