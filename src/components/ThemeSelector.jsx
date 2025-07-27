@@ -1,6 +1,6 @@
 // src/components/ThemeSelector.jsx
 import { useTheme } from "../context/ThemeContext";
-import { FaPalette, FaFont } from "react-icons/fa";
+import { FaPalette, FaFont, FaCheck } from "react-icons/fa";
 
 const ThemeSelector = () => {
   const { theme, toggleTheme, font, toggleFont } = useTheme();
@@ -154,68 +154,146 @@ const ThemeSelector = () => {
     "silk"
   ];
 
+  // Enhanced Theme Preview component
+  const ThemePreview = ({ themeName }) => {
+    return (
+      <div className="flex items-center gap-3">
+        <div className="flex-shrink-0 w-6 h-6 rounded-md border border-base-300 p-0.5">
+          <div className="w-full h-full rounded-sm flex flex-wrap overflow-hidden">
+            <div className="w-1/2 h-1/2 bg-primary" />
+            <div className="w-1/2 h-1/2 bg-secondary" />
+            <div className="w-1/2 h-1/2 bg-accent" />
+            <div className="w-1/2 h-1/2 bg-neutral" />
+          </div>
+        </div>
+        <span className="text-sm font-medium">
+          {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
+        </span>
+      </div>
+    );
+  };
+
+  // Font Preview component with consistent styling
+  const FontPreview = ({ fontName }) => {
+    return (
+      <div className="flex items-center gap-3">
+        <div className="flex-shrink-0 w-6 h-6 rounded-md border border-base-300 flex items-center justify-center">
+          <span className="text-xs" style={{ fontFamily: fontName }}>Aa</span>
+        </div>
+        <span className="text-sm font-medium" style={{ fontFamily: fontName }}>
+          {fontName}
+        </span>
+      </div>
+    );
+  };
+
   return (
-    <div className="space-y-4">
-      {/* Font Selector */}
+    <div className="space-y-6">
+      {/* Font Selector with Grid Dropdown */}
       <div className="form-control">
-        <label className="label">
-          <span className="label-text flex items-center gap-2">
-            <FaFont className="text-primary" />
+        <label className="label pl-0">
+          <span className="label-text flex items-center gap-2 text-sm font-medium">
+            <FaFont className="text-primary text-base" />
             Font Family
           </span>
         </label>
-        <select
-          className="select select-bordered w-full"
-          value={font}
-          onChange={(e) => toggleFont(e.target.value)}
-          style={{ fontFamily: font }}
-        >
-          {fontOptions.map((fontOption) => (
-            <option 
-              key={fontOption} 
-              value={fontOption}
-              style={{ fontFamily: fontOption }}
+        <div className="dropdown w-full">
+          <label
+            tabIndex={0}
+            className="btn btn-outline bg-base-100 hover:bg-base-200 justify-between w-full text-left"
+          >
+            <FontPreview fontName={font} />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              {fontOption}
-            </option>
-          ))}
-        </select>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </label>
+          <div
+            tabIndex={0}
+            className="dropdown-content p-3 shadow-lg bg-base-100 rounded-box w-full max-h-96 overflow-y-auto mt-1"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {fontOptions.map((fontOption) => (
+                <button
+                  key={fontOption}
+                  onClick={() => toggleFont(fontOption)}
+                  className={`flex items-center justify-between p-2 rounded hover:bg-base-200 ${
+                    font === fontOption ? "bg-base-200" : ""
+                  }`}
+                >
+                  <FontPreview fontName={fontOption} />
+                  {font === fontOption && (
+                    <FaCheck className="text-primary text-xs" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Theme Selector */}
+      {/* Theme Selector with Grid Dropdown */}
       <div className="form-control">
-        <label className="label">
-          <span className="label-text flex items-center gap-2">
-            <FaPalette className="text-primary" />
+        <label className="label pl-0">
+          <span className="label-text flex items-center gap-2 text-sm font-medium">
+            <FaPalette className="text-primary text-base" />
             Theme
           </span>
         </label>
-        <select
-          className="select select-bordered w-full"
-          value={theme}
-          onChange={(e) => toggleTheme(e.target.value)}
-        >
-          {themeOptions.map((themeOption) => (
-            <option key={themeOption} value={themeOption}>
-              {themeOption.charAt(0).toUpperCase() + themeOption.slice(1)}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Theme Preview Grid (Optional) */}
-      <div className="grid grid-cols-5 gap-2 mt-4">
-        {themeOptions.slice(0, 10).map((themeOption) => (
-          <button
-            key={themeOption}
-            onClick={() => toggleTheme(themeOption)}
-            className="btn btn-xs capitalize"
-            data-theme={themeOption}
-            title={themeOption}
+        <div className="dropdown w-full">
+          <label
+            tabIndex={0}
+            className="btn btn-outline bg-base-100 hover:bg-base-200 justify-between w-full text-left"
           >
-            <span className="flex-1 text-xs">{themeOption.charAt(0)}</span>
-          </button>
-        ))}
+            <ThemePreview themeName={theme} />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </label>
+          <div
+            tabIndex={0}
+            className="dropdown-content p-3 shadow-lg bg-base-100 rounded-box w-full max-h-96 overflow-y-auto mt-1"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {themeOptions.map((themeOption) => (
+                <button
+                  key={themeOption}
+                  onClick={() => toggleTheme(themeOption)}
+                  className={`flex items-center justify-between p-2 rounded hover:bg-base-200 ${
+                    theme === themeOption ? "bg-base-200" : ""
+                  }`}
+                  data-theme={themeOption}
+                >
+                  <ThemePreview themeName={themeOption} />
+                  {theme === themeOption && (
+                    <FaCheck className="text-primary text-xs" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
