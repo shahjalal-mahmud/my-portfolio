@@ -79,20 +79,31 @@ const Skills = () => {
           My Skills
         </h2>
 
-        {/* Category Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-8 md:mb-12">
+        {/* Replace the tabs with DaisyUI filter buttons */}
+        <div className="filter flex flex-wrap justify-center gap-2 mb-8 md:mb-12">
           {categories.map((cat, index) => (
-            <motion.button
+            <motion.div
               key={index}
-              onClick={() => setActiveCategory(cat)}
               whileTap={{ scale: 0.95 }}
               whileHover={{ scale: 1.05 }}
-              className={`btn btn-sm md:btn-md ${activeCategory === cat
-                ? 'btn-primary'
-                : 'btn-ghost'}`}
             >
-              {cat}
-            </motion.button>
+              <input
+                type="radio"
+                name="skill-categories"
+                id={`filter-${index}`}
+                className="btn btn-sm md:btn-md hidden" // Hide the actual radio input
+                checked={activeCategory === cat}
+                onChange={() => setActiveCategory(cat)}
+              />
+              <label
+                htmlFor={`filter-${index}`}
+                className={`btn btn-sm md:btn-md ${activeCategory === cat
+                  ? 'btn-primary'
+                  : 'btn-ghost'}`}
+              >
+                {cat}
+              </label>
+            </motion.div>
           ))}
         </div>
 
