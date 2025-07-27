@@ -10,6 +10,7 @@ import GitHubStats from "../components/GitHubStats";
 // import TestimonialsCertificates from "../sections/TestimonialsCertificates";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CodeforcesStats from "../components/CodeforcesStats";
 
 const Home = () => {
   return (
@@ -23,6 +24,7 @@ const Home = () => {
       <Projects />
       {/* <TestimonialsCertificates /> */}
       <GitHubStats />
+      <CodeforcesStats />
       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
