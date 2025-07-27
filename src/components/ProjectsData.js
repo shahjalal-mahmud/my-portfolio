@@ -68,7 +68,7 @@ const projects = [
       utilities: ["Coil", "Lottie Animations", "Markdown Rendering"]
     }
   },
-   {
+  {
     slug: "mobifixer",
     name: "MobiFixer - Phone Servicing Management",
     description: "An Android app that digitizes customer management for mobile repair shops, replacing manual sticker-based tracking with efficient digital records and deadline alerts.",
@@ -137,7 +137,69 @@ const projects = [
       "Avoided over-engineering per [5]",
       "Prioritized phone-number search over IDs based on user interviews"
     ]
-  }
+  },
+  {
+    slug: "teacher-portfolio",
+    name: "Dynamic Portfolio Website for University Teacher",
+    description: "A fully dynamic and editable personal portfolio website tailored for a university teacher, with real-time Firestore backend and admin-only dashboard for seamless content management.",
+    skills: ["React", "Firebase", "Tailwind CSS", "Firestore", "DaisyUI"],
+    extras: ["React Router", "Framer Motion", "React Toastify", "Modular Hooks", "Admin Auth"],
+    image: "/projects/teacher-portfolio/hero.png",
+    media: [
+      "/projects/teacher-portfolio/hero.png",
+      "/projects/teacher-portfolio/about.png",
+      "/projects/teacher-portfolio/timeline.png",
+      "/projects/teacher-portfolio/publications.png",
+      "/projects/teacher-portfolio/admin-modal.png",
+      "/projects/teacher-portfolio/dashboard.png"
+    ],
+    github: "https://github.com/shahjalal-mahmud/portfolio-nag-sir",
+    live: "https://anindyanag.netlify.app/",
+    story: "This project was born from a teacher's need to present academic, research, and professional work dynamically online without needing coding skills. It also helped me explore fullstack web development more deeply while solving a real use case.",
+    features: [
+      "Admin-only authentication with Firebase Auth",
+      "Inline and modal editing of all content",
+      "CRUD operations for Education, Experience, Publications, and Reviews",
+      "Firestore-powered real-time updates",
+      "Nested dynamic tabs with year-based filtering for publications/reviews",
+      "Smart CV and image upload via Google Drive/imgBB",
+      "Skills, certificates, references, and recognitions fully editable"
+    ],
+    documentation: "Detailed usage guide and admin instructions included in the repo README.",
+    readme: "Includes setup steps, Firebase rules guide, editing workflow, and screenshots.",
+    problem: "Many academic professionals lack a dynamic platform to showcase their credentials and update content easily without developer dependency.",
+    objective: "Create a clean, responsive portfolio website that a non-tech-savvy teacher can fully manage through a secure admin dashboard.",
+    scope: "Designed specifically for academic professionals in Bangladesh but scalable to international educators.",
+    flowchart: "/projects/teacher-portfolio/architecture.png",
+    architecture: "React frontend with Firebase Authentication and Firestore backend. Role-based UI rendering with modular component design.",
+    challenges: [
+      "Designing dynamic nested tabs with real-time filtering",
+      "Handling secure yet simple image/CV uploading flow",
+      "Ensuring real-time Firestore sync while minimizing re-renders"
+    ],
+    limitations: [
+      "Admin must manually paste image URLs (due to Firebase Storage quota)",
+      "No role-based user hierarchy (admin only)",
+      "Dependent on third-party image hosting (imgBB)"
+    ],
+    contributions: "Solo project – planned, designed, coded, tested, and deployed the full system including authentication, UI, Firestore rules, and CRUD logic.",
+    future: [
+      "Add Markdown-based publication import",
+      "Enable teacher-to-student project collaboration showcase",
+      "Integrate Google Scholar API for automatic publication fetching"
+    ],
+    conclusion: "Empowered a non-technical university teacher to maintain an elegant online academic presence. A scalable solution for others in academia.",
+    metrics: [
+      "20+ content sections handled dynamically",
+      "6 CRUD-enabled categories with modals",
+      "Single-authored, deployed, and tested"
+    ],
+    techStack: {
+      frontend: ["React", "Tailwind CSS", "DaisyUI"],
+      backend: ["Firebase Auth", "Firestore"],
+      utilities: ["Framer Motion", "React Toastify", "React Router", "Custom Hooks"]
+    }
+  },
 ];
 
 export default projects;
