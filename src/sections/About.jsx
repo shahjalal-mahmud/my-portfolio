@@ -37,7 +37,7 @@ const About = () => {
 
           <p className="text-md sm:text-lg opacity-90 leading-relaxed">
             I'm a 2nd-year Computer Science student at Northern University of
-            Business & Technology, Khulna, with a deep love for Android app
+            Business & Technology Khulna, with a deep love for Android app
             development. Currently, I'm mastering Kotlin and Jetpack Compose to
             build intuitive, high-performance mobile apps.
             {!isDesktop && isExpanded && (
@@ -97,7 +97,7 @@ const About = () => {
           <div className="pt-6">
             <h3 className="text-xl font-semibold mb-3">Tech Stack</h3>
             <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-              {["Kotlin", "Jetpack Compose", "Java", "XML", "Firebase", "Git", "LeetCode", "CodeForces", "Android Studio", "Figma"].map((tech, idx) => (
+              {["Kotlin", "Jetpack Compose", "Java", "Firebase", "Git", "LeetCode", "CodeForces", "Android Studio",].map((tech, idx) => (
                 <motion.span
                   key={idx}
                   whileHover={{ scale: 1.08 }}

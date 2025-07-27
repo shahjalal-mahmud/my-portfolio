@@ -5,31 +5,34 @@ import { motion } from "framer-motion";
 
 const Experience = () => {
   const experiences = [
-    {
-      title: "Android App Developer",
-      company: "Freelancer",
-      duration: "2023 - Present",
-      description:
-        "Developed and published multiple Android apps with Kotlin and Jetpack Compose, focusing on performance, animations, and Firebase integration.",
-      tags: ["Kotlin", "Jetpack Compose", "Firebase"],
-    },
-    {
-      title: "Frontend Intern",
-      company: "Tech Firm XYZ",
-      duration: "June 2024 - Sept 2024",
-      description:
-        "Built responsive UIs using React and Tailwind CSS. Improved component reusability and accessibility across dashboards.",
-      tags: ["React", "Tailwind CSS", "UI/UX"],
-    },
-    {
-      title: "Campus Ambassador",
-      company: "Dev Community Bangladesh",
-      duration: "2022 - 2023",
-      description:
-        "Organized workshops, promoted developer tools, and supported the community by bridging student developers with professionals.",
-      tags: ["Community", "Leadership", "Event Management"],
-    },
-  ];
+  {
+    title: "Team Lead & App Developer – Prodorshok",
+    company: "UIHP Cohort 3 (BHTPA)",
+    duration: "March 2025 – July 2025",
+    description:
+      "Led a 5-member team to build Prodorshok, an AI-powered career guidance app for Bangladeshi students, under the national UIHP innovation program. Developed MVP with Kotlin, Jetpack Compose, Firebase & AI, featuring personalized roadmaps, mentor matching, and skill-based course recommendations. Validated product with 150+ students across 10 universities, ensuring problem-solution fit.",
+    tags: ["Android","Kotlin & Compose", "AI Integration","Firebase","Startup", "Leadership", "Team Management"],
+  },
+  {
+    title: "Freelance React Developer – Portfolio Project",
+    company: "University Teacher (NUBTK)",
+    duration: "Jun 2025 – Jul 2025",
+    description:
+      "Built a secure, admin-controlled portfolio platform with React, Firebase, and Tailwind CSS (DaisyUI). Implemented real-time CRUD operations, Firebase Auth, and Firestore rules to enable the client to dynamically manage their academic profile, publications, CV, and contact sections without coding. Key features included inline/modal editing, image uploads (imgBB), and responsive UX design.",
+    tags: [
+      "React", "Firebase Auth", "Firestore", "Tailwind CSS", "DaisyUI",
+      "Fullstack", "UX Design", "Client Collaboration"
+    ],
+  },
+   {
+    title: "Founder & Fullstack Developer – Digital Portfolio Platform",
+    company: "Self-Initiated Startup Project",
+    duration: "July 2025 – Present",
+    description:
+      "Built a web platform enabling students and professionals to create and share personalized digital portfolios with editable templates, 30+ themes, 100+ fonts, and contact-saving features. Integrated secure login via email and student ID using Firebase Auth. Users can share their portfolio via QR-coded physical cards. Designed with monetization model and personalized branding. Includes promotional backlink to my own portfolio site for client reach.",
+    tags: ["React", "Firebase", "Tailwind CSS", "Authentication", "Design Systems", "Startup", "Monetization"],
+  },
+];
 
   return (
     <section id="experience" className="py-16 md:py-24 px-6 bg-base-200">

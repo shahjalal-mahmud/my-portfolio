@@ -4,24 +4,9 @@ import { motion } from "framer-motion";
 const EducationTimeline = () => {
   const timelineItems = [
     {
-      title: "MSc in Computer Science",
-      year: "2027 - 2029",
-      desc: "Khulna University (Coming Soon)",
-    },
-    {
       title: "BSc in Computer Science & Engineering",
       year: "2022 - 2027",
       desc: "Northern University of Business and Technology, Khulna",
-    },
-    {
-      title: "Freelance Android Developer",
-      year: "2023 - Present",
-      desc: "Created and published Android apps using Kotlin & Jetpack Compose.",
-    },
-    {
-      title: "Open Source Contributor",
-      year: "2023 - Present",
-      desc: "Contributed to GitHub projects related to Firebase Auth and UI components.",
     },
     {
       title: "HSC (Science)",

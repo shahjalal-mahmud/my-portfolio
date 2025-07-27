@@ -23,11 +23,11 @@ const Hero = () => {
             </h2>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
-              Hi, I'm <span className="text-primary">ShahJalal</span>
+              Hi, I'm <span className="text-primary">ShahaJalal</span>
             </h1>
 
             <p className="text-md sm:text-lg opacity-90 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              A passionate <strong className="text-primary">Android Developer</strong> and CSE student at Northern University of Business & Technology, Khulna. I build sleek
+              A passionate <strong className="text-primary">Android Developer</strong> and CSE student at Northern University of Business & Technology Khulna. I build sleek
               apps with <strong className="text-primary">Kotlin</strong> & <strong className="text-primary">Jetpack Compose</strong>, solve problems with <strong className="text-primary">DSA</strong>,
               and thrive on turning ideas into reality. Let's create something amazing!
             </p>
@@ -93,7 +93,7 @@ const Hero = () => {
                 <img
                   src="/img/profile.jpg"
                   alt="Profile"
-                  className="w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full shadow-2xl border-4 border-primary object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-104 xl:h-104 2xl:w-112 2xl:h-112 rounded-full shadow-2xl border-4 border-primary object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <span className="absolute bottom-2 right-2 badge badge-primary text-primary-content">
                   Kotlin + Jetpack

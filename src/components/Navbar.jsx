@@ -89,7 +89,7 @@ const Navbar = () => {
           onClick={() => handleNavClick("hero")}
           className="text-2xl md:text-3xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
         >
-          Shahjalal.dev
+          Shahajalal Mahmud
         </button>
       </div>
 
