@@ -4,9 +4,12 @@ import { MdEmail } from "react-icons/md";
 import { motion } from "framer-motion";
 import profilePic from "/img/profile.jpg";
 import { SiCodeforces, SiHackerrank, SiLeetcode } from "react-icons/si";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const socialLinks = [
     { icon: <FaGithub className="text-2xl" />, href: "https://github.com/shahjalal-mahmud", label: "GitHub" },
@@ -19,12 +22,31 @@ const Footer = () => {
   ];
 
   const quickLinks = [
-    { name: "Home", href: "#hero" },
-    { name: "About", href: "#about" },
-    { name: "Experience", href: "#experience" },
-    { name: "Projects", href: "#projects" },
-    { name: "Statistics", href: "#github" },
+    { name: "Home", id: "hero" },
+    { name: "About", id: "about" },
+    { name: "Experience", id: "experience" },
+    { name: "Projects", id: "projects" },
+    { name: "Statistics", id: "github" },
   ];
+
+  const handleQuickLinkClick = (id) => {
+    if (location.pathname !== "/") {
+      navigate("/", { replace: false });
+      // Wait for the navigation to complete before scrolling
+      setTimeout(() => {
+        scrollToSection(id);
+      }, 100);
+    } else {
+      scrollToSection(id);
+    }
+  };
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <footer className="w-full bg-base-300 text-base-content">
@@ -79,12 +101,12 @@ const Footer = () => {
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <a
-                    href={link.href}
-                    className="link link-hover text-base-content/80 hover:text-primary text-sm sm:text-base"
+                  <button
+                    onClick={() => handleQuickLinkClick(link.id)}
+                    className="link link-hover text-base-content/80 hover:text-primary text-sm sm:text-base text-left w-full"
                   >
                     {link.name}
-                  </a>
+                  </button>
                 </motion.li>
               ))}
             </ul>
