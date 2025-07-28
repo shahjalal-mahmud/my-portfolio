@@ -17,7 +17,7 @@ ChartJS.register(
 );
 
 const CodeforcesStats = () => {
-  const handle = "SahilH";
+  const handle = "mahmud.nubtk";
   const [userInfo, setUserInfo] = useState(null);
   const [userRating, setUserRating] = useState(null);
   const [userSubmissions, setUserSubmissions] = useState(null);
