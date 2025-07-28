@@ -1,86 +1,75 @@
-# 🌐 Shahjalal Mahmud — Developer Portfolio 🚀
+# 🚀 Shahjalal Mahmud - Developer Portfolio 
 
-A beautifully crafted, responsive personal developer portfolio built using **React**, **Vite**, **Tailwind CSS**, and **DaisyUI**.  
-This project showcases my journey as an Android and Full-Stack Developer — with elegant animations, project highlights, GitHub stats, testimonials, certificates, and more.
+A cutting-edge, fully responsive portfolio built with **React, Vite, Tailwind CSS, and DaisyUI** featuring dynamic theming, interactive elements, and detailed project showcases.
 
----
+## 🔥 Live Demo
 
-## 📍 Live Preview
+👉 **[Explore My Portfolio](https://shahajalalmahmud.netlify.app/)**  
+🌐 *Hosted on Netlify with CI/CD*
 
-🔗 **[View My Portfolio](https://shahjalal-portfolio.netlify.app/)**  
-🛠️ _Hosted with Netlify
+## ✨ Key Features
 
----
+### 🎨 Dynamic Personalization
+- **100+ Themes & Fonts**: Switch between all DaisyUI themes and Google Fonts
+- **Real-time Previews**: Changes apply instantly with localStorage persistence
+- **Dark/Light Mode**: Automatic system preference detection
 
-## 🧩 Features
+### 🏆 Professional Showcase
+- **Interactive Project Galleries**: 3D carousel for project media
+- **Detailed Case Studies**: Challenges, solutions, and tech deep dives
+- **Developer Analytics**: GitHub heatmaps & Codeforces stats
 
-- 🌙 **Light / Dark Mode Toggle** (synced across GitHub cards too!)
-- 📱 **Fully Responsive Design** for all screen sizes
-- 🎨 **Modern UI/UX** using Tailwind + DaisyUI
-- 🧠 **Skills & Career Roadmap** sections
-- 🧾 **Project Showcase** with live/demo links
-- 📊 **GitHub Stats + Contribution Heatmap**
-- 🧪 **Testimonials & Certificates** section
-- 📬 **Interactive Contact Form**
-- 📌 **Floating Social Sidebar** on desktop
-- 💾 **Downloadable Resume Support**
-- ⚡ Built with **React + Vite** for blazing speed
+### ⚡ Performance Optimized
+- **Vite-powered**: Instant hot module replacement
+- **95+ Lighthouse Score**: Optimized assets and lazy loading
+- **Responsive First**: Flawless on all devices
 
+## � Full Feature Breakdown
 
----
+| Section | Highlights |
+|---------|------------|
+| **🎯 Hero** | Animated profile, typing effect, social links |
+| **📚 About** | Bio modal, tech badges, downloadable CV |
+| **🎓 Education** | Interactive timeline visualization |
+| **💼 Experience** | Filterable card-based display |
+| **🚀 Projects** | Dedicated pages with: <br> • Media galleries <br> • Tech stacks <br> • Case studies |
+| **📊 Stats** | Live GitHub/Codeforces integration |
+| **📩 Contact** | Functional form with validation |
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-| Technology     | Purpose                           |
-|----------------|-----------------------------------|
-| [React](https://reactjs.org/)       | Component-based UI              |
-| [Vite](https://vitejs.dev/)         | Fast development tooling        |
-| [Tailwind CSS](https://tailwindcss.com/) | Utility-first styling         |
-| [DaisyUI](https://daisyui.com/)     | Tailwind component library      |
-| [AOS](https://michalsnik.github.io/aos/) | Scroll animations            |
-| [React Icons](https://react-icons.github.io/react-icons/) | Icon support |
+**Core Framework**  
+[![React](https://img.shields.io/badge/React-20232A?logo=react)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite)](https://vitejs.dev/)
 
----
+**Styling**  
+[![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
+[![DaisyUI](https://img.shields.io/badge/DaisyUI-5A0EF8)](https://daisyui.com/)
 
-## 🔥 Sections Included
+**Enhancements**  
+[![AOS](https://img.shields.io/badge/AOS-000000)](https://michalsnik.github.io/aos/)
+[![React Router](https://img.shields.io/badge/React_Router-CA4245?logo=reactrouter)](https://reactrouter.com/)
 
-- ✅ Navbar
-- ✅ Hero (with social sidebar + intro)
-- ✅ About Me
-- ✅ Education & Experience
-- ✅ My Career Roadmap
-- ✅ My Skills
-- ✅ My Projects
-- ✅ GitHub Contributions
-- ✅ Testimonials
-- ✅ Certificates & Achievements
-- ✅ Contact Me
-- ✅ Footer
-
----
-
-## 🧠 How to Run the Project Locally
-
-### 1️⃣ Clone this Repository
+## 🚀 Getting Started
 
 ```bash
+# 1. Clone repository
 git clone https://github.com/shahjalal-mahmud/my-portfolio.git
-cd my-portfolio
+
+# 2. Install dependencies
+npm install
+
+# 3. Run development server
+npm run dev
+
+# 4. Build for production
+npm run build
 ```
----
 
-## 📬 Contact  
-Want to connect?  
+## 📬 Let's Connect
+![Email](https://img.shields.io/badge/mahmud.nubtl@gmail.com-D14836?logo=gmail)
+![Linkding](https://img.shields.io/badge/Shahjalal_Mahmud-0A66C2?logo=linkedin)
+![Github](https://img.shields.io/badge/shahjalal--mahmud-181717?logo=github)
 
-📧 **Email**: mahmud.nubtl@gmail.com  
-🔗 **LinkedIn**: [linkedin.com/in/md-shahajalal-mahmud](https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/)  
-🐱 **GitHub**: [github.com/shahjalal-mahmud](https://github.com/shahjalal-mahmud)  
-
-## 📄 License  
-This project is open-sourced under the MIT License.  
-Feel free to use, modify, and build your own version!  
-
-## ❤️ Credits  
-Designed and Developed by **Shahjalal Mahmud**  
-
-Inspired by modern developer portfolios & crafted with 💻 + ☕
+## 📜 License
+MIT © Shahjalal Mahmud
