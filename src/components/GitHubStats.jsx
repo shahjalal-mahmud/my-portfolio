@@ -105,19 +105,29 @@ const GitHubStats = () => {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             GitHub Statistics
           </h2>
-          <div className="flex items-center justify-center gap-4">
-            <div className="avatar">
-              <div className="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={userData?.avatar_url || "https://github.com/identicons/app.png"} alt="Profile" />
+          <a
+            href="https://github.com/shahjalal-mahmud"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity"
+          >
+            <div className="flex items-center justify-center gap-4 cursor-pointer">
+              <div className="avatar">
+                <div className="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                  <img
+                    src={userData?.avatar_url || "https://github.com/identicons/app.png"}
+                    alt="Profile"
+                  />
+                </div>
+              </div>
+              <div className="text-left">
+                <h3 className="text-xl font-bold">{userData?.name || username}</h3>
+                <p className="text-sm opacity-80">
+                  {userData?.bio || "No bio available"}
+                </p>
               </div>
             </div>
-            <div className="text-left">
-              <h3 className="text-xl font-bold">{userData?.name || username}</h3>
-              <p className="text-sm opacity-80">
-                {userData?.bio || "No bio available"}
-              </p>
-            </div>
-          </div>
+          </a>
         </div>
 
         {/* Navigation Tabs */}

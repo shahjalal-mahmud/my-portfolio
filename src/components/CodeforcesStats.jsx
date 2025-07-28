@@ -162,7 +162,13 @@ const CodeforcesStats = () => {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             Codeforces Statistics
           </h2>
-          <div className="flex items-center justify-center gap-4">
+          <a
+            href="https://codeforces.com/profile/mahmud.nubtk/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity"
+          >
+          <div className="flex items-center justify-center gap-4 cursor-pointer">
             <div className="avatar">
               <div className="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                 <img src={userInfo?.titlePhoto || "https://userpic.codeforces.com/no-title.jpg"} alt="Profile" />
@@ -175,6 +181,7 @@ const CodeforcesStats = () => {
               </p>
             </div>
           </div>
+          </a>
         </div>
 
         {/* Navigation Tabs */}

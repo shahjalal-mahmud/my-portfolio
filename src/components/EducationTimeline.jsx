@@ -1,38 +1,65 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
+import { FaGraduationCap, FaSchool, FaUniversity } from "react-icons/fa";
 
 const EducationTimeline = () => {
   const timelineItems = [
     {
       title: "BSc in Computer Science & Engineering",
       year: "2023 - 2027",
-      desc: "Northern University of Business and Technology, Khulna",
+      institution: "Northern University of Business and Technology, Khulna",
       result: "CGPA 3.975 out of 4",
+      icon: <FaUniversity className="text-2xl" />,
+      highlights: [
+        "Specializing in Software Engineering",
+        "Active in competitive programming",
+        "Coursework includes AI, ML, and Data Structures"
+      ]
     },
     {
-      title: "HSC (Science)",
+      title: "Higher Secondary Certificate (Science)",
       year: "2019 - 2021",
-      desc: "Govt. Brajalal College, Khulna",
+      institution: "Govt. Brajalal College, Khulna",
       result: "GPA 5 out of 5",
+      icon: <FaSchool className="text-2xl" />,
+      highlights: [
+        "Mathematics & Physics focus",
+        "Participated in science fairs",
+        "Class representative"
+      ]
     },
     {
-      title: "SSC (Science)",
+      title: "Secondary School Certificate (Science)",
       year: "2017 - 2019",
-      desc: "Govt. Jalma Chakrakhali High School",
+      institution: "Govt. Jalma Chakrakhali High School",
       result: "GPA 5 out of 5",
+      icon: <FaSchool className="text-2xl" />,
+      highlights: [
+        "Top 1% in district",
+        "Science Olympiad participant",
+        "Debate team captain"
+      ]
     },
   ];
 
   return (
-    <section id="education" className="py-16 md:py-24 px-6">
-      <div className="max-w-6xl mx-auto">
-        <h3 className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16">
-          Education & Experience
-        </h3>
+    <section id="education" className="py-16 md:py-24 px-4 sm:px-6 bg-base-100">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 md:mb-6">
+            Education Journey
+          </h2>
+        </motion.div>
 
         <div className="relative">
-          {/* Center Line for Desktop */}
-          <div className="hidden lg:block absolute left-1/2 top-0 w-1 h-full bg-primary transform -translate-x-1/2"></div>
+          {/* Timeline line */}
+          <div className="hidden lg:block absolute left-1/2 top-0 w-0.5 h-full bg-gradient-to-b from-primary to-secondary transform -translate-x-1/2"></div>
 
           <div className="space-y-8 md:space-y-12">
             {timelineItems.map((item, idx) => {
@@ -44,23 +71,45 @@ const EducationTimeline = () => {
                     isLeft ? "lg:justify-start" : "lg:justify-end"
                   }`}
                 >
-                  {/* Dot */}
-                  <div className="absolute top-6 lg:top-1/2 lg:-translate-y-1/2 left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-primary border-4 border-base-100 z-20"></div>
+                  {/* Timeline dot with icon */}
+                  <div className="absolute top-6 lg:top-1/2 lg:-translate-y-1/2 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-primary border-4 border-base-100 z-20 flex items-center justify-center text-white">
+                    {item.icon}
+                  </div>
 
                   {/* Timeline Content */}
                   <motion.div
+                    initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}
+                    viewport={{ once: true }}
                     whileHover={{ scale: 1.02 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className={`bg-base-100 shadow-lg hover:shadow-xl rounded-xl p-6 w-full lg:w-[45%] z-10 transition-all duration-300 ${
+                    className={`bg-base-200 shadow-xl hover:shadow-2xl rounded-2xl p-6 w-full lg:w-[45%] z-10 transition-all duration-300 relative overflow-hidden ${
                       isLeft ? "lg:mr-auto" : "lg:ml-auto"
                     }`}
                   >
-                    <div className="text-sm text-primary font-semibold mb-1">
-                      {item.year}
+                    {/* Decorative element */}
+                    <div className="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+                    
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                      <span className="text-sm font-semibold px-3 py-1 bg-primary/10 text-primary rounded-full">
+                        {item.year}
+                      </span>
+                      <span className="text-sm font-medium px-3 py-1 bg-secondary/10 text-secondary rounded-full">
+                        {item.result}
+                      </span>
                     </div>
-                    <h4 className="text-xl font-bold">{item.title}</h4>
-                    <p className="opacity-90">{item.desc}</p>
-                    <p className="opacity-75">Grade: {item.result}</p>
+                    
+                    <h4 className="text-xl md:text-2xl font-bold mb-2">{item.title}</h4>
+                    <p className="text-primary/90 font-medium mb-3">{item.institution}</p>
+                    
+                    {/* <div className="mt-4 space-y-2">
+                      <h5 className="font-semibold text-sm opacity-80">Key Highlights:</h5>
+                      <ul className="list-disc list-inside space-y-1 text-sm opacity-90">
+                        {item.highlights.map((highlight, i) => (
+                          <li key={i}>{highlight}</li>
+                        ))}
+                      </ul>
+                    </div> */}
                   </motion.div>
                 </div>
               );

@@ -3,15 +3,19 @@ import { MdEmail } from "react-icons/md";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import profilePic from "/img/profile.jpg";
+import { SiCodeforces, SiHackerrank, SiLeetcode } from "react-icons/si";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
+
   const socialLinks = [
     { icon: <FaGithub className="text-2xl" />, href: "https://github.com/shahjalal-mahmud", label: "GitHub" },
     { icon: <FaLinkedin className="text-2xl" />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/", label: "LinkedIn" },
     { icon: <FaFacebook className="text-2xl" />, href: "https://www.facebook.com/ShahjalalMahmud100/", label: "Facebook" },
-    { icon: <MdEmail className="text-2xl" />, href: "mailto:mahmud.nubtk@gmail.com", label: "Email" }
+    { icon: <MdEmail className="text-2xl" />, href: "mailto:mahmud.nubtk@gmail.com", label: "Email" },
+    { icon: <SiCodeforces />, href: "https://codeforces.com/profile/mahmud.nubtk/", label: "CodeForces" },
+    { icon: <SiLeetcode />, href: "https://leetcode.com/Shahajalal_Mahmud/", label: "LeetCode" },
+    { icon: <SiHackerrank />, href: "https://www.hackerrank.com/profile/mahmud_nubtk/", label: "HackerRank" },
   ];
 
   const quickLinks = [
@@ -26,7 +30,7 @@ const Footer = () => {
     <footer className="w-full bg-base-300 text-base-content">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -35,7 +39,7 @@ const Footer = () => {
         >
           {/* Brand Section */}
           <div className="space-y-4 col-span-1">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.02 }}
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
             >
@@ -51,7 +55,7 @@ const Footer = () => {
             <p className="text-base-content/80 text-sm sm:text-base">
               Crafting digital experiences with clean code and modern design.
             </p>
-            
+
             {/* Email Button */}
             <div className="mt-4">
               <motion.a
@@ -75,8 +79,8 @@ const Footer = () => {
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <a 
-                    href={link.href} 
+                  <a
+                    href={link.href}
                     className="link link-hover text-base-content/80 hover:text-primary text-sm sm:text-base"
                   >
                     {link.name}
@@ -106,7 +110,7 @@ const Footer = () => {
               ))}
             </div>
           </div>
-          
+
           {/* Contact Info */}
           <div className="mt-6 lg:mt-0 col-span-1 md:col-span-2 lg:col-span-1">
             <h3 className="text-lg font-bold mb-4 text-primary">Contact Info</h3>

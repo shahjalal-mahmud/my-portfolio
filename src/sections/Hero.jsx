@@ -2,6 +2,8 @@ import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
+import { SiCodeforces, SiHackerrank, SiLeetcode } from "react-icons/si";
+import { MdEmail } from "react-icons/md";
 
 const Hero = () => {
   return (
@@ -62,6 +64,10 @@ const Hero = () => {
                 { icon: <FaGithub />, href: "https://github.com/shahjalal-mahmud" },
                 { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/" },
                 { icon: <FaFacebook />, href: "https://www.facebook.com/ShahjalalMahmud100/" },
+                { icon: <SiCodeforces />, href: "https://codeforces.com/profile/mahmud.nubtk/" },
+                { icon: <SiLeetcode />, href: "https://leetcode.com/Shahajalal_Mahmud/" },
+                { icon: <SiHackerrank />, href: "https://www.hackerrank.com/profile/mahmud_nubtk/" },
+                { icon: <MdEmail className="text-2xl" />, href: "mailto:mahmud.nubtk@gmail.com" },
               ].map((item, idx) => (
                 <motion.a
                   key={idx}

@@ -25,7 +25,7 @@ const Experience = () => {
     ],
   },
    {
-    title: "Founder & Fullstack Developer – Digital Portfolio Platform",
+    title: "Fullstack Developer – Digital Portfolio Platform",
     company: "Self-Initiated Startup Project",
     duration: "July 2025 – Present",
     description:

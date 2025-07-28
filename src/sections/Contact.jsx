@@ -4,6 +4,8 @@ import emailjs from "emailjs-com";
 import { toast } from "react-toastify";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
+import { SiCodeforces, SiHackerrank, SiLeetcode } from "react-icons/si";
+import { MdEmail } from "react-icons/md";
 
 const Contact = () => {
   const formRef = useRef();
@@ -70,7 +72,11 @@ const Contact = () => {
               {[
                 { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/", label: "LinkedIn" },
                 { icon: <FaGithub />, href: "https://github.com/shahjalal-mahmud", label: "GitHub" },
-                { icon: <FaFacebook />, href: "https://www.facebook.com/ShahjalalMahmud100/", label: "Facebook" }
+                { icon: <FaFacebook />, href: "https://www.facebook.com/ShahjalalMahmud100/", label: "Facebook" },
+                { icon: <SiCodeforces />, href: "https://codeforces.com/profile/mahmud.nubtk/" },
+                { icon: <SiLeetcode />, href: "https://leetcode.com/Shahajalal_Mahmud/" },
+                { icon: <SiHackerrank />, href: "https://www.hackerrank.com/profile/mahmud_nubtk/" },
+                { icon: <MdEmail className="text-2xl" />, href: "mailto:mahmud.nubtk@gmail.com"},
               ].map((social, i) => (
                 <motion.a
                   key={i}
