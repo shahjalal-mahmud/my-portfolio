@@ -6,7 +6,7 @@ const ThemeContext = createContext();
 const defaultFont = localStorage.getItem("font") || "Arial"; // default font
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "corporate");
   const [font, setFont] = useState(defaultFont);
 
   const toggleTheme = (newTheme) => {
