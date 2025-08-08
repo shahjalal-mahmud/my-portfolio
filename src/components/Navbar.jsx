@@ -42,7 +42,7 @@ const Navbar = () => {
       ]
     },
     { name: "Services", path: "/services" },
-    { name: "Blog", path: "/blog" },
+    // { name: "Blog", path: "/blog" },
   ];
 
   // Handle click outside for theme menu and dropdowns

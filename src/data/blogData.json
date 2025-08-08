@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Building My Portfolio Site with React + Tailwind",
+    "date": "2025-08-08",
+    "caption": "Finally launched my new portfolio site. Here's how I built it from scratch!",
+    "tags": ["React", "Tailwind", "Portfolio"],
+    "image": "https://source.unsplash.com/random/1200x600?coding",
+    "content": "I built my portfolio using Vite, React, TailwindCSS, and Firebase for backend. The UI is responsive, fast and lightweight. Check out the full design walkthrough and the source code.",
+    "author": {
+      "name": "Md Shahajalal Mahmud",
+      "title": "Student at NUBTK | Android App Developer",
+      "profileImage": "/img/profile.jpg"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Exploring Astro – A New Web Framework",
+    "date": "2025-08-07",
+    "caption": "Just started playing with AstroJS — and I’m loving the speed and simplicity.",
+    "tags": ["Astro", "Web", "Tools"],
+    "image": "https://source.unsplash.com/random/1200x600?frontend",
+    "content": "Astro allows you to ship less JavaScript and build extremely fast websites. Here’s my take on what makes it unique and where it fits in my workflow.",
+    "author": {
+      "name": "Md Shahajalal Mahmud",
+      "title": "Student at NUBTK | Android App Developer",
+      "profileImage": "/img/profile.jpg"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Fair Electricity Bill Sharing with Excel (Prepaid Meter + Slabs)",
+    "date": "2025-08-08",
+    "caption": "Built a simple but smart Excel sheet to split prepaid electricity bills among multiple families using slab rates.",
+    "tags": ["Excel", "Utility", "Personal Project"],
+    "image": "https://source.unsplash.com/random/1200x600?electricity",
+    "content": "I recently solved a real-world problem: splitting prepaid electricity bills among 3 families fairly based on sub-meter readings. Instead of building an app, I created a Google Sheet that:\n\n- Calculates unit consumption per family\n- Determines the actual cost per unit from net recharge (after VAT)\n- Applies government slab-wise billing rules (e.g., 0–50 units @ 4.63 BDT, 51–75 @ 5.26 BDT, etc.)\n- Uses Excel formulas like `=MAX(0, (MIN(end, slab_to) - slab_from) * rate)` to dynamically calculate charges slab by slab\n\nThe total always matches the net recharge amount, and the result is clean and fair for everyone involved. This is a great example of how powerful spreadsheets can be for everyday finance problems without needing to write code!",
+    "author": {
+      "name": "Md Shahajalal Mahmud",
+      "title": "Student at NUBTK | Android App Developer",
+      "profileImage": "/img/profile.jpg"
+    }
+  }
+]
