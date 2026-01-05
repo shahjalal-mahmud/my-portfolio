@@ -1,6 +1,5 @@
-import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-// eslint-disable-next-line no-unused-vars
+import { FaGithub, FaLinkedin, FaFacebook, FaExternalLinkAlt } from "react-icons/fa";
+import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
 import { motion } from "framer-motion";
 import profilePic from "/img/profile.jpg";
 import { SiCodeforces, SiHackerrank, SiLeetcode } from "react-icons/si";
@@ -12,30 +11,26 @@ const Footer = () => {
   const location = useLocation();
 
   const socialLinks = [
-    { icon: <FaGithub className="text-2xl" />, href: "https://github.com/shahjalal-mahmud", label: "GitHub" },
-    { icon: <FaLinkedin className="text-2xl" />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/", label: "LinkedIn" },
-    { icon: <FaFacebook className="text-2xl" />, href: "https://www.facebook.com/ShahjalalMahmud100/", label: "Facebook" },
-    { icon: <MdEmail className="text-2xl" />, href: "mailto:mahmud.nubtk@gmail.com", label: "Email" },
+    { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/", label: "LinkedIn" },
+    { icon: <FaGithub />, href: "https://github.com/shahjalal-mahmud", label: "GitHub" },
     { icon: <SiCodeforces />, href: "https://codeforces.com/profile/mahmud.nubtk/", label: "CodeForces" },
     { icon: <SiLeetcode />, href: "https://leetcode.com/Shahajalal_Mahmud/", label: "LeetCode" },
     { icon: <SiHackerrank />, href: "https://www.hackerrank.com/profile/mahmud_nubtk/", label: "HackerRank" },
+    { icon: <FaFacebook />, href: "https://www.facebook.com/ShahjalalMahmud100/", label: "Facebook" },
   ];
 
   const quickLinks = [
     { name: "Home", id: "hero" },
     { name: "About", id: "about" },
-    { name: "Experience", id: "experience" },
+    { name: "Skills", id: "skills" },
     { name: "Projects", id: "projects" },
-    { name: "Statistics", id: "github" },
+    { name: "Contact", id: "contact" },
   ];
 
   const handleQuickLinkClick = (id) => {
     if (location.pathname !== "/") {
       navigate("/", { replace: false });
-      // Wait for the navigation to complete before scrolling
-      setTimeout(() => {
-        scrollToSection(id);
-      }, 100);
+      setTimeout(() => scrollToSection(id), 100);
     } else {
       scrollToSection(id);
     }
@@ -49,83 +44,90 @@ const Footer = () => {
   };
 
   return (
-    <footer className="w-full bg-base-300 text-base-content">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Footer Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12"
-        >
-          {/* Brand Section */}
-          <div className="space-y-4 col-span-1">
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
-            >
+    <footer className="w-full bg-base-300 text-base-content border-t border-primary/10">
+      <div className="max-w-7xl mx-auto px-6 py-12 lg:py-16">
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          
+          {/* Brand & Mission */}
+          <div className="space-y-6 text-center md:text-left">
+            <div className="flex flex-col items-center md:items-start gap-4">
               <div className="avatar">
-                <div className="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <div className="w-20 rounded-2xl ring ring-primary ring-offset-base-100 ring-offset-4 rotate-3 hover:rotate-0 transition-transform duration-300">
                   <img src={profilePic} alt="Shahjalal Mahmud" />
                 </div>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                MD Shahajalal Mahmud
-              </h2>
-            </motion.div>
-            <p className="text-base-content/80 text-sm sm:text-base">
-              Crafting digital experiences with clean code and modern design.
-            </p>
-
-            {/* Email Button */}
-            <div className="mt-4">
-              <motion.a
-                href="mailto:mahmud.nubtk@gmail.com"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="btn btn-primary gap-2 w-full sm:w-auto text-sm sm:text-base"
-              >
-                <MdEmail /> Email Me
-              </motion.a>
+              <div>
+                <h2 className="text-2xl font-black tracking-tight">
+                  Shahajalal <span className="text-primary">Mahmud</span>
+                </h2>
+                <p className="text-xs font-bold uppercase tracking-widest opacity-60">Founder & Technical Leader</p>
+              </div>
             </div>
+            <p className="text-sm leading-relaxed opacity-80">
+              Architecting scalable digital products and leading high-performance teams to turn complex ideas into reality.
+            </p>
           </div>
 
-          {/* Quick Links */}
-          <div className="mt-6 md:mt-0">
-            <h3 className="text-lg font-bold mb-4 text-primary">Quick Links</h3>
-            <ul className="space-y-2">
+          {/* Quick Navigation */}
+          <div className="text-center md:text-left">
+            <h3 className="text-lg font-bold mb-6 text-primary uppercase tracking-widest text-xs">Navigation</h3>
+            <ul className="space-y-3">
               {quickLinks.map((link, index) => (
-                <motion.li
-                  key={index}
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
+                <li key={index}>
                   <button
                     onClick={() => handleQuickLinkClick(link.id)}
-                    className="link link-hover text-base-content/80 hover:text-primary text-sm sm:text-base text-left w-full"
+                    className="hover:text-primary transition-colors text-sm font-medium opacity-80 hover:opacity-100"
                   >
                     {link.name}
                   </button>
-                </motion.li>
+                </li>
               ))}
             </ul>
           </div>
 
-          {/* Social Links */}
-          <div className="mt-6 lg:mt-0 md:col-span-2 lg:col-span-1">
-            <h3 className="text-lg font-bold mb-4 text-primary">Connect With Me</h3>
-            <div className="flex flex-wrap gap-3 sm:gap-4">
+          {/* Appriyo Venture Section */}
+          <div className="text-center md:text-left bg-primary/5 p-6 rounded-2xl border border-primary/10">
+            <h3 className="text-lg font-bold mb-4 text-primary uppercase tracking-widest text-xs">Our Venture</h3>
+            <div className="space-y-4">
+              <h4 className="text-xl font-black italic">Appriyo</h4>
+              <p className="text-sm opacity-80">
+                A specialized IT farm focused on Android MVPs and scalable web ecosystems.
+              </p>
+              <a 
+                href="https://appriyo.com" 
+                target="_blank" 
+                rel="noreferrer"
+                className="btn btn-primary btn-sm gap-2 normal-case shadow-lg"
+              >
+                Visit appriyo.com <FaExternalLinkAlt className="text-[10px]" />
+              </a>
+            </div>
+          </div>
+
+          {/* Connect & Socials */}
+          <div className="text-center md:text-left">
+            <h3 className="text-lg font-bold mb-6 text-primary uppercase tracking-widest text-xs">Get in Touch</h3>
+            <div className="space-y-4 mb-8">
+              <a href="mailto:mahmud.nubtk@gmail.com" className="flex items-center justify-center md:justify-start gap-3 hover:text-primary transition-colors text-sm">
+                <MdEmail className="text-xl text-primary" /> mahmud.nubtk@gmail.com
+              </a>
+              <p className="flex items-center justify-center md:justify-start gap-3 text-sm">
+                <MdPhone className="text-xl text-primary" /> +880 18897-93146
+              </p>
+              <p className="flex items-center justify-center md:justify-start gap-3 text-sm">
+                <MdLocationOn className="text-xl text-primary" /> Khulna, Bangladesh
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center md:justify-start gap-3">
               {socialLinks.map((social, index) => (
                 <motion.a
                   key={index}
                   href={social.href}
                   target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  whileHover={{ y: -5, scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="btn btn-circle btn-ghost hover:bg-primary/10 hover:text-primary"
+                  rel="noreferrer"
+                  whileHover={{ y: -3, scale: 1.1 }}
+                  className="p-2 bg-base-100 rounded-lg text-xl hover:text-primary shadow-sm"
                 >
                   {social.icon}
                 </motion.a>
@@ -133,38 +135,21 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Contact Info */}
-          <div className="mt-6 lg:mt-0 col-span-1 md:col-span-2 lg:col-span-1">
-            <h3 className="text-lg font-bold mb-4 text-primary">Contact Info</h3>
-            <div className="space-y-2">
-              <p className="flex items-center gap-2 text-base-content/80 text-sm sm:text-base">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                018897-93146
-              </p>
-              <p className="flex items-center gap-2 text-base-content/80 text-sm sm:text-base">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                mahmud.nubtk@gmail.com
-              </p>
-            </div>
-          </div>
-        </motion.div>
+        </div>
 
-        {/* Divider */}
-        <div className="divider my-0"></div>
+        <div className="divider opacity-10 my-10"></div>
 
-        {/* Copyright Section */}
-        <div className="py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-2">
-            <p className="text-xs sm:text-sm text-base-content/70 text-center md:text-left">
-              © {currentYear} Md Shahajalal Mahmud. All rights reserved.
-            </p>
-            <p className="text-xs sm:text-sm text-base-content/70 text-center md:text-left">
-              Made with ❤️ and React
-            </p>
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 opacity-60">
+          <p className="text-xs font-medium">
+            © {currentYear} Shahajalal Mahmud • Built with React & Tailwind
+          </p>
+          <div className="flex gap-6 text-xs font-bold uppercase tracking-tighter">
+            <span>Discipline</span>
+            <span className="text-primary">●</span>
+            <span>Consistency</span>
+            <span className="text-primary">●</span>
+            <span>Growth</span>
           </div>
         </div>
       </div>
