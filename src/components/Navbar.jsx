@@ -41,8 +41,8 @@ const Navbar = () => {
         { name: "Codeforces", path: "/statistics#codeforces" }
       ]
     },
-    { name: "Services", path: "/services" },
-    // { name: "Blog", path: "/blog" },
+    // Updated this path to the external URL
+    { name: "Services", path: "https://appriyo.com/services" },
   ];
 
   // Handle click outside for theme menu and dropdowns
@@ -69,6 +69,12 @@ const Navbar = () => {
   const handleNavClick = (path) => {
     setIsOpen(false);
     setOpenDropdown(null);
+
+    // Check if the path is the external services link
+    if (path === "https://appriyo.com/services") {
+      window.open(path, "_blank", "noopener,noreferrer");
+      return; // Exit function so it doesn't try to navigate internally
+    }
 
     if (path.includes("#")) {
       const [route, hash] = path.split("#");
@@ -150,11 +156,10 @@ const Navbar = () => {
               <div key={idx} className="relative" ref={dropdownRefs[dropdownKey]}>
                 <button
                   onClick={() => toggleDropdown(dropdownKey)}
-                  className={`px-4 py-3 text-sm font-medium flex items-center gap-1 transition-all duration-200 rounded-lg ${
-                    isDropdownActive(item.items)
-                      ? "text-primary bg-primary/10"
-                      : "text-base-content hover:text-primary hover:bg-base-200"
-                  }`}
+                  className={`px-4 py-3 text-sm font-medium flex items-center gap-1 transition-all duration-200 rounded-lg ${isDropdownActive(item.items)
+                    ? "text-primary bg-primary/10"
+                    : "text-base-content hover:text-primary hover:bg-base-200"
+                    }`}
                 >
                   {item.name}
                   {openDropdown === dropdownKey ? (
@@ -166,22 +171,20 @@ const Navbar = () => {
 
                 {/* Dropdown Content */}
                 <div
-                  className={`absolute left-0 mt-1 min-w-[200px] bg-base-100 rounded-lg shadow-xl z-50 border border-base-200 transition-all duration-200 ${
-                    openDropdown === dropdownKey
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 -translate-y-2 pointer-events-none"
-                  }`}
+                  className={`absolute left-0 mt-1 min-w-[200px] bg-base-100 rounded-lg shadow-xl z-50 border border-base-200 transition-all duration-200 ${openDropdown === dropdownKey
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-2 pointer-events-none"
+                    }`}
                 >
                   <ul className="py-1 space-y-1">
                     {item.items.map((subItem, subIdx) => (
                       <li key={subIdx} className="px-1 py-0.5">
                         <button
                           onClick={() => handleNavClick(subItem.path)}
-                          className={`w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-150 flex items-center ${
-                            isActive(subItem.path)
-                              ? "bg-primary text-primary-content"
-                              : "hover:bg-base-200"
-                          }`}
+                          className={`w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-150 flex items-center ${isActive(subItem.path)
+                            ? "bg-primary text-primary-content"
+                            : "hover:bg-base-200"
+                            }`}
                         >
                           {subItem.name}
                         </button>
@@ -197,11 +200,10 @@ const Navbar = () => {
               <button
                 key={idx}
                 onClick={() => handleNavClick(item.path)}
-                className={`px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg ${
-                  isActive(item.path)
-                    ? "text-primary bg-primary/10"
-                    : "text-base-content hover:text-primary hover:bg-base-200"
-                }`}
+                className={`px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg ${isActive(item.path)
+                  ? "text-primary bg-primary/10"
+                  : "text-base-content hover:text-primary hover:bg-base-200"
+                  }`}
               >
                 {item.name}
               </button>
@@ -229,11 +231,10 @@ const Navbar = () => {
 
           {/* Dropdown Content */}
           <div
-            className={`absolute right-0 mt-2 w-72 sm:w-80 md:w-96 bg-base-200 rounded-box shadow-xl p-4 z-50 transition-all duration-200 ${
-              isThemeMenuOpen
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-2 pointer-events-none"
-            }`}
+            className={`absolute right-0 mt-2 w-72 sm:w-80 md:w-96 bg-base-200 rounded-box shadow-xl p-4 z-50 transition-all duration-200 ${isThemeMenuOpen
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-2 pointer-events-none"
+              }`}
           >
             <ThemeSelector />
           </div>
@@ -251,16 +252,14 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden fixed inset-y-0 right-0 z-40 transition-all duration-300 ease-in-out ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`lg:hidden fixed inset-y-0 right-0 z-40 transition-all duration-300 ease-in-out ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
         style={{ top: navbarRef.current?.offsetHeight || "64px" }}
       >
         {/* Menu Content */}
         <div
-          className={`absolute top-0 right-0 h-[calc(100vh-64px)] w-64 sm:w-72 bg-base-100/95 backdrop-blur-sm shadow-xl transform transition-transform duration-300 ease-in-out ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`absolute top-0 right-0 h-[calc(100vh-64px)] w-64 sm:w-72 bg-base-100/95 backdrop-blur-sm shadow-xl transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <div className="h-full flex flex-col overflow-y-auto">
             <ul className="flex-1 flex flex-col p-2 space-y-1">
@@ -271,11 +270,10 @@ const Navbar = () => {
                     <li key={idx} className="menu-dropdown">
                       <details open={isDropdownActive(item.items)}>
                         <summary
-                          className={`px-4 py-3 rounded-lg ${
-                            isDropdownActive(item.items)
-                              ? "bg-primary text-primary-content"
-                              : "hover:bg-base-200"
-                          }`}
+                          className={`px-4 py-3 rounded-lg ${isDropdownActive(item.items)
+                            ? "bg-primary text-primary-content"
+                            : "hover:bg-base-200"
+                            }`}
                         >
                           {item.name}
                         </summary>
@@ -284,11 +282,10 @@ const Navbar = () => {
                             <li key={subIdx}>
                               <button
                                 onClick={() => handleNavClick(subItem.path)}
-                                className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 ${
-                                  isActive(subItem.path)
-                                    ? "bg-primary text-primary-content"
-                                    : "hover:bg-base-200"
-                                }`}
+                                className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 ${isActive(subItem.path)
+                                  ? "bg-primary text-primary-content"
+                                  : "hover:bg-base-200"
+                                  }`}
                               >
                                 {subItem.name}
                               </button>
@@ -304,11 +301,10 @@ const Navbar = () => {
                     <li key={idx}>
                       <button
                         onClick={() => handleNavClick(item.path)}
-                        className={`w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 ${
-                          isActive(item.path)
-                            ? "bg-primary text-primary-content"
-                            : "hover:bg-base-200"
-                        }`}
+                        className={`w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 ${isActive(item.path)
+                          ? "bg-primary text-primary-content"
+                          : "hover:bg-base-200"
+                          }`}
                       >
                         {item.name}
                       </button>
