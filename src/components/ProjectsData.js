@@ -16,7 +16,7 @@ const projects = [
       "/projects/repair-store/trasection_screen.jpeg"
     ],
     github: "https://github.com/shahjalal-mahmud/RepairStoreManager",
-    Apk: null, 
+    live: "https://drive.google.com/file/d/1m7_lfMzOZHbpO7EsQEGvl3I9crFPEuTQ/view?usp=sharing", 
     story: "Witnessing local repair shops struggle with manual paper ledgers and lost customer stickers, I built a digital-first solution. Unlike generic apps, this was built in the 'trenches' with feedback from 5 active shop owners to handle real-world chaos like dual-SIM SMS and thermal printer pairing.",
     features: [
       "Automated SMS/WhatsApp status updates",
@@ -80,7 +80,7 @@ const projects = [
       "/projects/prodorshok/roadmap.png",
     ],
     github: "https://github.com/shahjalal-mahmud/Prodorshok",
-    live: null,
+    live: "https://drive.google.com/file/d/1f74Z32Zrevh6W5p_Rp-MG6c1_3o33AVy/view?usp=sharing",
     story: "Born from personal struggles with career choices in Bangladesh. After surveying 150+ students across 10 universities, I built this to democratize career guidance beyond traditional paths like medicine/engineering.",
     features: [
       "AI-powered career suggestions",
@@ -138,7 +138,7 @@ const projects = [
       "/projects/cashguard-ai/splash.jpg"
     ],
     github: "https://github.com/shahjalal-mahmud/CashGuardAI",
-    Apk: "https://bit.ly/CashGuardAPK", // Link from your hackathon docs
+    live: "https://drive.google.com/file/d/1lYBpXFjjI7-nI2asTUq9ow83-BPY0ck7/view?usp=sharing",
     story: "Circulation of fake currency is a major economic threat in Bangladesh. During the SOLVIO AI Hackathon, my team (Team Drishty) and I decided to tackle this by moving detection from expensive bank machines directly onto the user's smartphone. I led the technical development, focusing on making the AI model run smoothly on-device without needing an internet connection.",
     features: [
       "Real-time scanning using CameraX ImageAnalysis",

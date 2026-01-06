@@ -4,7 +4,7 @@ import { Typewriter } from "react-simple-typewriter";
 import { SiCodeforces, SiHackerrank, SiLeetcode } from "react-icons/si";
 import { MdEmail } from "react-icons/md";
 
-// 1. DATA CONFIGURATION - Change these values to update your site easily
+// 1. DATA CONFIGURATION
 const HERO_CONTENT = {
   name: "ShahaJalal",
   university: "NUBTK",
@@ -12,7 +12,18 @@ const HERO_CONTENT = {
   typewriterWords: ["Founder @ Appriyo", "Android Developer", "Technical Leader"],
   description: (
     <>
-      Founder of <strong className="text-primary">Appriyo</strong> and a 3rd-year CSE student. 
+      Founder of{" "}
+      <strong className="text-primary">
+        <a 
+          href="https://appriyo.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="hover:underline underline-offset-4"
+        >
+          Appriyo
+        </a>
+      </strong>{" "}
+      and a 3rd-year CSE student. 
       I lead a specialized team to build scalable systems, from high-performance 
       <strong className="text-primary"> Android Apps</strong> to modern web platforms. 
       I focus on architecture, discipline, and turning complex ideas into digital reality.
@@ -33,13 +44,13 @@ const HERO_CONTENT = {
 
 const Hero = () => {
   return (
-    <section id="hero" className="min-h-screen flex items-center pt-4 px-6">
+    <section id="hero" className="min-h-screen flex items-center pt-4 px-6 bg-base-100 text-base-content">
       <div className="max-w-7xl mx-auto w-full">
         <div className="flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-16">
           
           {/* Text Content */}
           <div className="flex-1 text-center lg:text-left space-y-6">
-            <h2 className="text-sm sm:text-md lg:text-xl xl:text-2xl tracking-wider uppercase font-bold opacity-100 min-h-[1.5em]">
+            <h2 className="text-sm sm:text-md lg:text-xl xl:text-2xl tracking-wider uppercase font-bold text-primary min-h-[1.5em]">
               <Typewriter
                 words={HERO_CONTENT.typewriterWords}
                 loop={true}
@@ -78,7 +89,12 @@ const Hero = () => {
               <a href="#projects" className="btn btn-primary btn-wide shadow-md">
                 View Projects
               </a>
-              <a href="https://appriyo.com" target="_blank" rel="noreferrer" className="btn btn-outline btn-wide">
+              <a 
+                href="https://appriyo.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-outline btn-wide"
+              >
                 Visit Appriyo
               </a>
             </div>

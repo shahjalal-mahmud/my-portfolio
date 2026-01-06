@@ -1,124 +1,136 @@
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { FaGraduationCap, FaSchool, FaUniversity } from "react-icons/fa";
+import { FaGraduationCap, FaUniversity, FaSchool, FaExternalLinkAlt } from "react-icons/fa";
 
-const EducationTimeline = () => {
-  const timelineItems = [
+const Education = () => {
+  const educationItems = [
     {
       title: "BSc in Computer Science & Engineering",
-      year: "2023 - 2027",
+      year: "2023 — 2027",
       institution: "Northern University of Business and Technology, Khulna",
-      result: "CGPA 3.975 out of 4",
-      icon: <FaUniversity className="text-2xl" />,
-      highlights: [
-        "Specializing in Software Engineering",
-        "Active in competitive programming",
-        "Coursework includes AI, ML, and Data Structures"
-      ]
+      link: "https://nubtk.ac.bd/",
+      result: "CGPA 3.975 / 4.00",
+      icon: <FaUniversity />,
+      highlights: ["Specializing in Software Engineering", "Departmental Topper", "Active in Competitive Programming"]
     },
     {
-      title: "Higher Secondary Certificate (Science)",
-      year: "2019 - 2021",
+      title: "Higher Secondary Certificate",
+      year: "2019 — 2021",
       institution: "Govt. Brajalal College, Khulna",
-      result: "GPA 5 out of 5",
-      icon: <FaSchool className="text-2xl" />,
-      highlights: [
-        "Mathematics & Physics focus",
-        "Participated in science fairs",
-        "Class representative"
-      ]
+      link: "http://nsc.blcollege.gov.bd/",
+      result: "GPA 5.00 / 5.00",
+      icon: <FaSchool />,
+      highlights: ["Science Group", "Mathematics focus", "Academic Excellence"]
     },
     {
-      title: "Secondary School Certificate (Science)",
-      year: "2017 - 2019",
+      title: "Secondary School Certificate",
+      year: "2017 — 2019",
       institution: "Govt. Jalma Chakrakhali High School",
-      result: "GPA 5 out of 5",
-      icon: <FaSchool className="text-2xl" />,
-      highlights: [
-        "Top 1% in district",
-        "Science Olympiad participant",
-        "Debate team captain"
-      ]
-    },
+      link: "https://www.facebook.com/GZCHSOfficial/",
+      result: "GPA 5.00 / 5.00",
+      icon: <FaGraduationCap />,
+      highlights: ["Science Group", "Top 1% in District", "Science Olympiad"]
+    }
   ];
 
   return (
-    <section id="education" className="py-16 md:py-24 px-4 sm:px-6 bg-base-100">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 md:mb-6">
-            Education Journey
-          </h2>
-        </motion.div>
+    <section id="education" className="py-24 px-6 bg-base-100 relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
 
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="hidden lg:block absolute left-1/2 top-0 w-0.5 h-full bg-gradient-to-b from-primary to-secondary transform -translate-x-1/2"></div>
+      <div className="max-w-7xl mx-auto relative z-10">
+        <header className="mb-16">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 mb-4"
+          >
+            <div className="h-px w-12 bg-primary"></div>
+            <span className="text-primary font-bold uppercase tracking-widest text-sm">Academic Background</span>
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-6xl font-black text-base-content italic"
+          >
+            Education <span className="text-primary not-italic">.</span>
+          </motion.h2>
+        </header>
 
-          <div className="space-y-8 md:space-y-12">
-            {timelineItems.map((item, idx) => {
-              const isLeft = idx % 2 === 0;
-              return (
-                <div
-                  key={idx}
-                  className={`relative flex flex-col lg:flex-row items-center ${
-                    isLeft ? "lg:justify-start" : "lg:justify-end"
-                  }`}
-                >
-                  {/* Timeline dot with icon */}
-                  <div className="absolute top-6 lg:top-1/2 lg:-translate-y-1/2 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-primary border-4 border-base-100 z-20 flex items-center justify-center text-white">
+        {/* Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {educationItems.map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              whileHover={{ y: -10 }}
+              className="group relative"
+            >
+              <div className="h-full bg-base-200/50 backdrop-blur-md border border-base-content/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:bg-base-200 hover:border-primary/30 shadow-sm hover:shadow-2xl hover:shadow-primary/5">
+                
+                {/* Top Section: Icon & Year */}
+                <div className="flex justify-between items-start mb-8">
+                  <div className="p-4 rounded-2xl bg-primary text-primary-content text-2xl shadow-lg shadow-primary/20 group-hover:rotate-12 transition-transform duration-500">
                     {item.icon}
                   </div>
+                  <span className="text-xs font-black opacity-40 group-hover:opacity-100 transition-opacity uppercase tracking-tighter">
+                    {item.year}
+                  </span>
+                </div>
 
-                  {/* Timeline Content */}
-                  <motion.div
-                    initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    viewport={{ once: true }}
-                    whileHover={{ scale: 1.02 }}
-                    className={`bg-base-200 shadow-xl hover:shadow-2xl rounded-2xl p-6 w-full lg:w-[45%] z-10 transition-all duration-300 relative overflow-hidden ${
-                      isLeft ? "lg:mr-auto" : "lg:ml-auto"
-                    }`}
-                  >
-                    {/* Decorative element */}
-                    <div className="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-                    
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                      <span className="text-sm font-semibold px-3 py-1 bg-primary/10 text-primary rounded-full">
-                        {item.year}
-                      </span>
-                      <span className="text-sm font-medium px-3 py-1 bg-secondary/10 text-secondary rounded-full">
+                {/* Main Content */}
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-black leading-tight">
+                    {item.title}
+                  </h3>
+                  
+                  <div className="flex flex-col gap-2">
+                    <a 
+                      href={item.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm font-bold text-primary flex items-center gap-2 hover:underline decoration-2 underline-offset-4 group/link"
+                    >
+                      {item.institution}
+                      <FaExternalLinkAlt className="text-[10px] group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                    </a>
+                    <div className="flex items-center gap-2">
+                      <span className="badge badge-outline badge-primary font-black text-[10px] px-3">
                         {item.result}
                       </span>
                     </div>
-                    
-                    <h4 className="text-xl md:text-2xl font-bold mb-2">{item.title}</h4>
-                    <p className="text-primary/90 font-medium mb-3">{item.institution}</p>
-                    
-                    {/* <div className="mt-4 space-y-2">
-                      <h5 className="font-semibold text-sm opacity-80">Key Highlights:</h5>
-                      <ul className="list-disc list-inside space-y-1 text-sm opacity-90">
-                        {item.highlights.map((highlight, i) => (
-                          <li key={i}>{highlight}</li>
-                        ))}
-                      </ul>
-                    </div> */}
-                  </motion.div>
+                  </div>
+
+                  {/* Highlights Reveal on Hover (Desktop) or Always Visible (Mobile) */}
+                  <div className="pt-6">
+                    <h4 className="text-[10px] uppercase font-black tracking-[0.2em] opacity-40 mb-3">Key Achievments</h4>
+                    <ul className="space-y-2">
+                      {item.highlights.map((point, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm opacity-70 group-hover:opacity-100 transition-opacity">
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></span>
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
+
+                {/* Bottom Decorative Number */}
+                <div className="absolute bottom-6 right-10 text-6xl font-black opacity-[0.03] group-hover:opacity-[0.07] transition-opacity pointer-events-none">
+                  0{idx + 1}
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
   );
 };
 
-export default EducationTimeline;
+export default Education;
