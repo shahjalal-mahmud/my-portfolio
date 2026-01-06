@@ -6,17 +6,17 @@ const Education = () => {
     {
       title: "BSc in Computer Science & Engineering",
       year: "2023 — 2027",
-      institution: "Northern University of Business and Technology, Khulna",
-      link: "https://nubtk.ac.bd/",
+      institution: "Northern University of Business and Technology Khulna",
+      link: "https://nubtkhulna.ac.bd/",
       result: "CGPA 3.975 / 4.00",
       icon: <FaUniversity />,
-      highlights: ["Specializing in Software Engineering", "Departmental Topper", "Active in Competitive Programming"]
+      highlights: ["Specializing in Software Engineering", "Software Development", "Active in Competitive Programming"]
     },
     {
       title: "Higher Secondary Certificate",
       year: "2019 — 2021",
       institution: "Govt. Brajalal College, Khulna",
-      link: "http://nsc.blcollege.gov.bd/",
+      link: "https://www.blcollege.edu.bd/",
       result: "GPA 5.00 / 5.00",
       icon: <FaSchool />,
       highlights: ["Science Group", "Mathematics focus", "Academic Excellence"]
@@ -25,7 +25,7 @@ const Education = () => {
       title: "Secondary School Certificate",
       year: "2017 — 2019",
       institution: "Govt. Jalma Chakrakhali High School",
-      link: "https://www.facebook.com/GZCHSOfficial/",
+      link: "https://jalmachakrakhalisecondaryschool.jessoreboard.gov.bd/",
       result: "GPA 5.00 / 5.00",
       icon: <FaGraduationCap />,
       highlights: ["Science Group", "Top 1% in District", "Science Olympiad"]

@@ -1,72 +1,103 @@
 import { Link } from "react-router-dom";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import projects from "../components/ProjectsData";
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-16 md:py-20 px-6">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12">My Projects</h2>
+    <section
+      id="projects"
+      className="py-16 md:py-24 px-4 bg-base-100 text-base-content relative overflow-hidden"
+    >
+      {/* Soft Background Accents */}
+      <div className="absolute top-10 left-10 w-72 h-72 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-72 h-72 bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Header */}
+        <header className="text-center md:text-left mb-12 md:mb-16">
+          <div className="flex items-center gap-3 mb-4 justify-center md:justify-start">
+            <div className="h-[2px] w-8 bg-primary" />
+            <span className="text-primary font-bold uppercase tracking-widest text-xs">
+              Selected Work
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+            Featured <span className="text-primary">Projects</span>
+          </h2>
+        </header>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {projects.map((project) => (
-            <motion.div
+            <motion.article
               key={project.slug}
-              whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="card bg-base-200 shadow-md hover:shadow-xl border border-base-300"
+              whileHover={{ y: -6 }}
+              transition={{ type: "spring", stiffness: 260 }}
+              className="group bg-base-200/50 backdrop-blur-sm border border-base-content/5 rounded-3xl overflow-hidden hover:border-primary/30 transition-all"
             >
-              <figure className="px-4 pt-4 bg-base-100 flex justify-center items-center h-48 sm:h-56 md:h-64">
-                <img
-                  src={project.image}
-                  alt={project.name}
-                  className="h-full object-contain rounded-lg"
-                />
-              </figure>
+              {/* Image */}
+              <div className="p-5">
+                <div className="bg-base-100 rounded-2xl overflow-hidden flex items-center justify-center h-44 md:h-52">
+                  <img
+                    src={project.image}
+                    alt={project.name}
+                    className="h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                </div>
+              </div>
 
-              <div className="card-body p-4 md:p-6">
-                <h3 className="card-title text-lg md:text-xl">{project.name}</h3>
-                <p className="text-sm opacity-90">{project.description}</p>
+              {/* Content */}
+              <div className="px-6 pb-6">
+                <h3 className="text-xl font-bold tracking-tight mb-2">
+                  {project.name}
+                </h3>
 
-                <div className="flex flex-wrap gap-2 mt-2">
+                <p className="text-sm opacity-70 leading-relaxed mb-4">
+                  {project.description}
+                </p>
+
+                {/* Tech Stack */}
+                <div className="flex flex-wrap gap-2 mb-5">
                   {project.skills.map((skill, i) => (
-                    <span 
-                      key={i} 
-                      className="badge badge-outline badge-primary hover:badge-primary hover:text-primary-content"
+                    <span
+                      key={i}
+                      className="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-base-300/60 text-base-content/70"
                     >
                       {skill}
                     </span>
                   ))}
                 </div>
 
-                <div className="card-actions mt-4 flex flex-wrap gap-2">
-                  <a 
-                    href={project.github} 
-                    className="btn btn-sm btn-outline gap-1"
+                {/* Actions */}
+                <div className="flex items-center gap-3">
+                  <a
+                    href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="btn btn-sm btn-ghost gap-2"
                   >
-                    <FaGithub /> Github
+                    <FaGithub /> Code
                   </a>
-                  <a 
-                    href={project.live} 
-                    className="btn btn-sm btn-primary gap-1"
+
+                  <a
+                    href={project.live}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="btn btn-sm btn-outline btn-primary gap-2"
                   >
                     <FaExternalLinkAlt /> Live
                   </a>
-                  <Link 
-                    to={`/projects/${project.slug}`} 
-                    className="btn btn-sm btn-secondary"
+
+                  <Link
+                    to={`/projects/${project.slug}`}
+                    className="ml-auto text-sm font-bold text-primary hover:underline"
                   >
-                    Details
+                    Details →
                   </Link>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </div>
