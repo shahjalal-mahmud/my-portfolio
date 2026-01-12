@@ -1,5 +1,6 @@
 import { FaMapMarkerAlt, FaEnvelope, FaDownload, FaUserGraduate, FaCode } from "react-icons/fa";
 import { useState, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { IoClose } from "react-icons/io5";
 
@@ -11,7 +12,7 @@ const ABOUT_DATA = {
   cvPath: "/cv.pdf",
   cvFileName: "Shahjalal_CV.pdf",
   
-  shortBio: `I am a 3rd-year CSE student at NUBTK and the Founder of Appriyo. I’ve transitioned from being a developer to a technical leader, focusing on building scalable digital products that solve real-world business problems.`,
+  shortBio: `I am a 3rd-year CSE student at NUBTK and the Founder of Appriyo. I've transitioned from being a developer to a technical leader, focusing on building scalable digital products that solve real-world business problems.`,
   
   expandedBio: (
     <>
@@ -19,7 +20,7 @@ const ABOUT_DATA = {
       <br /><br />
       I am a firm believer in discipline—evidenced by my growth into the Top 5% of global contributors in 2025. I use tools like ClickUp for project management and Figma for collaboration to ensure my team delivers polished, market-ready MVPs.
       <br /><br />
-      When I'm not architecting systems, I'm sharpening my problem-solving skills on LeetCode or exploring innovative tech like AI integration and NFC solutions. Let’s collaborate to turn your vision into a robust digital reality.
+      When I'm not architecting systems, I'm sharpening my problem-solving skills on LeetCode or exploring innovative tech like AI integration and NFC solutions. Let's collaborate to turn your vision into a robust digital reality.
     </>
   ),
 
@@ -156,14 +157,14 @@ const About = () => {
         </div>
       </div>
 
-      {/* Desktop Modal - Theme Adaptive */}
+      {/* Desktop Modal - Updated to fit within screen */}
       <AnimatePresence>
         {isExpanded && isDesktop && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-base-300/80 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-base-300/80 backdrop-blur-md"
             onClick={toggleExpanded}
           >
             <motion.div
@@ -171,27 +172,34 @@ const About = () => {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-base-100 rounded-3xl p-10 max-w-3xl w-full shadow-2xl border border-primary/20 relative"
+              className="bg-base-100 rounded-3xl p-6 sm:p-8 md:p-10 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-primary/20 relative"
+              style={{
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(100, 116, 139, 0.5) transparent'
+              }}
             >
-              <button onClick={toggleExpanded} className="absolute top-6 right-6 btn btn-circle btn-sm btn-ghost hover:bg-error/10 hover:text-error">
-                <IoClose className="text-2xl" />
+              <button 
+                onClick={toggleExpanded} 
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 btn btn-circle btn-sm btn-ghost hover:bg-error/10 hover:text-error z-10"
+              >
+                <IoClose className="text-xl sm:text-2xl" />
               </button>
               
-              <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-4 mb-6 sm:mb-8">
                 <div className="p-3 bg-primary rounded-2xl text-primary-content shadow-lg shadow-primary/20">
-                  <FaCode className="text-3xl" />
+                  <FaCode className="text-2xl sm:text-3xl" />
                 </div>
                 <div>
-                  <h3 className="text-3xl font-black">Building with Purpose</h3>
-                  <p className="text-primary font-bold text-sm tracking-widest uppercase">The Appriyo Vision</p>
+                  <h3 className="text-2xl sm:text-3xl font-black">Building with Purpose</h3>
+                  <p className="text-primary font-bold text-xs sm:text-sm tracking-widest uppercase">The Appriyo Vision</p>
                 </div>
               </div>
               
-              <div className="text-lg leading-relaxed opacity-90 space-y-6 text-base-content/80">
+              <div className="text-base sm:text-lg leading-relaxed opacity-90 space-y-4 sm:space-y-6 text-base-content/80">
                 {ABOUT_DATA.expandedBio}
               </div>
 
-              <div className="mt-10 pt-8 border-t border-base-content/10">
+              <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-base-content/10">
                 <h4 className="text-sm font-black uppercase tracking-widest mb-4 opacity-50">Technical Arsenal</h4>
                 <div className="flex flex-wrap gap-2">
                   {ABOUT_DATA.techStack.map((tech, idx) => (
