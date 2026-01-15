@@ -7,7 +7,7 @@ import EducationExperience from "../pages/EducationExperience";
 import Services from "../pages/Services";
 import Blog from "../pages/Blog";
 import ProjectDetails from "../components/ProjectDetails";
-import Statistics from "../pages/Statistics";
+import GitHubStats from "../components/GitHubStats";
 
 const router = createBrowserRouter([
   {
@@ -31,8 +31,8 @@ const router = createBrowserRouter([
         element: <Services />,
       },
       {
-        path: "statistics",
-        element: <Statistics />,
+        path: "github",
+        element: <GitHubStats />,
       },
       {
         path: "blog",

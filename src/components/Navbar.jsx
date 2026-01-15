@@ -34,13 +34,7 @@ const Navbar = () => {
         { name: "Projects", path: "/skills-projects#projects" }
       ]
     },
-    {
-      name: "Statistics",
-      items: [
-        { name: "GitHub", path: "/statistics#github" },
-        { name: "Codeforces", path: "/statistics#codeforces" }
-      ]
-    },
+    { name: "GitHub", path: "/github" },
     // Updated this path to the external URL
     { name: "Services", path: "https://appriyo.com/services" },
   ];
