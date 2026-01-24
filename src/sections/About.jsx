@@ -12,22 +12,24 @@ const ABOUT_DATA = {
   cvPath: "/cv.pdf",
   cvFileName: "Shahjalal_CV.pdf",
   
-  shortBio: `I am a 3rd-year CSE student at NUBTK and the Founder of Appriyo. I've transitioned from being a developer to a technical leader, focusing on building scalable digital products that solve real-world business problems.`,
-  
+  shortBio: `I am a 3rd-year CSE student at NUBTK and the Founder of Appriyo. I specialize in building high-performance Android apps and scalable digital products that solve real business problems, blending hands-on coding with system architecture and leadership.`,
+
   expandedBio: (
     <>
-      At <strong>Appriyo</strong>, I lead a team of four, overseeing everything from system architecture to final deployment. My technical core lies in <strong>Android Development (Kotlin + Jetpack Compose)</strong>, but my passion extends to high-level system design and project management.
+      At <strong>Appriyo</strong>, I lead a team of four, overseeing the entire project lifecycle—from **system architecture** and **MVP development** to deployment and maintenance. 
+      My core expertise is in <strong>Android Development (Kotlin + Jetpack Compose)</strong>, but I also drive project design, architecture, and team coordination to ensure products are **scalable, polished, and market-ready**.
       <br /><br />
-      I am a firm believer in discipline—evidenced by my growth into the Top 5% of global contributors in 2025. I use tools like ClickUp for project management and Figma for collaboration to ensure my team delivers polished, market-ready MVPs.
+      I focus on **discipline and efficiency**, leveraging tools like ClickUp for project management and Figma for collaborative design. My team and I have delivered innovative solutions, including **NFC Professional Cards** and revenue-generating mobile apps.
       <br /><br />
-      When I'm not architecting systems, I'm sharpening my problem-solving skills on LeetCode or exploring innovative tech like AI integration and NFC solutions. Let's collaborate to turn your vision into a robust digital reality.
+      Beyond development, I continuously sharpen my skills in **problem-solving, algorithms, and modern technologies** like AI integration. If you are looking to build an MVP or scale your digital product, I’m passionate about turning ideas into robust mobile solutions.
     </>
   ),
 
   techStack: [
-    "Kotlin", "Jetpack Compose", "Firebase", "System Architecture", 
-    "React", "Tailwind CSS", "Git", "Room DB", "Retrofit", 
-    "Coroutines", "Android Studio", "ClickUp", "Figma"
+    "Kotlin", "Jetpack Compose", "Room DB", "Coroutines", "Firebase",
+    "Retrofit", "Koin", "MVVM Architecture", "System Architecture",
+    "React", "Tailwind CSS", "Git", "Android Studio",
+    "ClickUp"
   ]
 };
 

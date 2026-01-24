@@ -1,4 +1,5 @@
 import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import { SiCodeforces, SiHackerrank, SiLeetcode } from "react-icons/si";
@@ -23,14 +24,23 @@ const HERO_CONTENT = {
           Appriyo
         </a>
       </strong>{" "}
-      and a 3rd-year CSE student. 
-      I lead a specialized team to build scalable systems, from high-performance 
-      <strong className="text-primary"> Android Apps</strong> to modern web platforms. 
-      I focus on architecture, discipline, and turning complex ideas into digital reality.
+      and a 3rd-year CSE student. I specialize in building high-performance, revenue-generating{" "}
+      <strong className="text-primary">Android apps</strong> using modern Kotlin-based tech stacks. 
+      I focus on clean architecture, scalable solutions, and turning complex ideas into production-ready mobile apps.
     </>
   ),
-  techStack: ["Kotlin", "Jetpack Compose", "React", "System Architecture", "Git"],
-  imageLabel: "Founder & Project Lead",
+  techStack: [
+    "Kotlin", 
+    "Jetpack Compose", 
+    "Ktor", 
+    "Room", 
+    "Koin", 
+    "Coroutines", 
+    "Firebase", 
+    "Git", 
+    "MVVM Architecture"
+  ],
+  imageLabel: "Android Developer (Kotlin)",
   socials: [
     { icon: <FaGithub />, href: "https://github.com/shahjalal-mahmud" },
     { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/" },
