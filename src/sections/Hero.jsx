@@ -43,7 +43,7 @@ const HERO_CONTENT = {
   imageLabel: "Android Developer (Kotlin)",
   socials: [
     { icon: <FaGithub />, href: "https://github.com/shahjalal-mahmud" },
-    { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/" },
+    { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud/" },
     { icon: <FaFacebook />, href: "https://www.facebook.com/ShahjalalMahmud100/" },
     { icon: <SiCodeforces />, href: "https://codeforces.com/profile/mahmud.nubtk/" },
     { icon: <SiLeetcode />, href: "https://leetcode.com/Shahajalal_Mahmud/" },

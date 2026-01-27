@@ -13,7 +13,7 @@ const CONTACT_DATA = {
   phone: "+880 18897-93146",
   location: "Khulna, Bangladesh",
   socials: [
-    { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud-077b29231/", label: "LinkedIn" },
+    { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud/", label: "LinkedIn" },
     { icon: <FaGithub />, href: "https://github.com/shahjalal-mahmud", label: "GitHub" },
     { icon: <FaFacebook />, href: "https://www.facebook.com/ShahjalalMahmud100/", label: "Facebook" },
     { icon: <SiCodeforces />, href: "https://codeforces.com/profile/mahmud.nubtk/", label: "Codeforces" },
