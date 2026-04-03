@@ -1,73 +1,86 @@
 import { useState, useEffect, useRef } from "react";
-import { FaBars, FaTimes, FaChevronDown, FaChevronUp, FaPalette } from "react-icons/fa";
+import {
+  FaBars, FaTimes, FaChevronDown, FaPalette,
+  FaGithub, FaBriefcase, FaHome, FaUser, FaCode,
+} from "react-icons/fa";
+import { MdWork } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import ThemeSelector from "./ThemeSelector";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
   const themeMenuRef = useRef(null);
   const navbarRef = useRef(null);
+
   const dropdownRefs = {
     background: useRef(null),
     portfolio: useRef(null),
-    statistics: useRef(null)
   };
 
-  // Nav structure with dropdown items
+  // Nav structure
   const navItems = [
-    { name: "Home", path: "/" },
+    { name: "Home",    path: "/",       icon: <FaHome className="text-[11px]" /> },
     {
       name: "Background",
+      icon: <FaUser className="text-[11px]" />,
       items: [
-        { name: "Education", path: "/education-experience#education" },
-        { name: "Experience", path: "/education-experience#experience" }
-      ]
+        { name: "Education",   path: "/education-experience#education"  },
+        { name: "Experience",  path: "/education-experience#experience" },
+      ],
     },
     {
       name: "Portfolio",
+      icon: <FaCode className="text-[11px]" />,
       items: [
-        { name: "Skills", path: "/skills-projects#skills" },
-        { name: "Projects", path: "/skills-projects#projects" }
-      ]
+        { name: "Skills",   path: "/skills-projects#skills"   },
+        { name: "Projects", path: "/skills-projects#projects" },
+      ],
     },
-    { name: "GitHub", path: "/github" },
-    // Updated this path to the external URL
-    { name: "Services", path: "https://appriyo.com/services" },
+    { name: "GitHub",   path: "/github",                          icon: <FaGithub className="text-[11px]" />   },
+    { name: "Services", path: "https://appriyo.com/services",     icon: <MdWork className="text-[11px]" />, external: true },
   ];
 
-  // Handle click outside for theme menu and dropdowns
+  // Scroll shadow
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (themeMenuRef.current && !themeMenuRef.current.contains(event.target)) {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Click outside
+  useEffect(() => {
+    const handler = (e) => {
+      if (themeMenuRef.current && !themeMenuRef.current.contains(e.target)) {
         setIsThemeMenuOpen(false);
       }
-
-      // Close dropdowns if clicked outside
-      if (openDropdown &&
-        dropdownRefs[openDropdown]?.current &&
-        !dropdownRefs[openDropdown].current.contains(event.target)) {
+      if (openDropdown && dropdownRefs[openDropdown]?.current && !dropdownRefs[openDropdown].current.contains(e.target)) {
         setOpenDropdown(null);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, [openDropdown]);
 
-  const handleNavClick = (path) => {
+  // Lock body scroll on mobile menu
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
+
+  const handleNavClick = (path, external = false) => {
     setIsOpen(false);
     setOpenDropdown(null);
 
-    // Check if the path is the external services link
-    if (path === "https://appriyo.com/services") {
+    if (external || path.startsWith("http")) {
       window.open(path, "_blank", "noopener,noreferrer");
-      return; // Exit function so it doesn't try to navigate internally
+      return;
     }
 
     if (path.includes("#")) {
@@ -75,242 +88,355 @@ const Navbar = () => {
       if (location.pathname !== route) {
         navigate(route, { state: { hash } });
       } else {
-        const element = document.getElementById(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
       }
     } else {
       navigate(path);
     }
   };
 
-  const toggleDropdown = (name) => {
-    setOpenDropdown(openDropdown === name ? null : name);
-  };
-
-  // Handle hash navigation after route change
   useEffect(() => {
     if (location.state?.hash) {
-      const element = document.getElementById(location.state.hash);
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
+      setTimeout(() => {
+        document.getElementById(location.state.hash)?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }
   }, [location]);
 
-  // Check if a link is active
   const isActive = (path) => {
-    const [route, hash] = path.split('#');
-    const currentPath = location.pathname;
-    const currentHash = location.hash.replace('#', '');
-
-    // For home page with hash
-    if (path === '/#about' && currentPath === '/' && currentHash === 'about') return true;
-    if (path === '/#github' && currentPath === '/' && currentHash === 'github') return true;
-    if (path === '/#contact' && currentPath === '/' && currentHash === 'contact') return true;
-
-    // For other routes
-    if (path.startsWith('/#')) {
-      return currentPath === route.split('#')[0] && currentHash === hash;
+    const [route, hash] = path.split("#");
+    if (hash) {
+      return location.pathname === route && location.hash === `#${hash}`;
     }
-
-    // For exact matches
-    return currentPath === path;
+    return location.pathname === path;
   };
 
-  // Check if any child item is active (for dropdown parent)
-  const isDropdownActive = (items) => {
-    return items.some(item => isActive(item.path));
-  };
+  const isDropdownActive = (items) => items.some((item) => isActive(item.path));
 
   return (
-    <nav
-      ref={navbarRef}
-      className="navbar bg-base-100/90 backdrop-blur-sm fixed top-0 left-0 w-full shadow-md z-50 px-4 md:px-6 lg:px-8 transition-all duration-300"
-    >
-      <div className="flex-1">
-        <button
-          onClick={() => handleNavClick("/")}
-          className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
-        >
-          Shahajalal Mahmud
-        </button>
-      </div>
-
-      {/* Desktop Navigation */}
-      <div className="hidden lg:flex items-center gap-1">
-        {navItems.map((item, idx) => {
-          if (item.items) {
-            // Render dropdown menu
-            const dropdownKey = item.name.toLowerCase();
-            return (
-              <div key={idx} className="relative" ref={dropdownRefs[dropdownKey]}>
-                <button
-                  onClick={() => toggleDropdown(dropdownKey)}
-                  className={`px-4 py-3 text-sm font-medium flex items-center gap-1 transition-all duration-200 rounded-lg ${isDropdownActive(item.items)
-                    ? "text-primary bg-primary/10"
-                    : "text-base-content hover:text-primary hover:bg-base-200"
-                    }`}
-                >
-                  {item.name}
-                  {openDropdown === dropdownKey ? (
-                    <FaChevronUp className="text-xs opacity-70" />
-                  ) : (
-                    <FaChevronDown className="text-xs opacity-70" />
-                  )}
-                </button>
-
-                {/* Dropdown Content */}
-                <div
-                  className={`absolute left-0 mt-1 min-w-[200px] bg-base-100 rounded-lg shadow-xl z-50 border border-base-200 transition-all duration-200 ${openDropdown === dropdownKey
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 -translate-y-2 pointer-events-none"
-                    }`}
-                >
-                  <ul className="py-1 space-y-1">
-                    {item.items.map((subItem, subIdx) => (
-                      <li key={subIdx} className="px-1 py-0.5">
-                        <button
-                          onClick={() => handleNavClick(subItem.path)}
-                          className={`w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-150 flex items-center ${isActive(subItem.path)
-                            ? "bg-primary text-primary-content"
-                            : "hover:bg-base-200"
-                            }`}
-                        >
-                          {subItem.name}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            );
-          } else {
-            // Render regular nav item
-            return (
-              <button
-                key={idx}
-                onClick={() => handleNavClick(item.path)}
-                className={`px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg ${isActive(item.path)
-                  ? "text-primary bg-primary/10"
-                  : "text-base-content hover:text-primary hover:bg-base-200"
-                  }`}
-              >
-                {item.name}
-              </button>
-            );
+    <>
+      <nav
+        ref={navbarRef}
+        className={`
+          fixed top-0 left-0 w-full z-50
+          transition-all duration-300
+          ${scrolled
+            ? "bg-base-100/95 backdrop-blur-md shadow-lg shadow-base-300/20 border-b border-base-300/30"
+            : "bg-base-100/80 backdrop-blur-sm"
           }
-        })}
-      </div>
-
-      {/* Right Side: Theme Controls + Mobile Menu Button */}
-      <div className="flex items-center gap-2 ml-2 sm:ml-4 md:ml-6">
-        {/* Theme Selector - Visible on all devices */}
-        <div className="relative" ref={themeMenuRef}>
-          <button
-            className="btn btn-ghost btn-sm sm:btn-md gap-1 normal-case px-2 sm:px-3"
-            onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
-          >
-            <FaPalette className="text-lg" />
-            <span className="hidden sm:inline">Theme</span>
-            {isThemeMenuOpen ? (
-              <FaChevronUp className="text-xs" />
-            ) : (
-              <FaChevronDown className="text-xs" />
-            )}
-          </button>
-
-          {/* Dropdown Content */}
-          <div
-            className={`absolute right-0 mt-2 w-72 sm:w-80 md:w-96 bg-base-200 rounded-box shadow-xl p-4 z-50 transition-all duration-200 ${isThemeMenuOpen
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-2 pointer-events-none"
-              }`}
-          >
-            <ThemeSelector />
-          </div>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="lg:hidden text-xl btn btn-ghost btn-circle btn-sm sm:btn-md"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Menu"
-        >
-          {isOpen ? <FaTimes /> : <FaBars />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <div
-        className={`lg:hidden fixed inset-y-0 right-0 z-40 transition-all duration-300 ease-in-out ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
-        style={{ top: navbarRef.current?.offsetHeight || "64px" }}
+        `}
       >
-        {/* Menu Content */}
-        <div
-          className={`absolute top-0 right-0 h-[calc(100vh-64px)] w-64 sm:w-72 bg-base-100/95 backdrop-blur-sm shadow-xl transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
-            }`}
-        >
-          <div className="h-full flex flex-col overflow-y-auto">
-            <ul className="flex-1 flex flex-col p-2 space-y-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+
+            {/* ── Logo ────────────────────────────────────────── */}
+            <button
+              onClick={() => handleNavClick("/")}
+              className="flex items-center gap-2.5 group"
+            >
+              {/* Logo mark */}
+              <div className="
+                w-8 h-8 rounded-lg bg-primary flex items-center justify-center
+                text-primary-content font-black text-sm
+                shadow-md shadow-primary/30
+                group-hover:scale-105 transition-transform duration-200
+              ">
+                S
+              </div>
+              <span className="
+                text-lg font-extrabold tracking-tight
+                text-base-content group-hover:text-primary
+                transition-colors duration-200 hidden sm:block
+              ">
+                Shahajalal
+                <span className="text-primary">.</span>
+              </span>
+            </button>
+
+            {/* ── Desktop Nav ──────────────────────────────────── */}
+            <div className="hidden lg:flex items-center gap-0.5">
               {navItems.map((item, idx) => {
                 if (item.items) {
-                  // Render dropdown in mobile
+                  const key = item.name.toLowerCase();
+                  const active = isDropdownActive(item.items);
                   return (
-                    <li key={idx} className="menu-dropdown">
-                      <details open={isDropdownActive(item.items)}>
-                        <summary
-                          className={`px-4 py-3 rounded-lg ${isDropdownActive(item.items)
-                            ? "bg-primary text-primary-content"
-                            : "hover:bg-base-200"
-                            }`}
-                        >
-                          {item.name}
-                        </summary>
-                        <ul className="pl-2 mt-1 space-y-1">
-                          {item.items.map((subItem, subIdx) => (
-                            <li key={subIdx}>
-                              <button
-                                onClick={() => handleNavClick(subItem.path)}
-                                className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors duration-200 ${isActive(subItem.path)
-                                  ? "bg-primary text-primary-content"
-                                  : "hover:bg-base-200"
-                                  }`}
-                              >
-                                {subItem.name}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    </li>
-                  );
-                } else {
-                  // Render regular item in mobile
-                  return (
-                    <li key={idx}>
+                    <div key={idx} className="relative" ref={dropdownRefs[key]}>
                       <button
-                        onClick={() => handleNavClick(item.path)}
-                        className={`w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 ${isActive(item.path)
-                          ? "bg-primary text-primary-content"
-                          : "hover:bg-base-200"
-                          }`}
+                        onClick={() => setOpenDropdown(openDropdown === key ? null : key)}
+                        className={`
+                          flex items-center gap-1.5 px-4 py-2 rounded-lg text-[13px] font-medium
+                          transition-all duration-200
+                          ${active
+                            ? "text-primary bg-primary/10"
+                            : "text-base-content/70 hover:text-base-content hover:bg-base-200/70"
+                          }
+                        `}
                       >
+                        {item.icon}
                         {item.name}
+                        <motion.span
+                          animate={{ rotate: openDropdown === key ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <FaChevronDown className="text-[9px] opacity-60" />
+                        </motion.span>
                       </button>
-                    </li>
+
+                      <AnimatePresence>
+                        {openDropdown === key && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+                            transition={{ duration: 0.15 }}
+                            className="
+                              absolute top-full left-0 mt-1.5
+                              min-w-[180px] bg-base-100
+                              rounded-xl shadow-xl border border-base-300/50
+                              overflow-hidden z-50 p-1
+                            "
+                          >
+                            {item.items.map((sub, si) => (
+                              <button
+                                key={si}
+                                onClick={() => handleNavClick(sub.path)}
+                                className={`
+                                  w-full text-left px-3.5 py-2.5 text-[13px] rounded-lg
+                                  transition-colors duration-150
+                                  ${isActive(sub.path)
+                                    ? "bg-primary text-primary-content font-semibold"
+                                    : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+                                  }
+                                `}
+                              >
+                                {sub.name}
+                              </button>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   );
                 }
+
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handleNavClick(item.path, item.external)}
+                    className={`
+                      flex items-center gap-1.5 px-4 py-2 rounded-lg text-[13px] font-medium
+                      transition-all duration-200
+                      ${item.external
+                        ? "text-primary border border-primary/30 hover:bg-primary/10 ml-1"
+                        : isActive(item.path)
+                          ? "text-primary bg-primary/10"
+                          : "text-base-content/70 hover:text-base-content hover:bg-base-200/70"
+                      }
+                    `}
+                  >
+                    {item.icon}
+                    {item.name}
+                    {item.external && <span className="text-[9px] opacity-60">↗</span>}
+                  </button>
+                );
               })}
-            </ul>
+            </div>
+
+            {/* ── Right Controls ───────────────────────────────── */}
+            <div className="flex items-center gap-2">
+
+              {/* Theme toggle */}
+              <div className="relative" ref={themeMenuRef}>
+                <button
+                  onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                  className={`
+                    flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium
+                    transition-all duration-200
+                    ${isThemeMenuOpen
+                      ? "text-primary bg-primary/10"
+                      : "text-base-content/60 hover:text-base-content hover:bg-base-200/70"
+                    }
+                  `}
+                >
+                  <FaPalette className="text-base" />
+                  <span className="hidden sm:inline">Theme</span>
+                  <motion.span
+                    animate={{ rotate: isThemeMenuOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <FaChevronDown className="text-[9px] opacity-60" />
+                  </motion.span>
+                </button>
+
+                <AnimatePresence>
+                  {isThemeMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -6, scale: 0.97 }}
+                      transition={{ duration: 0.15 }}
+                      className="
+                        absolute right-0 top-full mt-1.5
+                        w-80 sm:w-96 bg-base-100
+                        rounded-xl shadow-2xl border border-base-300/50
+                        p-4 z-50
+                      "
+                    >
+                      <ThemeSelector />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Mobile hamburger */}
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="
+                  lg:hidden w-9 h-9 flex items-center justify-center
+                  rounded-lg text-base-content/70 hover:bg-base-200
+                  transition-colors duration-200
+                "
+                aria-label="Toggle menu"
+              >
+                <AnimatePresence mode="wait">
+                  {isOpen ? (
+                    <motion.span
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <FaTimes />
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="open"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <FaBars />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      {/* ── Mobile Menu Overlay ─────────────────────────────────────── */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="lg:hidden fixed inset-0 z-40 bg-base-300/30 backdrop-blur-sm"
+              style={{ top: "64px" }}
+            />
+
+            {/* Drawer */}
+            <motion.div
+              key="drawer"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="
+                lg:hidden fixed right-0 z-50 w-72
+                bg-base-100 border-l border-base-300/40
+                shadow-2xl overflow-y-auto
+              "
+              style={{ top: "64px", bottom: 0 }}
+            >
+              {/* Header */}
+              <div className="px-5 py-4 border-b border-base-300/40">
+                <p className="text-[10px] uppercase tracking-[0.18em] text-base-content/35 font-semibold">
+                  Navigation
+                </p>
+              </div>
+
+              <nav className="p-3 space-y-1">
+                {navItems.map((item, idx) => {
+                  if (item.items) {
+                    const active = isDropdownActive(item.items);
+                    return (
+                      <div key={idx}>
+                        <div className={`
+                          flex items-center gap-2.5 px-4 py-3 rounded-xl text-[13px] font-semibold
+                          text-base-content/50 uppercase tracking-wider
+                        `}>
+                          {item.icon}
+                          {item.name}
+                        </div>
+                        <div className="ml-4 space-y-0.5">
+                          {item.items.map((sub, si) => (
+                            <button
+                              key={si}
+                              onClick={() => handleNavClick(sub.path)}
+                              className={`
+                                w-full text-left px-4 py-2.5 rounded-lg text-[13px] font-medium
+                                transition-colors duration-150
+                                ${isActive(sub.path)
+                                  ? "bg-primary text-primary-content"
+                                  : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+                                }
+                              `}
+                            >
+                              {sub.name}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => handleNavClick(item.path, item.external)}
+                      className={`
+                        w-full text-left flex items-center gap-2.5
+                        px-4 py-3 rounded-xl text-[13px] font-medium
+                        transition-colors duration-150
+                        ${item.external
+                          ? "text-primary border border-primary/25 hover:bg-primary/8"
+                          : isActive(item.path)
+                            ? "bg-primary text-primary-content"
+                            : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+                        }
+                      `}
+                    >
+                      {item.icon}
+                      {item.name}
+                      {item.external && <span className="ml-auto text-xs opacity-50">↗</span>}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Bottom: contact CTA */}
+              <div className="p-4 mt-auto border-t border-base-300/40">
+                <a
+                  href="mailto:mahmud.nubtk@gmail.com"
+                  className="btn btn-primary btn-sm w-full gap-2"
+                >
+                  <MdWork className="text-sm" />
+                  Hire Me
+                </a>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
