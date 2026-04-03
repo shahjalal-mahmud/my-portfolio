@@ -6,30 +6,60 @@ import { IoClose } from "react-icons/io5";
 
 const ABOUT_DATA = {
   title: "About Me",
-  role: "3rd Year CSE Student",
+  role: "Software Engineer (Android & Backend)",
   location: "Khulna, Bangladesh",
   email: "mahmud.nubtk@gmail.com",
   cvPath: "/cv.pdf",
   cvFileName: "Shahjalal_CV.pdf",
   
-  shortBio: `I am a 3rd-year CSE student at NUBTK and the Founder of Appriyo. I specialize in building high-performance Android apps and scalable digital products that solve real business problems, blending hands-on coding with system architecture and leadership.`,
+  shortBio: `Software Engineer specializing in Android and backend systems. I build scalable, secure, and offline-first applications with a strong focus on system design, data integrity, and real-world problem solving. Experienced in multi-tenant architectures, financial workflows, and performance-optimized mobile apps.`,
 
   expandedBio: (
     <>
-      At <strong>Appriyo</strong>, I lead a team of four, overseeing the entire project lifecycle—from **system architecture** and **MVP development** to deployment and maintenance. 
-      My core expertise is in <strong>Android Development (Kotlin + Jetpack Compose)</strong>, but I also drive project design, architecture, and team coordination to ensure products are **scalable, polished, and market-ready**.
+      I design and build <strong>production-grade software systems</strong> with a strong focus on 
+      <strong> scalability, security, and reliability</strong>. My core expertise lies in 
+      <strong> Android development (Kotlin + Jetpack Compose)</strong> and 
+      <strong> backend engineering (Node.js, REST APIs, PostgreSQL)</strong>, where I develop 
+      end-to-end solutions for real-world applications.
       <br /><br />
-      I focus on **discipline and efficiency**, leveraging tools like ClickUp for project management and Figma for collaborative design. My team and I have delivered innovative solutions, including **NFC Professional Cards** and revenue-generating mobile apps.
+      
+      I have hands-on experience building <strong>multi-tenant SaaS systems</strong> with strict 
+      <strong> data isolation</strong>, as well as implementing <strong>secure financial workflows</strong> 
+      using <strong>RBAC and JWT-based authentication</strong>. My approach emphasizes 
+      <strong> consistency, concurrency safety, and clean architecture</strong>.
       <br /><br />
-      Beyond development, I continuously sharpen my skills in **problem-solving, algorithms, and modern technologies** like AI integration. If you are looking to build an MVP or scale your digital product, I’m passionate about turning ideas into robust mobile solutions.
+
+      I also specialize in <strong>offline-first mobile systems</strong> using Room and optimized 
+      local databases, ensuring seamless user experience even in low-connectivity environments.
+      <br /><br />
+
+      Beyond development, I have a strong academic foundation in 
+      <strong> Data Structures & Algorithms, Operating Systems, DBMS, and Networking</strong>, 
+      which helps me design efficient and scalable systems from first principles.
+      <br /><br />
+
+      Currently, I am focused on building systems in the <strong>FinTech domain</strong> and solving 
+      high-impact engineering problems at scale.
     </>
   ),
 
   techStack: [
-    "Kotlin", "Jetpack Compose", "Room DB", "Coroutines", "Firebase",
-    "Retrofit", "Koin", "MVVM Architecture", "System Architecture",
-    "React", "Tailwind CSS", "Git", "Android Studio",
-    "ClickUp"
+    "Kotlin",
+    "Jetpack Compose",
+    "MVVM",
+    "Coroutines",
+    "Room DB",
+    "Node.js",
+    "REST APIs",
+    "JWT Auth",
+    "PostgreSQL",
+    "Firebase",
+    "Prisma",
+    "C++ (DSA)",
+    "System Design",
+    "RBAC Security",
+    "Linux (CLI)",
+    "Git"
   ]
 };
 
