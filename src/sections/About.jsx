@@ -66,7 +66,7 @@ const ABOUT_DATA = {
   ],
 
   stats: [
-    { value: 3, suffix: "+", label: "Years" },
+    { value: 2, suffix: "+", label: "Years" },
     { value: 10, suffix: "+", label: "Projects" },
     { value: 2, suffix: "", label: "Domains" },
   ],
