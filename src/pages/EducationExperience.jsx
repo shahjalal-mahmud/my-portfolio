@@ -8,7 +8,7 @@ const EducationExperience = () => {
     <>
       <EducationTimeline />
       <Experience />
-      <Roadmap />
+      {/* <Roadmap /> */}
     </>
   );
 };
