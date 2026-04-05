@@ -1,4 +1,4 @@
-# 🚀 Shahjalal Mahmud - Developer Portfolio 
+# 🚀Md Shahajalal Mahmud - Developer Portfolio 
 
 A cutting-edge, fully responsive portfolio built with **React, Vite, Tailwind CSS, and DaisyUI** featuring dynamic theming, interactive elements, and detailed project showcases.
 
