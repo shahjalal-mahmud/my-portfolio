@@ -1,8 +1,16 @@
 // src/components/ProjectDetails/SectionWrapper.jsx
+// NOTE: SectionWrapper is now largely replaced by the inline SectionCard in ProjectDetails.jsx
+// This file is kept for backward compatibility with any other components that import it.
+
 const SectionWrapper = ({ title, children }) => (
-  <div className="mb-10">
-    <h3 className="text-2xl font-semibold mb-2">{title}</h3>
-    <div className="text-gray-700 dark:text-gray-300 text-sm">{children}</div>
+  <div className="mb-8">
+    {title && (
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-px w-5 bg-primary/40" />
+        <h3 className="text-[10px] uppercase tracking-[0.22em] text-primary font-bold">{title}</h3>
+      </div>
+    )}
+    <div className="text-base-content/70 text-sm leading-relaxed">{children}</div>
   </div>
 );
 
