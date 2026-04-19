@@ -43,7 +43,7 @@ const Navbar = () => {
         { name: "Projects", path: "/skills-projects#projects" },
       ],
     },
-    { name: "GitHub",   path: "/github",                          icon: <FaGithub className="text-[11px]" />   },
+    // { name: "GitHub",   path: "/github",                          icon: <FaGithub className="text-[11px]" />   },
     { name: "Services", path: "https://appriyo.com/services",     icon: <MdWork className="text-[11px]" />, external: true },
   ];
 
