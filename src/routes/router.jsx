@@ -4,7 +4,6 @@ import Layout from "../components/Layout";
 import Home from "../pages/Home";
 import SkillsProjects from "../pages/SkillsProjects";
 import EducationExperience from "../pages/EducationExperience";
-import Services from "../pages/Services";
 import ProjectDetails from "../components/ProjectDetails";
 
 const router = createBrowserRouter([
@@ -23,10 +22,6 @@ const router = createBrowserRouter([
       {
         path: "skills-projects",
         element: <SkillsProjects />,
-      },
-      {
-        path: "services",
-        element: <Services />,
       },
       {
         path: "projects/:slug",
