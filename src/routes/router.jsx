@@ -5,9 +5,7 @@ import Home from "../pages/Home";
 import SkillsProjects from "../pages/SkillsProjects";
 import EducationExperience from "../pages/EducationExperience";
 import Services from "../pages/Services";
-import Blog from "../pages/Blog";
 import ProjectDetails from "../components/ProjectDetails";
-import GitHubStats from "../components/GitHubStats";
 
 const router = createBrowserRouter([
   {
@@ -29,14 +27,6 @@ const router = createBrowserRouter([
       {
         path: "services",
         element: <Services />,
-      },
-      {
-        path: "github",
-        element: <GitHubStats />,
-      },
-      {
-        path: "blog",
-        element: <Blog />,
       },
       {
         path: "projects/:slug",
