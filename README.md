@@ -15,6 +15,44 @@ _Deployed on Netlify with CI/CD from GitHub_
 
 ---
 
+## 📸 Screenshots
+
+### 🏠 Hero Section
+
+![Hero Section](./screenshots/hero.png)
+
+---
+
+### 👨‍💻 About Section
+
+![About Section](./screenshots/about.png)
+
+---
+
+### 👨‍💻 Contact Section
+
+![Contact Section](./screenshots/contact.png)
+
+---
+
+### 🛠️ Skills Section
+
+![Skills Section](./screenshots/skills.png)
+
+---
+
+### 🚀 Projects Showcase
+
+![Projects Section](./screenshots/projects.png)
+
+---
+
+### 🚀 Footer Section
+
+![Footer Section](./screenshots/footer.png)
+
+---
+
 ## What's Inside
 
 | Section                    | Highlights                                                                  |
