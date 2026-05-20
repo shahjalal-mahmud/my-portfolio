@@ -10,7 +10,7 @@ const EDUCATION_DATA = [
     year: "2023 — 2027",
     institution: "Northern University of Business & Technology Khulna",
     link: "https://nubtkhulna.ac.bd/",
-    result: "CGPA 3.975 / 4.00",
+    result: "CGPA 3.90 / 4.00",
     grade: "A+",
     icon: <FaUniversity />,
     status: "Ongoing",
