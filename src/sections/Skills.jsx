@@ -5,53 +5,56 @@ import {
   FaCode, FaTerminal, FaShieldAlt,
 } from "react-icons/fa";
 import { MdArchitecture } from "react-icons/md";
-import { SiTailwindcss, SiGit, SiFirebase, SiPostgresql, SiKotlin, SiNodedotjs, SiPrisma } from "react-icons/si";
+import { SiTailwindcss, SiGit, SiFirebase, SiPostgresql, SiKotlin, SiNodedotjs, SiPrisma, SiSpringboot, SiDocker } from "react-icons/si";
 import { TbTopologyStar3 } from "react-icons/tb";
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 const SKILLS_DATA = [
   { name: "Kotlin + Jetpack Compose", icon: <SiKotlin />, category: "Android", tag: "Expert", tagColor: "text-success bg-success/10 border-success/25", desc: "Modern Android UI with declarative patterns, state management, and scalable architecture." },
-  { name: "MVVM + Coroutines", icon: <MdArchitecture />, category: "Android", tag: "Expert", tagColor: "text-success bg-success/10 border-success/25", desc: "Structured reactive architecture with lifecycle-aware components and async flows." },
-  { name: "Room + WorkManager", icon: <FaDatabase />, category: "Android", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Offline-first storage and background task scheduling in production apps." },
+  { name: "MVVM + Clean Architecture", icon: <MdArchitecture />, category: "Android", tag: "Expert", tagColor: "text-success bg-success/10 border-success/25", desc: "Structured, layered architecture with lifecycle-aware components, separation of concerns, and maintainable codebases." },
+  { name: "Coroutines + Flow", icon: <SiKotlin />, category: "Android", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Structured concurrency and reactive streams for async operations and state management in Android." },
+  { name: "Room + WorkManager", icon: <FaDatabase />, category: "Android", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Offline-first local storage with optimized schemas and reliable background task scheduling in production apps." },
 
   { name: "React.js", icon: <FaReact />, category: "Web", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Dynamic, responsive web interfaces with modern hooks and component patterns." },
   { name: "Tailwind CSS", icon: <SiTailwindcss />, category: "Web", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Utility-first styling for fast, consistent, and scalable UI development." },
 
-  { name: "Node.js + REST APIs", icon: <SiNodedotjs />, category: "Backend", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Scalable API design with proper architecture, middleware, and clean code principles." },
-  { name: "JWT Authentication", icon: <FaLock />, category: "Backend", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Secure auth systems with access/refresh tokens and session management." },
+  { name: "Spring Boot + Kotlin", icon: <SiSpringboot />, category: "Backend", tag: "Intermediate", tagColor: "text-warning bg-warning/10 border-warning/25", desc: "Structured backend development with layered architecture, dependency injection, and enterprise-grade patterns." },
+  { name: "JWT Authentication", icon: <FaLock />, category: "Backend", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Secure auth systems with access/refresh tokens, session management, and role enforcement." },
   { name: "Prisma ORM", icon: <SiPrisma />, category: "Backend", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Type-safe database access and schema management with auto migrations." },
+  { name: "Multi-tenant Architecture", icon: <MdArchitecture />, category: "Backend", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Per-tenant data isolation, RBAC authorization, and transaction-safe workflows in production SaaS systems." },
 
-  { name: "PostgreSQL", icon: <SiPostgresql />, category: "Database", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Relational database design, complex queries, indexing, and optimization." },
+  { name: "PostgreSQL", icon: <SiPostgresql />, category: "Database", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Relational schema design, complex queries, indexing, normalization, and transaction management." },
   { name: "Firebase", icon: <SiFirebase />, category: "Database", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Realtime database, Firestore, cloud functions, and authentication integrations." },
 
-  { name: "Data Structures & Algorithms", icon: <FaCode />, category: "Core CS", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Efficient problem-solving with optimized algorithms in C++ and Java." },
+  { name: "Data Structures & Algorithms", icon: <FaCode />, category: "Core CS", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Efficient problem-solving with optimized algorithms in C++ and Kotlin. Daily LeetCode and Codeforces practice." },
   { name: "Operating Systems", icon: <FaTerminal />, category: "Core CS", tag: "Intermediate", tagColor: "text-warning bg-warning/10 border-warning/25", desc: "Process management, memory, scheduling, and system-level fundamentals." },
   { name: "DBMS", icon: <FaDatabase />, category: "Core CS", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Database design, normalization, ACID properties, and transaction management." },
   { name: "Computer Networks", icon: <FaServer />, category: "Core CS", tag: "Intermediate", tagColor: "text-warning bg-warning/10 border-warning/25", desc: "Networking fundamentals, TCP/IP stack, and communication protocols." },
 
-  { name: "RBAC & API Security", icon: <FaShieldAlt />, category: "Security", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Role-based access control, API hardening, and secure design patterns." },
+  { name: "RBAC & API Security", icon: <FaShieldAlt />, category: "Security", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Role-based access control, API hardening, secure design patterns, and Android Keystore integration." },
 
   { name: "Git & Version Control", icon: <SiGit />, category: "Tools", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Collaborative workflows, branching strategies, and codebase management." },
-  { name: "Linux & CLI", icon: <FaTerminal />, category: "Tools", tag: "Advanced", tagColor: "text-info bg-info/10 border-info/25", desc: "Command-line tools, bash scripting, and efficient dev environment workflows." },
+  { name: "Linux & CLI", icon: <FaTerminal />, category: "Tools", tag: "Intermediate", tagColor: "text-warning bg-warning/10 border-warning/25", desc: "Command-line tools, bash scripting, and server environment fundamentals." },
+  { name: "Docker Basics", icon: <SiDocker />, category: "Tools", tag: "Beginner", tagColor: "text-secondary bg-secondary/10 border-secondary/25", desc: "Containerization fundamentals for local development workflows and deployment preparation." },
 ];
 
 const CATEGORIES = ["All", "Android", "Web", "Backend", "Database", "Core CS", "Security", "Tools"];
 
 const CATEGORY_META = {
-  Android:  { icon: <FaAndroid />,    color: "text-success", bg: "bg-success/10 border-success/20" },
-  Web:      { icon: <FaReact />,      color: "text-info",    bg: "bg-info/10 border-info/20" },
-  Backend:  { icon: <FaServer />,     color: "text-warning", bg: "bg-warning/10 border-warning/20" },
-  Database: { icon: <FaDatabase />,   color: "text-primary", bg: "bg-primary/10 border-primary/20" },
-  "Core CS":{ icon: <FaCode />,       color: "text-secondary",bg: "bg-secondary/10 border-secondary/20" },
-  Security: { icon: <FaShieldAlt />,  color: "text-error",   bg: "bg-error/10 border-error/20" },
-  Tools:    { icon: <SiGit />,        color: "text-accent",  bg: "bg-accent/10 border-accent/20" },
+  Android:   { icon: <FaAndroid />,    color: "text-success",   bg: "bg-success/10 border-success/20"     },
+  Web:       { icon: <FaReact />,      color: "text-info",      bg: "bg-info/10 border-info/20"           },
+  Backend:   { icon: <FaServer />,     color: "text-warning",   bg: "bg-warning/10 border-warning/20"     },
+  Database:  { icon: <FaDatabase />,   color: "text-primary",   bg: "bg-primary/10 border-primary/20"     },
+  "Core CS": { icon: <FaCode />,       color: "text-secondary", bg: "bg-secondary/10 border-secondary/20" },
+  Security:  { icon: <FaShieldAlt />,  color: "text-error",     bg: "bg-error/10 border-error/20"         },
+  Tools:     { icon: <SiGit />,        color: "text-accent",    bg: "bg-accent/10 border-accent/20"       },
 };
 
 const SIDEBAR_STATS = [
-  { label: "Architecture", value: "MVVM / Clean", icon: <MdArchitecture /> },
-  { label: "Backend",      value: "Node.js / REST", icon: <SiNodedotjs /> },
-  { label: "Database",     value: "PostgreSQL / Firebase", icon: <FaDatabase /> },
-  { label: "Security",     value: "RBAC / JWT", icon: <FaLock /> },
+  { label: "Architecture", value: "MVVM / Clean Arch",        icon: <MdArchitecture /> },
+  { label: "Backend",      value: "Spring Boot / Node.js",    icon: <SiSpringboot />   },
+  { label: "Database",     value: "PostgreSQL / Firebase",    icon: <FaDatabase />     },
+  { label: "Security",     value: "RBAC / JWT",               icon: <FaLock />         },
 ];
 
 const ease = [0.22, 1, 0.36, 1];
