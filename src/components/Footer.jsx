@@ -4,7 +4,7 @@ import {
 } from "react-icons/fa";
 import { FiServer, FiExternalLink } from "react-icons/fi";
 import { MdEmail, MdPhone, MdLocationOn, MdArchitecture } from "react-icons/md";
-import { SiCodeforces, SiHackerrank, SiLeetcode } from "react-icons/si";
+import { SiCodeforces, SiHackerrank, SiLeetcode, SiSpringboot } from "react-icons/si";
 import { TbBrandKotlin } from "react-icons/tb";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useRef } from "react";
@@ -331,7 +331,7 @@ const Footer = () => {
               <div className="flex items-center gap-2 flex-wrap">
                 {[
                   { icon: <TbBrandKotlin />, color: "text-[#7F52FF]", label: "Kotlin" },
-                  { icon: <FiServer />, color: "text-info", label: "Node.js" },
+                  { icon: <SiSpringboot />, color: "text-[#6DB33F]", label: "Spring Boot" },
                   { icon: <FaAndroid />, color: "text-success", label: "Android" },
                 ].map((t, i) => (
                   <div key={i} className="flex items-center gap-1 px-2 py-1 bg-base-200/60 border border-base-300/50 rounded-lg">
