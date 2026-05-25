@@ -10,7 +10,7 @@ import {
 import { FiServer, FiExternalLink } from "react-icons/fi";
 import { MdArchitecture, MdSecurity } from "react-icons/md";
 import { TbTopologyStar3, TbBrandKotlin } from "react-icons/tb";
-import { SiNodedotjs, SiPostgresql, SiFirebase } from "react-icons/si";
+import { SiPostgresql, SiFirebase, SiSpringboot } from "react-icons/si";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { IoClose } from "react-icons/io5";
@@ -20,69 +20,73 @@ const ABOUT_DATA = {
   cvPath: "/cv.pdf",
   cvFileName: "Shahjalal_CV.pdf",
 
-  shortBio: `Founder of Appriyo & CSE student building scalable Android and backend systems. I specialize in multi-tenant architectures, secure financial workflows, and offline-first mobile apps — turning complex engineering into production-ready products.`,
+  shortBio: `Founder of Appriyo & CSE student building scalable Android and backend systems. I specialize in native Android engineering, multi-tenant SaaS architecture, and offline-first mobile apps — turning complex engineering challenges into production-grade systems.`,
 
   expandedBio: (
     <>
       I design and build <strong>production-grade software systems</strong> with a strong focus on{" "}
-      <strong>scalability, security, and reliability</strong>. My core expertise lies in{" "}
+      <strong>scalability, maintainability, and reliability</strong>. My core expertise lies in{" "}
       <strong>Android development (Kotlin + Jetpack Compose)</strong> and{" "}
-      <strong>backend engineering (Node.js, REST APIs, PostgreSQL)</strong>, where I develop
+      <strong>backend engineering (Spring Boot, REST APIs, PostgreSQL)</strong>, where I develop
       end-to-end solutions for real-world applications.
       <br /><br />
       I have hands-on experience building <strong>multi-tenant SaaS systems</strong> with strict{" "}
-      <strong>data isolation</strong>, as well as implementing <strong>secure financial workflows</strong>{" "}
+      <strong>data isolation</strong>, as well as implementing <strong>secure API workflows</strong>{" "}
       using <strong>RBAC and JWT-based authentication</strong>. My approach emphasizes{" "}
-      <strong>consistency, concurrency safety, and clean architecture</strong>.
+      <strong>clean architecture, transaction safety, and long-term maintainability</strong> over
+      rapid feature shipping.
       <br /><br />
-      I also specialize in <strong>offline-first mobile systems</strong> using Room and optimized
-      local databases, ensuring seamless UX in low-connectivity environments.
+      I specialize in <strong>offline-first mobile systems</strong> using Room DB and optimized
+      local schemas — ensuring seamless UX in low-connectivity environments. Some of my best
+      engineering lessons came from shipping to real users, watching systems break, and rebuilding
+      them properly from scratch.
       <br /><br />
       Beyond development, I have a strong academic foundation in{" "}
       <strong>Data Structures & Algorithms, Operating Systems, DBMS, and Networking</strong>.
       <br /><br />
-      Currently focused on building systems in the <strong>FinTech domain</strong> and solving
-      high-impact engineering problems at scale.
+      Currently focused on deepening <strong>native Android and Spring Boot engineering</strong>,
+      mastering scalable backend architecture, and building systems that solve real business problems
+      end-to-end.
     </>
   ),
 
   techStack: [
-    { label: "Kotlin", icon: <TbBrandKotlin />, color: "text-[#7F52FF]" },
-    { label: "Jetpack", icon: <FaAndroid />, color: "text-success" },
-    { label: "Node.js", icon: <SiNodedotjs />, color: "text-[#68A063]" },
-    { label: "PostgreSQL", icon: <SiPostgresql />, color: "text-[#336791]" },
-    { label: "Firebase", icon: <SiFirebase />, color: "text-[#FFCA28]" },
-    { label: "REST APIs", icon: <FiServer />, color: "text-info" },
-    { label: "RBAC Auth", icon: <MdSecurity />, color: "text-error" },
-    { label: "Sys Design", icon: <MdArchitecture />, color: "text-warning" },
-    { label: "MVVM", icon: <TbTopologyStar3 />, color: "text-secondary" },
-    { label: "C++ DSA", icon: <FaCode />, color: "text-primary" },
+    { label: "Kotlin",       icon: <TbBrandKotlin />,  color: "text-[#7F52FF]"  },
+    { label: "Compose",      icon: <FaAndroid />,       color: "text-success"    },
+    { label: "Spring Boot",  icon: <SiSpringboot />,    color: "text-[#6DB33F]"  },
+    { label: "PostgreSQL",   icon: <SiPostgresql />,    color: "text-[#336791]"  },
+    { label: "Firebase",     icon: <SiFirebase />,      color: "text-[#FFCA28]"  },
+    { label: "REST APIs",    icon: <FiServer />,        color: "text-info"       },
+    { label: "RBAC Auth",    icon: <MdSecurity />,      color: "text-error"      },
+    { label: "Sys Design",   icon: <MdArchitecture />,  color: "text-warning"    },
+    { label: "MVVM",         icon: <TbTopologyStar3 />, color: "text-secondary"  },
+    { label: "C++ DSA",      icon: <FaCode />,          color: "text-primary"    },
   ],
 
   pillars: [
-    { icon: <FaAndroid />, title: "Android", desc: "Kotlin · Jetpack · Room DB", accent: "text-success", bg: "bg-success/10 border-success/20" },
-    { icon: <FiServer />, title: "Backend", desc: "Node.js · REST · PostgreSQL", accent: "text-info", bg: "bg-info/10 border-info/20" },
-    { icon: <MdArchitecture />, title: "Architecture", desc: "SaaS · FinTech · Scale", accent: "text-warning", bg: "bg-warning/10 border-warning/20" },
+    { icon: <FaAndroid />,      title: "Android",      desc: "Kotlin · Compose · Room DB",      accent: "text-success", bg: "bg-success/10 border-success/20" },
+    { icon: <FiServer />,       title: "Backend",      desc: "Spring Boot · REST · PostgreSQL",  accent: "text-info",    bg: "bg-info/10 border-info/20"       },
+    { icon: <MdArchitecture />, title: "Architecture", desc: "Multi-tenant SaaS · Clean Arch",  accent: "text-warning", bg: "bg-warning/10 border-warning/20" },
   ],
 
   stats: [
-    { value: 2, suffix: "+", label: "Years" },
+    { value: 2,  suffix: "+", label: "Years"    },
     { value: 10, suffix: "+", label: "Projects" },
-    { value: 2, suffix: "", label: "Domains" },
+    { value: 2,  suffix: "",  label: "SaaS Apps" },
   ],
 
   info: [
-    { icon: <FaMapMarkerAlt />, label: "Location", value: "Khulna, Bangladesh", color: "text-error", bg: "bg-error/10 border-error/20" },
-    { icon: <FaEnvelope />, label: "Email", value: "mahmud.nubtk@gmail.com", color: "text-info", bg: "bg-info/10 border-info/20", href: "mailto:mahmud.nubtk@gmail.com", truncate: true },
-    { icon: <FaUserGraduate />, label: "Role", value: "SWE · Android & Backend", color: "text-warning", bg: "bg-warning/10 border-warning/20" },
-    { icon: <FaDownload />, label: "Resume", value: "Download CV", color: "text-success", bg: "bg-success/10 border-success/20", href: "/cv.pdf", download: "Shahjalal_CV.pdf", isLink: true },
+    { icon: <FaMapMarkerAlt />,  label: "Location", value: "Khulna, Bangladesh",       color: "text-error",   bg: "bg-error/10 border-error/20"                                                                       },
+    { icon: <FaEnvelope />,      label: "Email",    value: "mahmud.nubtk@gmail.com",   color: "text-info",    bg: "bg-info/10 border-info/20",    href: "mailto:mahmud.nubtk@gmail.com", truncate: true              },
+    { icon: <FaUserGraduate />,  label: "Role",     value: "Android & Backend Engineer", color: "text-warning", bg: "bg-warning/10 border-warning/20"                                                                 },
+    { icon: <FaDownload />,      label: "Resume",   value: "Download CV",              color: "text-success", bg: "bg-success/10 border-success/20", href: "/cv.pdf", download: "Shahjalal_CV.pdf", isLink: true     },
   ],
 
   extras: [
-    { label: "Available for", value: "Freelance & Full-time", dot: "bg-success" },
-    { label: "Response time", value: "Within 24 hours", dot: "bg-info" },
-    { label: "Work style", value: "Remote & Hybrid", dot: "bg-warning" },
-    { label: "Languages", value: "Bengali & English", dot: "bg-secondary" },
+    { label: "Available for",  value: "Freelance & Full-time", dot: "bg-success"   },
+    { label: "Response time",  value: "Within 24 hours",       dot: "bg-info"      },
+    { label: "Work style",     value: "Remote & Hybrid",       dot: "bg-warning"   },
+    { label: "Languages",      value: "Bengali & English",     dot: "bg-secondary" },
   ],
 };
 
@@ -402,38 +406,6 @@ const About = () => {
                     <div className="leading-tight">
                       <p className="text-[8px] opacity-60 uppercase tracking-wider font-medium">Role</p>
                       <p className="text-[10px] font-bold mt-0.5">Android & Backend</p>
-                    </div>
-                  </motion.div>
-
-                  {/* Chip: Stack */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.5, x: 14, y: 8 }}
-                    whileInView={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.95, type: "spring", stiffness: 200, damping: 16 }}
-                    className="absolute -bottom-3 -right-10 z-20 flex items-center gap-1.5 bg-base-100 border border-base-300 rounded-2xl px-2.5 py-2 shadow-[0_8px_28px_rgba(0,0,0,0.16)]"
-                  >
-                    <TbBrandKotlin className="text-[#7F52FF] text-[14px]" />
-                    <span className="text-base-content/20 text-[9px]">+</span>
-                    <SiNodedotjs className="text-[#68A063] text-[12px]" />
-                    <div className="leading-tight ml-1">
-                      <p className="text-[8px] text-base-content/35 uppercase tracking-wider font-medium">Stack</p>
-                      <p className="text-[10px] font-bold text-base-content mt-0.5">Kotlin · Node.js</p>
-                    </div>
-                  </motion.div>
-
-                  {/* Chip: Location */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.5, x: -10, y: 6 }}
-                    whileInView={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 1.1, type: "spring", stiffness: 200, damping: 16 }}
-                    className="absolute bottom-12 -left-10 z-20 flex items-center gap-1.5 bg-base-200 border border-base-300 rounded-xl px-2.5 py-1.5 shadow-md"
-                  >
-                    <FaMapMarkerAlt className="text-error text-xs flex-shrink-0" />
-                    <div className="leading-tight">
-                      <p className="text-[8px] text-base-content/35 uppercase tracking-wider font-medium">Based in</p>
-                      <p className="text-[10px] font-bold text-base-content mt-0.5">Khulna, BD</p>
                     </div>
                   </motion.div>
                 </motion.div>
