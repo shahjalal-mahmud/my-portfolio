@@ -14,29 +14,33 @@ const HERO_CONTENT = {
   title: "Shahajalal Mahmud",
   typewriterWords: [
     "Android Engineer (Kotlin)",
-    "Backend Engineer (Node.js)",
+    "Backend Engineer (Spring Boot)",
     "Founder @ Appriyo",
-    "FinTech Systems Builder",
+    "SaaS Systems Builder",
     "System Design Enthusiast",
   ],
   tagline: "Founder · Engineer · Builder",
   description: (
     <>
       Founder of{" "}
-      <strong className="text-primary font-semibold"><a href="https://appriyo.com" target="_blank" rel="noopener noreferrer">Appriyo</a></strong> & 3rd-year CSE student
-      specializing in{" "}
       <strong className="text-primary font-semibold">
-        high-performance Android & backend systems
+        <a href="https://appriyo.com" target="_blank" rel="noopener noreferrer">
+          Appriyo
+        </a>
+      </strong>{" "}
+      & 3rd-year CSE student specializing in{" "}
+      <strong className="text-primary font-semibold">
+        native Android engineering & scalable backend systems
       </strong>
-      . I design multi-tenant architectures, secure financial workflows, and
-      offline-first applications — turning complex engineering challenges into
-      production-ready, revenue-generating products at scale.
+      . I design multi-tenant SaaS architectures, offline-first mobile
+      applications, and secure REST APIs — building production-grade systems
+      that solve real business problems end-to-end.
     </>
   ),
   badges: [
-    { icon: <FaAndroid className="text-success" />, label: "Android", sub: "Kotlin · Jetpack" },
-    { icon: <FiServer className="text-info" />,     label: "Backend",  sub: "Node.js · REST" },
-    { icon: <MdArchitecture className="text-warning" />, label: "Architecture", sub: "Multi-tenant" },
+    { icon: <FaAndroid className="text-success" />,      label: "Android",      sub: "Kotlin · Compose"  },
+    { icon: <FiServer className="text-info" />,          label: "Backend",       sub: "Spring Boot · PostgreSQL" },
+    { icon: <MdArchitecture className="text-warning" />, label: "Architecture",  sub: "Multi-tenant SaaS" },
   ],
   socials: [
     { icon: <FaGithub />,    href: "https://github.com/shahjalal-mahmud",                label: "GitHub"     },
@@ -430,7 +434,7 @@ const Hero = () => {
                   </div>
                   <div className="text-left leading-tight">
                     <p className="text-[9px] text-base-content/35 uppercase tracking-wider font-medium">Tech Stack</p>
-                    <p className="text-[11px] font-bold text-base-content mt-0.5">Kotlin · Node.js</p>
+                    <p className="text-[11px] font-bold text-base-content mt-0.5">Kotlin · Spring Boot</p>
                   </div>
                 </motion.div>
 
