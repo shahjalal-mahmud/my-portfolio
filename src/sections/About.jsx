@@ -8,7 +8,7 @@ import {
   FaRocket,
 } from "react-icons/fa";
 import { FiServer, FiExternalLink } from "react-icons/fi";
-import { MdArchitecture, MdSecurity } from "react-icons/md";
+import { MdSecurity } from "react-icons/md";
 import { TbTopologyStar3, TbBrandKotlin } from "react-icons/tb";
 import { SiPostgresql, SiFirebase, SiSpringboot } from "react-icons/si";
 import { useState, useEffect, useRef } from "react";
@@ -58,15 +58,8 @@ const ABOUT_DATA = {
     { label: "Firebase",     icon: <SiFirebase />,      color: "text-[#FFCA28]"  },
     { label: "REST APIs",    icon: <FiServer />,        color: "text-info"       },
     { label: "RBAC Auth",    icon: <MdSecurity />,      color: "text-error"      },
-    { label: "Sys Design",   icon: <MdArchitecture />,  color: "text-warning"    },
     { label: "MVVM",         icon: <TbTopologyStar3 />, color: "text-secondary"  },
     { label: "C++ DSA",      icon: <FaCode />,          color: "text-primary"    },
-  ],
-
-  pillars: [
-    { icon: <FaAndroid />,      title: "Android",      desc: "Kotlin · Compose · Room DB",      accent: "text-success", bg: "bg-success/10 border-success/20" },
-    { icon: <FiServer />,       title: "Backend",      desc: "Spring Boot · REST · PostgreSQL",  accent: "text-info",    bg: "bg-info/10 border-info/20"       },
-    { icon: <MdArchitecture />, title: "Architecture", desc: "Multi-tenant SaaS · Clean Arch",  accent: "text-warning", bg: "bg-warning/10 border-warning/20" },
   ],
 
   stats: [
@@ -80,13 +73,6 @@ const ABOUT_DATA = {
     { icon: <FaEnvelope />,      label: "Email",    value: "mahmud.nubtk@gmail.com",   color: "text-info",    bg: "bg-info/10 border-info/20",    href: "mailto:mahmud.nubtk@gmail.com", truncate: true              },
     { icon: <FaUserGraduate />,  label: "Role",     value: "Android & Backend Engineer", color: "text-warning", bg: "bg-warning/10 border-warning/20"                                                                 },
     { icon: <FaDownload />,      label: "Resume",   value: "Download CV",              color: "text-success", bg: "bg-success/10 border-success/20", href: "/cv.pdf", download: "Shahjalal_CV.pdf", isLink: true     },
-  ],
-
-  extras: [
-    { label: "Available for",  value: "Freelance & Full-time", dot: "bg-success"   },
-    { label: "Response time",  value: "Within 24 hours",       dot: "bg-info"      },
-    { label: "Work style",     value: "Remote & Hybrid",       dot: "bg-warning"   },
-    { label: "Languages",      value: "Bengali & English",     dot: "bg-secondary" },
   ],
 };
 
@@ -239,9 +225,9 @@ const About = () => {
           {/* ── THREE-COLUMN LAYOUT ─────────────────────────────────── */}
           <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-6 xl:gap-10">
 
-            {/* ── LEFT: Text + stats + pillars + CTAs ───────────────── */}
+            {/* ── LEFT: Text + stats + CTAs ──────────────────────────── */}
             <motion.div
-              className="w-full lg:flex-1 flex flex-col gap-3.5 items-center text-center lg:items-start lg:text-left"
+              className="w-full lg:flex-1 flex flex-col gap-4 items-center text-center lg:items-start lg:text-left"
               variants={container}
               initial="hidden"
               whileInView="visible"
@@ -294,11 +280,11 @@ const About = () => {
               {/* Stats strip */}
               <motion.div
                 variants={item}
-                className="w-full flex items-center justify-center lg:justify-start gap-6 py-3.5 px-5 bg-base-200/50 border border-base-300/50 rounded-2xl"
+                className="w-full flex items-center justify-center lg:justify-start gap-8 py-4 px-6 bg-base-200/50 border border-base-300/50 rounded-2xl"
               >
                 {ABOUT_DATA.stats.map((s, i) => (
                   <div key={i} className="contents">
-                    {i > 0 && <div className="w-px h-7 bg-base-300" />}
+                    {i > 0 && <div className="w-px h-8 bg-base-300" />}
                     <div className="flex flex-col items-center gap-0.5">
                       <p className="text-2xl font-extrabold text-primary tracking-tight">
                         <CountUp target={s.value} suffix={s.suffix} />
@@ -309,39 +295,7 @@ const About = () => {
                 ))}
               </motion.div>
 
-              {/* Pillars */}
-              <motion.div variants={item} className="w-full flex flex-wrap gap-2 justify-center lg:justify-start">
-                {ABOUT_DATA.pillars.map((p, i) => (
-                  <div key={i} className={`flex items-center gap-2 px-3 py-2 border rounded-xl ${p.bg}`}>
-                    <span className={`text-sm ${p.accent}`}>{p.icon}</span>
-                    <div>
-                      <p className="text-[11px] font-bold text-base-content leading-none">{p.title}</p>
-                      <p className="text-[9px] text-base-content/40 mt-0.5 leading-none">{p.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
 
-              {/* CTA Buttons */}
-              <motion.div variants={item} className="flex flex-row gap-2.5 justify-center lg:justify-start">
-                <a
-                  href={ABOUT_DATA.cvPath}
-                  download={ABOUT_DATA.cvFileName}
-                  className="btn btn-primary btn-sm px-5 gap-2 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 hover:-translate-y-0.5 transition-all duration-200"
-                >
-                  <FaDownload className="text-xs" />
-                  Resume
-                </a>
-
-                {/* Updated Link below */}
-                <a
-                  href="/skills-projects"
-                  className="btn btn-outline btn-sm px-5 gap-2 hover:border-primary/50 hover:bg-primary/8 hover:-translate-y-0.5 transition-all duration-200"
-                >
-                  <FaRocket className="text-xs" />
-                  Projects
-                </a>
-              </motion.div>
             </motion.div>
 
             {/* ── CENTER: Photo ──────────────────────────────────────── */}
@@ -412,9 +366,9 @@ const About = () => {
               </div>
             </motion.div>
 
-            {/* ── RIGHT: Info + Tech + Extras ────────────────────────── */}
+            {/* ── RIGHT: Info + Tech ─────────────────────────────────── */}
             <motion.div
-              className="w-full lg:flex-1 flex flex-col gap-3.5 items-center text-center lg:items-start lg:text-left"
+              className="w-full lg:flex-1 flex flex-col gap-4 items-center text-center lg:items-start lg:text-left"
               variants={container}
               initial="hidden"
               whileInView="visible"
@@ -426,7 +380,9 @@ const About = () => {
                   <motion.div
                     key={i}
                     whileHover={{ y: -2 }}
-                    className="flex items-center gap-2 p-2.5 bg-base-200/60 border border-base-300/50 rounded-xl hover:border-primary/25 hover:bg-base-200/90 transition-all duration-200 group"
+                    className={`flex items-center gap-2 p-3 bg-base-200/60 border border-base-300/50 rounded-xl hover:border-primary/25 hover:bg-base-200/90 transition-all duration-200 group ${
+                      i === ABOUT_DATA.info.length - 1 && ABOUT_DATA.info.length % 2 !== 0 ? "col-span-2" : ""
+                    }`}
                   >
                     <div className={`w-7 h-7 flex items-center justify-center rounded-lg text-xs flex-shrink-0 border ${info.bg} ${info.color} group-hover:scale-110 transition-transform duration-200`}>
                       {info.icon}
@@ -436,12 +392,11 @@ const About = () => {
                       {info.href ? (
                         <a
                           href={info.href}
-                          download={info.download}
-                          target={!info.download ? "_blank" : undefined}
+                          target="_blank"
                           rel="noopener noreferrer"
-                          className={`text-[11px] font-bold mt-0.5 block ${info.isLink ? "text-primary hover:underline" : "text-base-content/80 hover:text-primary"} ${info.truncate ? "truncate" : ""} transition-colors duration-150`}
+                          className={`text-[11px] font-bold mt-0.5 block ${info.truncate ? "truncate" : ""} text-base-content/80 hover:text-primary transition-colors duration-150`}
                         >
-                          {info.value}{info.isLink && <FiExternalLink className="inline ml-0.5 text-[8px]" />}
+                          {info.value}
                         </a>
                       ) : (
                         <p className={`text-[11px] font-bold text-base-content/80 mt-0.5 ${info.truncate ? "truncate" : ""}`}>{info.value}</p>
@@ -462,26 +417,6 @@ const About = () => {
               <motion.div variants={item} className="flex flex-wrap gap-1.5 justify-center lg:justify-start">
                 {ABOUT_DATA.techStack.map((tech, i) => (
                   <TechBadge key={i} {...tech} />
-                ))}
-              </motion.div>
-
-              {/* Divider */}
-              <motion.div variants={item} className="flex items-center justify-center lg:justify-start gap-3 w-full">
-                <div className="h-px w-8 bg-base-300" />
-                <span className="text-[9px] text-base-content/25 uppercase tracking-[0.22em] flex-shrink-0">Availability</span>
-                <div className="h-px flex-1 max-w-[60px] bg-base-300" />
-              </motion.div>
-
-              {/* Extra chips */}
-              <motion.div variants={item} className="w-full grid grid-cols-2 gap-2">
-                {ABOUT_DATA.extras.map((chip, i) => (
-                  <div key={i} className="flex items-start gap-2 p-2.5 bg-base-200/40 border border-base-300/40 rounded-xl">
-                    <span className={`w-1.5 h-1.5 rounded-full ${chip.dot} mt-1.5 flex-shrink-0`} />
-                    <div>
-                      <p className="text-[8px] text-base-content/35 uppercase tracking-wider font-semibold">{chip.label}</p>
-                      <p className="text-[11px] font-bold text-base-content/80 mt-0.5">{chip.value}</p>
-                    </div>
-                  </div>
                 ))}
               </motion.div>
             </motion.div>
