@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./shared/tokens/m3.css";
 
 /* DaisyUI Plugin and Theme Configuration */
 @plugin "daisyui" {
