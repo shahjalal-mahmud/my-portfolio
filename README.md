@@ -4,13 +4,13 @@
 
 A cutting-edge, fully responsive personal portfolio built with **React, Vite, Tailwind CSS, and DaisyUI** — featuring 100+ dynamic themes, live GitHub/Codeforces stats, interactive project showcases, and a production-grade contact system.
 
-📍 Khulna, Bangladesh &nbsp;|&nbsp; 🌐 [shahajalalmahmud.netlify.app](https://shahajalalmahmud.netlify.app/) &nbsp;|&nbsp; 🏗️ [appriyo.com](https://appriyo.com/)
+📍 Khulna, Bangladesh &nbsp;|&nbsp; 🌐 [shahajalalmahmud.netlify.app](https://shahajalal.me/) &nbsp;|&nbsp; 🏗️ [appriyo.com](https://appriyo.com/)
 
 ---
 
 ## Live Demo
 
-**[🚀 View Portfolio →](https://shahajalalmahmud.netlify.app/)**
+**[🚀 View Portfolio →](https://shahajalal.me/)**
 _Deployed on Netlify with CI/CD from GitHub_
 
 ---
@@ -190,7 +190,7 @@ ThemeContext
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Md_Shahajalal_Mahmud-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/md-shahajalal-mahmud)
 [![Email](https://img.shields.io/badge/Email-mahmud.nubtk@gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:mahmud.nubtk@gmail.com)
 [![GitHub](https://img.shields.io/badge/GitHub-shahjalal--mahmud-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/shahjalal-mahmud)
-[![Portfolio](https://img.shields.io/badge/Portfolio-shahajalalmahmud.netlify.app-4285F4?style=flat-square&logo=google-chrome&logoColor=white)](https://shahajalalmahmud.netlify.app/)
+[![Portfolio](https://img.shields.io/badge/Portfolio-shahajalalmahmud.netlify.app-4285F4?style=flat-square&logo=google-chrome&logoColor=white)](https://shahajalal.me/)
 [![Appriyo](https://img.shields.io/badge/Appriyo-appriyo.com-000000?style=flat-square&logo=google-chrome&logoColor=white)](https://appriyo.com)
 
 ---
