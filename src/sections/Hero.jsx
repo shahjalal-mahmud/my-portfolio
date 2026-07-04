@@ -269,7 +269,7 @@ const Hero = () => {
             {/* Description */}
             <motion.p
               variants={item}
-              className="text-sm sm:text-[15px] opacity-60 leading-[1.75] max-w-md lg:max-w-none lg:max-w-[500px]"
+              className="text-sm sm:text-[15px] opacity-60 leading-[1.75] max-w-md lg:max-w-none"
             >
               {HERO_CONTENT.description}
             </motion.p>

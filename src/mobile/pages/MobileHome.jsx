@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import {
   FaRocket, FaArrowRight, FaGithub, FaLinkedin, FaEnvelope,
+  FaPhone,
 } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
 import projects from "../../shared/data/projects";
@@ -23,7 +24,7 @@ const TYPING_WORDS = [
 const SOCIALS = [
   { icon: <FaGithub />, href: "https://github.com/shahajalal-mahmud" },
   { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/md-shahajalal-mahmud/" },
-  { icon: <SiLeetcode />, href: "https://leetcode.com/Shahajalal_Mahmud/" },
+  { icon: <FaPhone />,     href: "tel:+8801889793146"},
   { icon: <FaEnvelope />, href: "mailto:mahmud.nubtk@gmail.com" },
 ];
 
