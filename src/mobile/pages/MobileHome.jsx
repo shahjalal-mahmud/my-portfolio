@@ -60,15 +60,15 @@ const FOCUS = [
 
 // Quick actions — 4-up grid of icon tiles.
 const ACTIONS = [
-  { icon: <FaDownload />, label: "CV",       to: null,                href: "https://drive.google.com/file/d/1m7_lfMzOZHbpO7EsQEGvl3I9crFPEuTQ/view?usp=sharing" },
+  { icon: <FaDownload />, label: "CV",       to: null,                href: "/cv.pdf" },
   { icon: <FaEnvelope />, label: "Contact",  to: "/contact",          href: null                },
   { icon: <FaRocket />,   label: "Appriyo",  to: null,                href: "https://appriyo.com" },
-  { icon: <FaCodeBranch />, label: "GitHub", to: null,                href: "https://github.com/shahajalal-mahmud" },
+  { icon: <FaCodeBranch />, label: "GitHub", to: null,                href: "https://github.com/shahjalal-mahmud" },
 ];
 
 // Social list rows. Each item is clickable and opens in a new tab.
 const SOCIALS = [
-  { leading: <FaGithub className="text-base" />,    title: "GitHub",    subtitle: "@shahajalal-mahmud",          href: "https://github.com/shahajalal-mahmud" },
+  { leading: <FaGithub className="text-base" />,    title: "GitHub",    subtitle: "@shahjalal-mahmud",          href: "https://github.com/shahajalal-mahmud" },
   { leading: <FaLinkedin className="text-base" />,  title: "LinkedIn",  subtitle: "md-shahajalal-mahmud",        href: "https://www.linkedin.com/in/md-shahajalal-mahmud/" },
   { leading: <SiLeetcode className="text-base" />,  title: "LeetCode",  subtitle: "Shahajalal_Mahmud",           href: "https://leetcode.com/Shahajalal_Mahmud/" },
   { leading: <FaEnvelope className="text-base" />,  title: "Email",     subtitle: "mahmud.nubtk@gmail.com",      href: "mailto:mahmud.nubtk@gmail.com" },

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find C:Projectsmy-portfoliosrcmobile -type f -name *.jsx -o -name *.css)",
+      "Bash(npm run:*)"
+    ]
+  }
+}
