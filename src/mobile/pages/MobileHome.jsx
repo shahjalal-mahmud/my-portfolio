@@ -1,19 +1,4 @@
 // MobileHome — flagship native-Android dashboard.
-//
-// Design goal: this screen must feel like a premium Android app, not a
-// responsive website. Every section uses a deliberately different visual
-// structure so the eye is constantly refreshed:
-//
-//   1. Profile            — Instagram-style header (no surrounding card)
-//   2. Currently building — wide banner with a single "NOW" pulse
-//   3. Featured projects  — Play-Store snap carousel with peek + scale
-//   4. Achievements       — award cards in a horizontal scroller
-//   5. Current focus      — compact Android-style tiles
-//   6. Quick actions      — icon-tile grid
-//   7. Connect            — Android list rows
-//
-// Reuses M3Card / M3Button / M3Chip / M3ListItem / M3Timeline where it makes
-// sense. Theme-aware (every color uses semantic tokens). No new primitives.
 
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
