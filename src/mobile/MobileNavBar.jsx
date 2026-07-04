@@ -1,4 +1,6 @@
 // MobileNavBar — bottom NavigationBar with 4 destinations + center FAB.
+// Designed to feel like a modern Android bottom nav: tonal surface,
+// pill-shaped active indicator behind each icon, prominent center FAB.
 
 import { FaHome, FaCode, FaUserGraduate, FaBriefcase } from "react-icons/fa";
 import M3NavigationBar from "./components/M3NavigationBar";

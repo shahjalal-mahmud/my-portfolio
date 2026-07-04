@@ -1,4 +1,6 @@
 // M3 Navigation Bar item — one destination in the bottom NavigationBar.
+// Uses the Material 3 expressive active pill (rounded "selected" indicator
+// behind the icon) — the canonical shape used in modern Android.
 
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -11,29 +13,50 @@ export function M3NavigationBarItem({ to, icon, label, end = false }) {
       aria-label={label}
       className={({ isActive }) =>
         `m3-tap relative flex-1 flex flex-col items-center justify-center
-         min-h-[48px] py-1.5 px-1 gap-0.5
+         min-h-[56px] py-1.5 px-1 gap-0.5
          transition-colors duration-150
-         ${isActive ? "text-primary" : "text-base-content/65 hover:text-base-content"}`
+         ${isActive ? "text-primary" : "text-base-content/65"}`
       }
     >
       {({ isActive }) => (
         <>
-          {/* Active pill */}
+          {/* Selected indicator pill (Material 3 spec: 64x32 behind icon) */}
           <motion.span
             initial={false}
             animate={{
               opacity: isActive ? 1 : 0,
-              scale: isActive ? 1 : 0.6,
+              width: isActive ? 64 : 32,
+              height: isActive ? 32 : 32,
             }}
             transition={{ type: "spring", stiffness: 380, damping: 30 }}
-            className="absolute top-1.5 w-16 h-7 rounded-full bg-primary/15 pointer-events-none"
+            className="absolute top-1.5 rounded-full bg-primary/15 pointer-events-none"
+            style={{ left: "50%", x: "-50%" }}
           />
-          <span className="relative z-10 w-6 h-6 flex items-center justify-center text-[22px]">
+
+          {/* Icon */}
+          <motion.span
+            initial={false}
+            animate={{
+              y: isActive ? -1 : 0,
+            }}
+            transition={{ type: "spring", stiffness: 420, damping: 28 }}
+            className="relative z-10 w-6 h-6 flex items-center justify-center text-[22px]"
+          >
             {icon}
-          </span>
-          <span className="relative z-10 text-[11px] font-medium leading-none tracking-wide">
+          </motion.span>
+
+          {/* Label */}
+          <motion.span
+            initial={false}
+            animate={{
+              fontSize: isActive ? "11px" : "11px",
+              fontWeight: isActive ? 600 : 500,
+            }}
+            transition={{ duration: 0.15 }}
+            className="relative z-10 leading-none tracking-wide"
+          >
             {label}
-          </span>
+          </motion.span>
         </>
       )}
     </NavLink>
