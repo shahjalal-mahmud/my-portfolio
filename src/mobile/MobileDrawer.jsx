@@ -13,8 +13,8 @@ const SOCIALS = [
   {
     leading: <FaGithub />,
     title: "GitHub",
-    subtitle: "github.com/shahajalal-mahmud",
-    href: "https://github.com/shahajalal-mahmud",
+    subtitle: "github.com/shahjalal-mahmud",
+    href: "https://github.com/shahjalal-mahmud",
   },
   {
     leading: <FaLinkedin />,
