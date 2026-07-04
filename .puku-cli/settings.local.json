@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(find C:Projectsmy-portfoliosrcmobile -type f -name *.jsx -o -name *.css)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(grep -r \"FaRocket\\\\|FaBrain\\\\|FaCloud\\\\|FaCogs\\\\|FaCodeBranch\\\\|FaShieldAlt\\\\|FaServer\\\\|FaAndroid\\\\|MdArchitecture\" C:/Projects/my-portfolio/src --include=*.jsx -l)",
+      "Bash(node -e \":*)",
+      "Bash(for icon:*)",
+      "Bash(do if:*)",
+      "Bash(then echo:*)"
     ]
   }
 }
