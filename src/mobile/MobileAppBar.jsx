@@ -2,6 +2,11 @@
 // Hosts the menu trigger (profile avatar with status dot), a large title with
 // subtitle meta, and a pill-shaped trailing action cluster (notifications /
 // theme).
+//
+// Each trigger opens the MobileDrawer with a different `mode`:
+//   • avatar         → "menu"
+//   • notifications  → "alerts"
+//   • palette / theme → "theme"
 
 import { useLocation } from "react-router-dom";
 import { FaPalette, FaBell } from "react-icons/fa";
@@ -26,6 +31,10 @@ export default function MobileAppBar({ onOpenDrawer }) {
   const { pathname } = useLocation();
   const { title, subtitle } = deriveTitle(pathname);
 
+  const openMenu = () => onOpenDrawer?.("menu");
+  const openAlerts = () => onOpenDrawer?.("alerts");
+  const openTheme = () => onOpenDrawer?.("theme");
+
   return (
     <M3TopAppBar
       title={title}
@@ -33,7 +42,7 @@ export default function MobileAppBar({ onOpenDrawer }) {
       titleClassName="text-[1.05rem] tracking-tight"
       leading={
         <button
-          onClick={onOpenDrawer}
+          onClick={openMenu}
           aria-label="Open menu"
           className="m3-tap relative w-10 h-10 rounded-full overflow-hidden flex items-center justify-center m3-state-hover ring-2 ring-primary/20 active:scale-95 transition-transform"
         >
@@ -50,9 +59,9 @@ export default function MobileAppBar({ onOpenDrawer }) {
       }
       trailing={
         <div className="flex items-center gap-0.5">
-          {/* Notifications pill (decorative — opens drawer) */}
+          {/* Notifications pill */}
           <button
-            onClick={onOpenDrawer}
+            onClick={openAlerts}
             aria-label="Notifications"
             className="m3-tap relative w-10 h-10 rounded-full flex items-center justify-center text-base-content m3-state-hover active:scale-95 transition-transform"
           >
@@ -61,7 +70,7 @@ export default function MobileAppBar({ onOpenDrawer }) {
           </button>
           {/* Theme / settings */}
           <button
-            onClick={onOpenDrawer}
+            onClick={openTheme}
             aria-label="Theme & settings"
             className="m3-tap w-10 h-10 rounded-full flex items-center justify-center text-base-content m3-state-hover active:scale-95 transition-transform"
           >
