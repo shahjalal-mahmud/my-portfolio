@@ -1,16 +1,16 @@
 // MobileHome — flagship native-Android dashboard.
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   FaAndroid, FaServer, FaLayerGroup, FaRocket, FaEnvelope, FaPhone,
-  FaGithub, FaLinkedin, FaDownload, FaArrowRight, FaCodeBranch, FaUsers,
+  FaGithub, FaLinkedin, FaDownload, FaArrowRight, FaCodeBranch,
   FaTrophy, FaStar, FaGraduationCap, FaCheckCircle, FaShieldAlt, FaBolt,
   FaMobileAlt, FaCloud, FaCogs, FaBrain, FaChevronRight, FaPlay,
-  FaCertificate, FaAward, FaTimes, FaPlus,
+  FaCertificate, FaAward, FaHeart, FaCode,
 } from "react-icons/fa";
-import { SiLeetcode, SiFirebase, SiSpringboot, SiKotlin, SiTensorflow } from "react-icons/si";
+import { SiLeetcode } from "react-icons/si";
 import projects from "../../shared/data/projects";
 import M3Card from "../components/M3Card";
 import M3Button from "../components/M3Button";
@@ -47,6 +47,7 @@ const NOW = {
   title: "Appriyo SaaS dashboard",
   subtitle: "Multi-tenant admin panel for repair-shop ERP",
   meta: "Shipping this quarter",
+  progress: 72,
 };
 
 // Current focus — 4 small Android-style tiles.
@@ -62,20 +63,20 @@ const ACTIONS = [
   { icon: <FaDownload />, label: "CV",       to: null,                href: "https://drive.google.com/file/d/1m7_lfMzOZHbpO7EsQEGvl3I9crFPEuTQ/view?usp=sharing" },
   { icon: <FaEnvelope />, label: "Contact",  to: "/contact",          href: null                },
   { icon: <FaRocket />,   label: "Appriyo",  to: null,                href: "https://appriyo.com" },
-  { icon: <FaCodeBranch />, label: "GitHub", to: null,                href: "https://github.com/shahjalal-mahmud" },
+  { icon: <FaCodeBranch />, label: "GitHub", to: null,                href: "https://github.com/shahajalal-mahmud" },
 ];
 
-// Social list rows.
+// Social list rows. Each item is clickable and opens in a new tab.
 const SOCIALS = [
-  { leading: <FaGithub className="text-base" />,    title: "GitHub",    subtitle: "@shahjalal-mahmud",          href: "https://github.com/shahajalal-mahmud" },
+  { leading: <FaGithub className="text-base" />,    title: "GitHub",    subtitle: "@shahajalal-mahmud",          href: "https://github.com/shahajalal-mahmud" },
   { leading: <FaLinkedin className="text-base" />,  title: "LinkedIn",  subtitle: "md-shahajalal-mahmud",        href: "https://www.linkedin.com/in/md-shahajalal-mahmud/" },
   { leading: <SiLeetcode className="text-base" />,  title: "LeetCode",  subtitle: "Shahajalal_Mahmud",           href: "https://leetcode.com/Shahajalal_Mahmud/" },
   { leading: <FaEnvelope className="text-base" />,  title: "Email",     subtitle: "mahmud.nubtk@gmail.com",      href: "mailto:mahmud.nubtk@gmail.com" },
   { leading: <FaPhone className="text-base" />,     title: "Phone",     subtitle: "+880 1889-793146",            href: "tel:+8801889793146" },
 ];
 
-// Achievements — designed to be the visual "wow" alongside the carousel.
-// Each card has a gradient (theme-aware), a metric, and an event label.
+// Achievements — clean outline cards, no gradient backgrounds.
+// Designed in pure Material 3 expressive style: tonal surface + accent number.
 const ACHIEVEMENTS = [
   {
     icon: <FaTrophy />,
@@ -83,7 +84,6 @@ const ACHIEVEMENTS = [
     metric: "98.7%",
     title: "Model Accuracy",
     event: "CashGuard AI · SOLVIO 2025",
-    color: "from-amber-400 to-orange-500",
   },
   {
     icon: <FaAward />,
@@ -91,7 +91,6 @@ const ACHIEVEMENTS = [
     metric: "Global",
     title: "AI Hackathon",
     event: "SOLVIO 2025 · Team Drishty",
-    color: "from-primary to-secondary",
   },
   {
     icon: <FaCertificate />,
@@ -99,7 +98,6 @@ const ACHIEVEMENTS = [
     metric: "5 shops",
     title: "Active Beta",
     event: "Repair Store Manager",
-    color: "from-emerald-400 to-teal-500",
   },
   {
     icon: <FaStar />,
@@ -107,7 +105,6 @@ const ACHIEVEMENTS = [
     metric: "150+",
     title: "Students",
     event: "Prodorshok · 10 universities",
-    color: "from-sky-400 to-indigo-500",
   },
 ];
 
@@ -132,46 +129,107 @@ function projectStatus(p) {
 // ─── Subcomponents (page-scoped) ─────────────────────────────────────────────
 
 /**
- * Play-Store-style snap carousel.
- * - 85% width per slide
- * - peek of next card
- * - dot indicator
- * - per-card scale/opacity shift while scrolling (driven by scroll progress)
+ * Play-Store-style snap carousel with infinite-loop behaviour.
+ *
+ * Strategy: render a cloned copy of the projects list at the start and end
+ * so the user can swipe past the boundaries and we silently jump back to
+ * the real item without animation. The visible "active index" is mapped
+ * back to the original array (modulo length) for the dot indicator.
+ *
+ * The carousel lives inside an `overflow-hidden` clip-frame so the page
+ * itself never scrolls horizontally — only the inner track moves.
  */
 function FeaturedCarousel() {
   const trackRef = useRef(null);
   const [active, setActive] = useState(0);
+  const [cloned] = useState(() => [
+    projects[projects.length - 1], // clone of last at start
+    ...projects,
+    projects[0], // clone of first at end
+  ]);
+  const realCount = projects.length;
+  const isJumpingRef = useRef(false);
+
+  // Compute slide width (85% of container + gap-3 = 12px).
+  const getCardW = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return 0;
+    return el.clientWidth * 0.85 + 12;
+  }, []);
+
+  const onScroll = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const cardW = getCardW();
+    if (!cardW) return;
+    const idx = Math.round(el.scrollLeft / cardW);
+    // Map back to original index (offset by 1 because of the leading clone).
+    const realIdx = ((idx - 1) % realCount + realCount) % realCount;
+    setActive(realIdx);
+  }, [getCardW, realCount]);
 
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
-    const onScroll = () => {
-      // Each card width is 85% of viewport. Compute the nearest snap index.
-      const cardW = el.clientWidth * 0.85;
-      const idx = Math.round(el.scrollLeft / cardW);
-      setActive(Math.max(0, Math.min(projects.length - 1, idx)));
-    };
     el.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => el.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [onScroll]);
+
+  // Infinite-loop wrap: after a scroll settles near a clone, jump to the real slide.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const handleScrollEnd = () => {
+      const cardW = getCardW();
+      if (!cardW) return;
+      const idx = Math.round(el.scrollLeft / cardW);
+      // idx 0 == clone of last, idx (realCount+1) == clone of first.
+      if (idx === 0) {
+        isJumpingRef.current = true;
+        el.scrollTo({ left: realCount * cardW, behavior: "auto" });
+      } else if (idx === realCount + 1) {
+        isJumpingRef.current = true;
+        el.scrollTo({ left: 1 * cardW, behavior: "auto" });
+      }
+      // Clear the jump flag after a frame.
+      requestAnimationFrame(() => {
+        isJumpingRef.current = false;
+      });
+    };
+    let scrollTimer;
+    const onScrollWrap = () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(handleScrollEnd, 90);
+    };
+    el.addEventListener("scroll", onScrollWrap, { passive: true });
+    return () => {
+      clearTimeout(scrollTimer);
+      el.removeEventListener("scroll", onScrollWrap);
+    };
+  }, [getCardW, realCount]);
 
   const go = (i) => {
     const el = trackRef.current;
     if (!el) return;
-    const cardW = el.clientWidth * 0.85;
-    el.scrollTo({ left: i * cardW, behavior: "smooth" });
+    const cardW = getCardW();
+    if (!cardW) return;
+    // +1 because of the leading clone.
+    el.scrollTo({ left: (i + 1) * cardW, behavior: "smooth" });
   };
 
   return (
     <div>
-      <div
-        ref={trackRef}
-        className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory gap-3 -mx-4 px-4 pb-2"
-      >
-        {projects.map((p, i) => (
-          <ProjectCard key={p.slug} project={p} index={i} />
-        ))}
+      {/* Outer clip-frame: this is the key to stopping horizontal page-scroll. */}
+      <div className="overflow-hidden">
+        <div
+          ref={trackRef}
+          className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory gap-3 -mx-4 px-4 pb-2"
+        >
+          {cloned.map((p, i) => (
+            <ProjectCard key={`${p.slug}-${i}`} project={p} index={i} />
+          ))}
+        </div>
       </div>
 
       {/* Dots */}
@@ -204,7 +262,7 @@ function FeaturedCarousel() {
  */
 function ProjectCard({ project, index }) {
   const cardRef = useRef(null);
-  const [progress, setProgress] = useState(index === 0 ? 0 : 1); // 0 = centered, 1 = far
+  const [progress, setProgress] = useState(index === 1 ? 0 : 1); // 0 = centered, 1 = far
 
   useEffect(() => {
     const el = cardRef.current;
@@ -300,31 +358,33 @@ function ProjectCard({ project, index }) {
 }
 
 /**
- * Award card — used in the achievements horizontal scroller.
- * Visual: gradient ring + icon badge + metric headline + event label.
+ * Award card — clean outline design with no gradient background.
+ * Material 3 "expressive" style: tonal surface + accent number.
  */
 function AwardCard({ a }) {
   return (
     <motion.div
       whileTap={{ scale: 0.97 }}
       transition={SPRING}
-      className="snap-start shrink-0 w-[68%] m3-tap"
+      className="snap-start shrink-0 w-[72%] m3-tap"
     >
-      <M3Card elevation={2} className="m3-shape-xl overflow-hidden p-0">
-        {/* Gradient top banner */}
-        <div className={`relative h-24 bg-gradient-to-br ${a.color}`}>
-          <div className="absolute inset-0 bg-black/10" />
-          <div className="absolute -bottom-6 left-4 w-14 h-14 rounded-2xl bg-base-100 ring-4 ring-base-100 flex items-center justify-center text-2xl text-primary m3-elev-2">
+      <M3Card
+        elevation={0}
+        className="m3-shape-xl border border-base-300/70 bg-base-100 p-4 h-full"
+      >
+        {/* Top row: icon badge + pill badge */}
+        <div className="flex items-center justify-between">
+          <div className="w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center text-xl">
             {a.icon}
           </div>
-          <span className="absolute top-3 right-3 m3-label-medium uppercase tracking-wider text-white/90 bg-black/20 backdrop-blur-sm rounded-full px-2.5 py-1">
+          <span className="m3-label-medium uppercase tracking-wider text-base-content/55 bg-base-200/70 rounded-full px-2.5 py-1">
             {a.badge}
           </span>
         </div>
 
-        {/* Body */}
-        <div className="pt-9 px-4 pb-4">
-          <p className="m3-headline-medium text-base-content leading-none">
+        {/* Metric + title */}
+        <div className="mt-4">
+          <p className="m3-headline-medium text-primary leading-none">
             {a.metric}
           </p>
           <p className="m3-title-medium text-base-content mt-1.5 font-semibold">
@@ -422,7 +482,9 @@ export default function MobileHome() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="pb-8"
+      // The wrapper itself clips any horizontal overflow — this is the page-level
+      // safety net that complements the carousel's inner clip-frame.
+      className="pb-8 overflow-x-hidden"
     >
       {/* ════════════════════════════════════════════════════════════════════
           1. PROFILE HEADER (Instagram-inspired, no surrounding card)
@@ -500,37 +562,69 @@ export default function MobileHome() {
       </motion.section>
 
       {/* ════════════════════════════════════════════════════════════════════
-          2. CURRENTLY BUILDING (single full-width banner, NOW pulse)
+          2. CURRENTLY BUILDING — Modern Material You "Now Playing" card.
+          Layered surface, pulsing live dot, progress rail, accent hero icon.
       ════════════════════════════════════════════════════════════════════ */}
       <motion.section variants={itemVariants} className="px-4 mb-6">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/15 via-primary/5 to-secondary/10 border border-primary/20 p-4">
-          {/* Glow */}
-          <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-primary/20 blur-3xl pointer-events-none" />
+        <div className="relative overflow-hidden rounded-3xl bg-base-100 border border-base-300/70 m3-elev-1">
+          {/* Subtle accent strip on the left edge — modern Android "side rail" feel. */}
+          <div className="absolute left-0 top-3 bottom-3 w-1 rounded-r-full bg-primary" />
 
-          <div className="relative flex items-center gap-3">
-            <div className="relative w-11 h-11 rounded-2xl bg-primary text-primary-content flex items-center justify-center flex-shrink-0 m3-elev-1">
-              <FaRocket />
-              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-success ring-2 ring-base-100">
-                <span className="absolute inset-0 rounded-full bg-success animate-ping opacity-75" />
+          <div className="relative p-4 pl-5">
+            {/* Header row: LIVE pill + meta */}
+            <div className="flex items-center justify-between">
+              <div className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full bg-primary/10 text-primary m3-label-medium">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-70" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
+                </span>
+                NOW BUILDING
+              </div>
+              <span className="m3-label-medium uppercase tracking-wider text-base-content/45">
+                {NOW.meta}
               </span>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="m3-label-medium uppercase tracking-[0.12em] text-primary">
-                Now building
-              </p>
-              <p className="m3-title-large text-base-content leading-tight truncate">
-                {NOW.title}
-              </p>
-              <p className="m3-body-medium text-base-content/65 line-clamp-1">
-                {NOW.subtitle}
-              </p>
+
+            {/* Body row: icon + title + subtitle */}
+            <div className="relative flex items-center gap-3 mt-3">
+              <div className="relative w-12 h-12 rounded-2xl bg-primary text-primary-content flex items-center justify-center flex-shrink-0 m3-elev-1">
+                <FaRocket className="text-lg" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="m3-title-large text-base-content leading-tight truncate">
+                  {NOW.title}
+                </p>
+                <p className="m3-body-medium text-base-content/65 line-clamp-1">
+                  {NOW.subtitle}
+                </p>
+              </div>
+            </div>
+
+            {/* Progress rail — Android "linear progress" */}
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="m3-label-medium uppercase tracking-wider text-base-content/55">
+                  Progress
+                </span>
+                <span className="m3-label-large text-primary tabular-nums">
+                  {NOW.progress}%
+                </span>
+              </div>
+              <div className="h-1.5 w-full rounded-full bg-base-200 overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${NOW.progress}%` }}
+                  transition={{ duration: 1.1, ease: EASE_OUT, delay: 0.2 }}
+                  className="h-full rounded-full bg-primary"
+                />
+              </div>
             </div>
           </div>
         </div>
       </motion.section>
 
       {/* ════════════════════════════════════════════════════════════════════
-          3. FEATURED PROJECTS — Play-Store snap carousel
+          3. FEATURED PROJECTS — Play-Store snap carousel (infinite loop)
       ════════════════════════════════════════════════════════════════════ */}
       <motion.section variants={itemVariants} className="mb-7">
         <div className="flex items-end justify-between px-4 pb-3">
@@ -555,7 +649,7 @@ export default function MobileHome() {
       </motion.section>
 
       {/* ════════════════════════════════════════════════════════════════════
-          4. ACHIEVEMENTS — award cards in a horizontal scroller
+          4. ACHIEVEMENTS — clean outline cards, no gradients.
       ════════════════════════════════════════════════════════════════════ */}
       <motion.section variants={itemVariants} className="mb-7">
         <div className="flex items-end justify-between px-4 pb-3">
@@ -569,10 +663,14 @@ export default function MobileHome() {
           </div>
         </div>
 
-        <div className="flex gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 pb-1">
-          {ACHIEVEMENTS.map((a) => (
-            <AwardCard key={a.title} a={a} />
-          ))}
+        {/* Same overflow-hidden clip-frame trick as the carousel so this section
+            can scroll horizontally without making the page scroll. */}
+        <div className="overflow-hidden">
+          <div className="flex gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 pb-1">
+            {ACHIEVEMENTS.map((a) => (
+              <AwardCard key={a.title} a={a} />
+            ))}
+          </div>
         </div>
       </motion.section>
 
@@ -618,6 +716,8 @@ export default function MobileHome() {
 
       {/* ════════════════════════════════════════════════════════════════════
           7. CONNECT — Android list (card)
+          Each item is wrapped in an <a target="_blank"> so it opens in a
+          new tab. M3ListItem also accepts an `href` and becomes an <a>.
       ════════════════════════════════════════════════════════════════════ */}
       <motion.section variants={itemVariants} className="px-4">
         <div className="flex items-end justify-between pb-3">
@@ -633,21 +733,102 @@ export default function MobileHome() {
 
         <M3Card elevation={1} className="m3-shape-xl overflow-hidden p-0">
           {SOCIALS.map((s, i) => (
-            <M3ListItem
+            <a
               key={s.title}
-              leading={
-                <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                  {s.leading}
-                </div>
-              }
-              title={s.title}
-              subtitle={s.subtitle}
               href={s.href}
-              divider={i < SOCIALS.length - 1}
-            />
+              target="_blank"
+              rel="noopener noreferrer"
+              className="m3-tap block"
+              aria-label={`Open ${s.title} in a new tab`}
+            >
+              <M3ListItem
+                leading={
+                  <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                    {s.leading}
+                  </div>
+                }
+                title={s.title}
+                subtitle={s.subtitle}
+                divider={i < SOCIALS.length - 1}
+              />
+            </a>
           ))}
         </M3Card>
       </motion.section>
+
+      {/* ════════════════════════════════════════════════════════════════════
+          8. FOOTER — Android-app-style. Divider, brand mark, links row,
+          version chip, safe-area padding.
+      ════════════════════════════════════════════════════════════════════ */}
+      <motion.footer
+        variants={itemVariants}
+        className="mt-8 m3-safe-bottom"
+      >
+        {/* Top divider */}
+        <div className="px-4">
+          <div className="h-px w-full bg-base-300/70" />
+        </div>
+
+        <div className="px-4 pt-5 pb-2">
+          {/* Brand row */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-primary text-primary-content flex items-center justify-center m3-elev-1">
+              <FaCode className="text-base" />
+            </div>
+            <div className="min-w-0">
+              <p className="m3-title-medium text-base-content leading-tight">
+                Shahajalal Mahmud
+              </p>
+              <p className="m3-label-medium text-base-content/55">
+                Built with care · 2025
+              </p>
+            </div>
+          </div>
+
+          {/* Link row */}
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Link
+              to="/"
+              className="m3-tap m3-label-large text-base-content/75 hover:text-primary"
+            >
+              Home
+            </Link>
+            <Link
+              to="/skills-projects"
+              className="m3-tap m3-label-large text-base-content/75 hover:text-primary"
+            >
+              Projects
+            </Link>
+            <Link
+              to="/education-experience"
+              className="m3-tap m3-label-large text-base-content/75 hover:text-primary"
+            >
+              Journey
+            </Link>
+            <Link
+              to="/contact"
+              className="m3-tap m3-label-large text-base-content/75 hover:text-primary"
+            >
+              Contact
+            </Link>
+          </div>
+
+          {/* Bottom meta row */}
+          <div className="mt-5 flex items-center justify-between">
+            <span className="inline-flex items-center gap-1.5 m3-label-medium text-base-content/55">
+              <FaHeart className="text-error text-xs" />
+              Crafted with passion
+            </span>
+            <span className="m3-label-medium text-base-content/40 tabular-nums">
+              v1.0.0
+            </span>
+          </div>
+
+          <p className="mt-3 m3-label-medium text-base-content/40">
+            © {new Date().getFullYear()} MD Shahajalal Mahmud · All rights reserved.
+          </p>
+        </div>
+      </motion.footer>
     </motion.div>
   );
 }
