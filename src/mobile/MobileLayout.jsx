@@ -13,6 +13,7 @@ import MobileAppBar from "./MobileAppBar";
 import MobileNavBar from "./MobileNavBar";
 import MobileDrawer from "./MobileDrawer";
 import OfflineBanner from "../shared/components/OfflineBanner";
+import ChatAssistant from "../features/chatbot";
 
 export default function MobileLayout() {
   // null when closed; otherwise the mode the drawer should render in.
@@ -34,6 +35,7 @@ export default function MobileLayout() {
       <MobileNavBar />
       <MobileDrawer open={drawerOpen} onClose={closeDrawer} mode={drawerMode || "menu"} />
       <OfflineBanner />
+      <ChatAssistant />
     </div>
   );
 }
