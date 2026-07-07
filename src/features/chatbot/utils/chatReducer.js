@@ -84,6 +84,17 @@ export function chatReducer(state = INITIAL, action) {
       return { ...state, messages };
     }
 
+    case "APPEND_TO_MESSAGE": {
+      // Stream-friendly update: appends text to a single message's content.
+      // Used by the chat hook to grow the assistant bubble token-by-token.
+      const messages = state.messages.map((m) =>
+        m.id === action.id
+          ? { ...m, content: (m.content || "") + (action.text || "") }
+          : m
+      );
+      return { ...state, messages };
+    }
+
     case "REMOVE_MESSAGE":
       return { ...state, messages: state.messages.filter((m) => m.id !== action.id) };
 

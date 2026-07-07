@@ -93,7 +93,7 @@
  * @typedef {Object} ChatAction
  * @property {"OPEN" | "CLOSE" | "TOGGLE"} [type]
  * @property {"SET_STATUS" | "SET_ERROR" | "CLEAR_ERROR" | "CLEAR" | "RESET" | "SET_PENDING_INPUT"} [type]
- * @property {"APPEND_USER_MESSAGE" | "APPEND_ASSISTANT_MESSAGE" | "UPDATE_MESSAGE" | "REMOVE_MESSAGE"} [type]
+ * @property {"APPEND_USER_MESSAGE" | "APPEND_ASSISTANT_MESSAGE" | "UPDATE_MESSAGE" | "APPEND_TO_MESSAGE" | "REMOVE_MESSAGE"} [type]
  * @property {Message} [message]
  * @property {string} [id]
  * @property {Partial<Message>} [patch]
