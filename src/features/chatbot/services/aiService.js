@@ -154,8 +154,22 @@ function normalizeError(err) {
 
 /** @type {GoogleGenAI | null} */
 let client = null;
-/** @type {any | null} */ // Chat instance from @google/genai
+
+/**
+ * Per-turn chat session. We rebuild the session on every `sendMessage`
+ * because the system instruction changes per turn (knowledge-base
+ * retrieval produces different additions). The Gemini `chats.create()`
+ * call is cheap — no network — so per-turn is the simplest correct path.
+ *
+ * `lastSessionKey` lets us detect whether a cached session is still valid
+ * (history version + previous-turn additions) so we can avoid a rebuild
+ * for an identical re-send, but the common case rebuilds.
+ *
+ * @type {any | null}
+ */
 let chatSession = null;
+/** @type {string | null} */
+let lastSessionKey = null;
 
 /**
  * Read the API key from Vite env. Returns empty string (NOT undefined) when
@@ -234,21 +248,36 @@ export function buildHistoryFromMessages(messages) {
 }
 
 /**
- * Get (or lazily build) the chat session. Rebuilds history from the caller's
- * transcript on first use after a reload so multi-turn context survives.
+ * Build a chat session for this turn. The session is rebuilt whenever the
+ * per-turn additions or the transcript length changes — both are common
+ * cases. The construction is local (no network) so per-turn rebuilds
+ * cost effectively nothing.
  *
- * @param {import('../types/chat.types').Message[]} [history]
+ * @param {Array<{ role: "user" | "model", parts: Array<{ text: string }> }>} history
+ * @param {string} systemInstructionAdditions
  * @returns {any} The Gemini Chat object (SDK type elided for portability).
  */
-function getOrCreateChatSession(history = []) {
-  if (chatSession) return chatSession;
+function getOrCreateChatSession(history, systemInstructionAdditions) {
+  const key = `${history.length}|${systemInstructionAdditions}`;
+  if (chatSession && lastSessionKey === key) return chatSession;
+
   const ai = getClient();
   chatSession = ai.chats.create({
     model: AI_MODEL.model,
-    config: buildGenerationConfig(),
-    history: buildHistoryFromMessages(history),
+    config: buildGenerationConfig(systemInstructionAdditions),
+    history,
   });
+  lastSessionKey = key;
   return chatSession;
+}
+
+/**
+ * Drop the cached chat session so the next send starts fresh. Called from
+ * `clearConversation()` so a user-initiated reset really clears the model.
+ */
+function dropChatSession() {
+  chatSession = null;
+  lastSessionKey = null;
 }
 
 /**
@@ -309,6 +338,11 @@ export async function initializeChat() {
  * incrementally. The returned promise resolves with the full
  * `AssistantResponse` once the stream ends (or rejects on error).
  *
+ * Phase 4: this function now also calls `buildContext(userMessage)` to
+ * retrieve relevant knowledge chunks and splice them into the per-turn
+ * system instruction. A broken knowledge file or empty retrieval must
+ * never abort the request — `buildContext` degrades gracefully.
+ *
  * @param {string} text
  * @param {object} [opts]
  * @param {(chunk: string) => void} [opts.onChunk]
@@ -327,6 +361,17 @@ export async function sendMessage(text, opts = {}) {
   const persisted = CHAT_SURFACE.persistToStorage
     ? readTranscript()
     : [];
+
+  // Phase 4: retrieve relevant knowledge and splice into the system
+  // instruction. `buildContext` never throws — it returns an empty
+  // payload on failure so the assistant still works without KB.
+  let context;
+  try {
+    context = await buildContext(trimmed);
+  } catch {
+    context = { systemAdditions: "", retrievedChunks: [] };
+  }
+  const history = buildHistoryFromMessages(persisted);
 
   const startedAt = Date.now();
   const controller = new AbortController();
@@ -354,7 +399,7 @@ export async function sendMessage(text, opts = {}) {
     let attempt = 0;
     while (true) {
       try {
-        const chat = getOrCreateChatSession(persisted);
+        const chat = getOrCreateChatSession(history, context.systemAdditions);
         const stream = await chat.sendMessageStream({ message: trimmed });
 
         for await (const chunk of stream) {
@@ -375,7 +420,13 @@ export async function sendMessage(text, opts = {}) {
           id: `asst-${startedAt}`,
           content: assistantText,
           latencyMs: Date.now() - startedAt,
-          meta: meta || { provider: "gemini" },
+          meta: {
+            provider: "gemini",
+            retrievedChunks: context.retrievedChunks.length,
+            sources: Array.from(
+              new Set(context.retrievedChunks.map((c) => c.source))
+            ),
+          },
         };
       } catch (err) {
         const wrapped = normalizeError(err);
@@ -429,7 +480,7 @@ function readTranscript() {
  * @returns {Promise<void>}
  */
 export async function clearConversation(_conversationId) {
-  chatSession = null;
+  dropChatSession();
   return Promise.resolve();
 }
 
