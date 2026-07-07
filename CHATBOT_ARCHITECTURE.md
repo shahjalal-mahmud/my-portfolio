@@ -455,3 +455,226 @@ With a **valid** key:
 * No code generation or self-modification flows.
 * No automatic browser-tab eviction when the conversation gets long —
   reuse `CHAT_SURFACE.maxMessages` for that.
+
+---
+
+# Phase 4 — Knowledge Base Connection
+
+Phase 1 (architecture), Phase 2 (Gemini), and Phase 3 (knowledge content)
+are complete. Phase 4 wires the existing `knowledge/` directory into the
+service so every reply is grounded in the portfolio's source-of-truth
+files.
+
+## 10.1 Design constraints
+
+* **No new dependencies.** `@google/genai` and `react-markdown` were
+  already in `package.json` from Phases 2 and earlier; nothing extra.
+* **No embeddings, no vector DB, no third-party RAG libs.** The
+  knowledge base is ≈50 KB; keyword scoring is faster, simpler, and
+  good enough.
+* **No UI changes** beyond Markdown rendering in the assistant bubble.
+* **No breaking changes** to the existing `aiService` export surface —
+  every signature from Phase 2 is preserved.
+
+## 10.2 Knowledge loading
+
+The 17 Markdown files under `knowledge/` (plus `metadata.json`) are
+loaded eagerly at module init via Vite's `import.meta.glob`:
+
+```js
+const RAW_FILES = import.meta.glob("/knowledge/*.md", {
+  query: "?raw", import: "default", eager: true
+});
+```
+
+This bakes the entire knowledge base into the JS bundle as plain
+strings — no runtime fetch, no flash-of-empty-context, no extra
+network requests. The bundle grew from ~222 KB → ~278 KB gzipped.
+
+Each file is split into chunks at Markdown heading boundaries
+(`#` / `##` / `###`) by `knowledgeLoader.chunkMarkdown()`. A chunk
+carries:
+
+* `id`     — `<file>#<index>`, stable for citations.
+* `source` — basename (e.g. `skills.md`).
+* `section`— the heading it sits under.
+* `text`   — the raw markdown, kept for the model to render back.
+* `tokens` — pre-tokenised lower-cased word list for fast scoring.
+
+The result is cached in a module-scope `KnowledgeBase` and reused for
+every retrieval. `reloadKnowledge()` is exported so future code (HMR,
+admin button, manual refresh) can invalidate the cache.
+
+## 10.3 Retrieval flow
+
+For every user message, `buildContext(text)` (in
+`services/contextProvider.js`) does the following:
+
+1. Pulls the cached knowledge base (single eager load, no I/O).
+2. Calls `retriever.rank(text, kb.chunks, { topK: 5, minScore: 0.5 })`.
+3. Builds a `systemAdditions` block containing:
+   * A **file catalogue** (from `metadata.json`) — the model learns
+     which `.md` file is authoritative for which topic so it can
+     cite correctly.
+   * The **retrieved chunks** under a `## Retrieved context for this
+     question` header, each tagged with its source file + section
+     heading.
+4. Returns both `systemAdditions` (spliced into the system prompt) and
+   `retrievedChunks` (used by `aiService` to populate the response
+   `meta` field with citation info).
+
+The additions string is hard-capped at 6 000 characters with a trailing
+`_(truncated)_` marker so a runaway query never blows the token budget.
+
+## 10.4 Scoring algorithm
+
+The retriever (`services/retriever.js`) is a pure function combining
+three signals per chunk:
+
+| Signal       | Weight | Description                                            |
+|--------------|--------|--------------------------------------------------------|
+| **TF**       | base   | log(1 + count) of query tokens in chunk text, scaled by coverage (% of query terms matched). |
+| **Filename** | +1.2   | per query token that appears in the source filename.   |
+| **Heading**  | +1.5   | per query token that appears in the section heading.   |
+
+The bonuses apply even when TF is zero, because topical intent (the
+user asked "what are his skills?") is fully expressed by filename +
+heading matches — body text rarely needs to echo the question word to
+be the right chunk. A small stopword filter (≈80 common English words)
+keeps the scoring signal clean.
+
+Smoke test (from `vite-node` against the real knowledge base):
+
+| Query                       | Top-3 chunks surfaced                                                  |
+|-----------------------------|------------------------------------------------------------------------|
+| "what projects has he built?" | projects.md (overview), Amar Savings, experience.md (Projects Delivered) |
+| "what are his skills?"      | skills.md (Technical Skills), Soft Skills, Kotlin — Advanced           |
+| "tell me about his education" | education.md (BSc, HSC, SSC)                                          |
+| "what is appriyo?"          | experience.md (Founder), services.md (Company), opensource.md         |
+| "tell me about Amar Repair" | projects.md (full case study), timeline.md, Repair Store Manager      |
+| "what awards has he won?"   | awards.md (SOLVIO, Project Showcase, Math Olympiad)                    |
+| "what is his cgpa?"         | about.md, achievements.md, awards.md (Academic Distinctions)          |
+
+## 10.5 Gemini request lifecycle
+
+```
+useChat.sendMessage(text)
+  └── aiService.sendMessage(text, { onChunk, signal })
+        ├── readTranscript()                          → ChatHistory (from localStorage)
+        ├── context = await buildContext(text)         → { systemAdditions, retrievedChunks }
+        ├── history = buildHistoryFromMessages(persisted)
+        ├── getOrCreateChatSession(history, context.systemAdditions)
+        │     └── invalidates session when systemAdditions or history length changes
+        ├── chat.sendMessageStream({ message: text })
+        └── return AssistantResponse {
+                content,
+                latencyMs,
+                meta: {
+                  provider: "gemini",
+                  retrievedChunks: <count>,
+                  sources: ["projects.md", "skills.md", ...]
+                }
+              }
+```
+
+The session-rebuild-by-cache-key (`<historyLen>|<systemAdditionsHash>`)
+keeps the per-turn knowledge injection correct without re-running the
+SDK setup on every send.
+
+## 10.6 Cache strategy
+
+* **Knowledge cache** — `KnowledgeBase` is built once on first
+  `getKnowledgeBase()` call and held in module scope. `reloadKnowledge()`
+  is exposed for HMR / future admin actions. Because the markdown files
+  are bundled by Vite (not fetched), there is no disk round-trip — the
+  cache is essentially free.
+* **Chat session cache** — invalidated whenever the system instruction
+  changes (which is every send, since the retrieved additions differ)
+  OR when the history length changes (which is also every send). The
+  common path is "rebuild session per turn"; the cache key check is a
+  fast-path for repeated identical re-sends.
+* **Transcript cache** — unchanged from Phase 2 (localStorage-backed).
+
+## 10.7 Response formatting (Markdown rendering)
+
+`ChatMessage` now renders assistant bubbles through `react-markdown`
+with a custom component map so every element inherits the active
+DaisyUI theme. The map covers:
+
+| Markdown        | Bubble styling                                                    |
+|-----------------|-------------------------------------------------------------------|
+| `# h1`–`#### h4`| sized, semibold, base-content colour                              |
+| `paragraph`     | text-sm, leading-relaxed                                          |
+| `bullet list`   | list-disc, pl-5, base-content                                     |
+| `numbered list` | list-decimal, pl-5                                                |
+| `inline code`   | bg-base-300/60, rounded, font-mono, 12px                          |
+| `fenced code`   | bg-base-300/40 block, border-base-300/60, overflow-x-auto        |
+| `blockquote`    | border-l-2 border-primary/40, italic                              |
+| `table`         | bg-base-300/40 header, base-300/40 row dividers                   |
+| `link`          | text-primary, underline, target=_blank + rel=noopener             |
+| `hr`            | border-base-300/60                                                |
+
+User bubbles remain plain text (whitespace-pre-wrap) — chat input is
+never Markdown.
+
+## 10.8 Update workflow
+
+Knowledge files are static, source-controlled, and bundled at build
+time, so updates follow the standard git flow:
+
+```bash
+# 1. Edit a knowledge file
+$EDITOR knowledge/skills.md
+
+# 2. Restart dev server (Vite HMR will rebuild the bundle but the
+#    in-page knowledge cache stays stale until reload).
+npm run dev      # HMR triggers; reload the browser tab
+
+# 3. Production deploy
+npm run build
+```
+
+Future enhancements (intentionally NOT done now):
+
+* Live HMR-aware cache reload (a `vite-plugin-watch` hook that calls
+  `reloadKnowledge()` on `.md` changes).
+* A "Show sources" UI affordance under assistant bubbles that lists
+  the retrieved chunks.
+* Per-chunk overrides for citation weights (e.g. boost `bio.md`).
+
+## 10.9 Verification (Phase 4)
+
+```bash
+npx eslint src/features/chatbot
+npx vite build
+```
+
+With a valid `VITE_GEMINI_API_KEY`:
+
+* "Tell me about his projects" → assistant returns a Markdown answer
+  citing `projects.md`, with project names, technologies, and links.
+* "What's his CGPA?" → assistant cites `education.md` and `about.md`,
+  returns 3.90/4.00.
+* "What is Appriyo?" → assistant cites `experience.md`, `services.md`,
+  describes the company accurately.
+* "Where can I find his GitHub?" → assistant cites `contact.md`,
+  returns `https://github.com/shahajalal-mahmud`.
+* "How do I cook pasta?" → assistant politely refuses (out of scope).
+* "Tell me something the knowledge base doesn't cover" → assistant
+  responds "I don't have that information" instead of inventing.
+
+Without a key:
+
+* Send a message → friendly "missing API key" error (Phase 2 path,
+  unchanged).
+
+## 10.10 Things deliberately NOT done in Phase 4
+
+* No embeddings, vector DB, FAISS, Pinecone, Chroma, LangChain,
+  LlamaIndex — keyword scoring is enough.
+* No live HMR for knowledge files (would need a Vite plugin).
+* No "Show sources" UI under bubbles (Phase 5+ work).
+* No chunk-level citation weights (chunk-level override knobs are
+  exported via `retriever.rank({ weights })` but currently fixed).
+* No fallback to "general knowledge" — the model is explicitly told to
+  refuse unknown questions per the system prompt.
