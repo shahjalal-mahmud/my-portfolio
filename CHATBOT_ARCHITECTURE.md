@@ -267,3 +267,191 @@ npm run dev
 * Switch DaisyUI themes via the existing theme selector — the chat
   recolours instantly.
 * Resize across the desktop / mobile boundary — the layout responds.
+
+---
+
+# Phase 2 — Google Gemini Integration
+
+Phase 1 shipped the surface; Phase 2 wires the model. No architecture was
+rebuilt — the chat window, state reducer, and component hierarchy are
+identical. Only the AI service layer was replaced, plus a minimal hook
+patch for streaming.
+
+## 9.1 SDK choice
+
+The official Google Gen AI JavaScript SDK, **`@google/genai` (v2.x)**, is
+the recommended path. The legacy `@google/generative-ai` package is
+deprecated and no longer receives new feature work, so we deliberately do
+not install it.
+
+## 9.2 Configuration
+
+Every Gemini knob is sourced from `src/features/chatbot/config/chatbot.config.js`,
+which ships with realistic Free Tier defaults. Phase 2 did not touch
+`chatbot.config.js` because the existing `AI_MODEL` shape already maps
+1:1 to Gemini's `config` block:
+
+| Config key             | Maps to Gemini `config`        |
+| ---------------------- | ------------------------------ |
+| `AI_MODEL.model`       | `ai.chats.create({ model })`   |
+| `AI_MODEL.temperature` | `config.temperature`           |
+| `AI_MODEL.topP`        | `config.topP`                  |
+| `AI_MODEL.topK`        | `config.topK`                  |
+| `AI_MODEL.maxOutputTokens` | `config.maxOutputTokens`   |
+| `AI_MODEL.timeoutMs`   | Internal timeout via `setTimeout` (SDK has no `AbortSignal` yet) |
+| `AI_MODEL.retryCount`  | Retry transient failures only |
+| `AI_MODEL.retryBackoffMs` | Initial backoff (exponential) |
+
+The API key is read from `import.meta.env.VITE_GEMINI_API_KEY`. It is
+never logged, never persisted, and never sent anywhere except the Gemini
+endpoint.
+
+## 9.3 API flow
+
+```
+User types "Tell me about his projects" + Enter
+       │
+       ▼
+ChatInput → ChatWindow.handleSend
+       │
+       ▼
+useChat.sendMessage(text)
+  ├── dispatch APPEND_USER_MESSAGE   (optimistic)
+  ├── dispatch APPEND_ASSISTANT_MESSAGE (pending:true placeholder)
+  ├── new AbortController()
+  └── aiService.sendMessage(text, { onChunk, signal })
+        ├── buildContext()           → empty Phase 2 payload
+        ├── getOrCreateChatSession() — module-scope cache
+        ├── chat.sendMessageStream({ message })
+        ├── for await (chunk of stream)
+        │     ├── if signal.aborted → throw CANCELLED
+        │     ├── coalesce empty pieces
+        │     ├── onChunk(piece) → useChat APPEND_TO_MESSAGE
+        │     └── accumulate content
+        └── return AssistantResponse { id, content, latencyMs, meta }
+       │
+       ▼
+useChat
+  ├── dispatch UPDATE_MESSAGE      (final content, pending:false)
+  └── dispatch SET_STATUS("success")
+
+On error:
+  ├── humanizeError(err) → friendly text
+  ├── dispatch UPDATE_MESSAGE      (friendly message, error:true)
+  └── dispatch SET_ERROR(friendly)
+```
+
+## 9.4 Conversation lifecycle
+
+* The Gemini `Chat` object is cached in **module scope** of `aiService.js`
+  (one per page session).
+* Multi-turn history is **rebuilt from `localStorage`** on first
+  `sendMessage` after a reload, by mapping each persisted `Message` →
+  `{ role: "user" | "model", parts: [{ text }] }`. This keeps cross-reload
+  context without a parallel session cache.
+* `clearConversation()` drops the cached session AND the persisted
+  transcript, so the next send starts from a clean slate.
+* `cancelRequest()` aborts the in-flight `AbortController`, which causes
+  the streaming loop to throw `AiServiceError(CANCELLED)` cleanly.
+
+## 9.5 Error handling
+
+A single typed error class — `AiServiceError` — with a `code` field
+covering every category the service can surface:
+
+| `code`             | Friendly user message                                                |
+| ------------------ | -------------------------------------------------------------------- |
+| `MISSING_API_KEY`  | "The assistant isn't configured yet (missing API key). …"            |
+| `INVALID_API_KEY`  | "The API key was rejected. Please verify VITE_GEMINI_API_KEY …"      |
+| `RATE_LIMIT`       | "Hit a rate limit just now. Wait a few seconds and try again."       |
+| `QUOTA_EXCEEDED`   | "The free-tier quota is exhausted for now. Please try again later." |
+| `TIMEOUT`          | "The request took too long. Please try again."                       |
+| `NETWORK`          | "Network unavailable. Check your connection and try again."          |
+| `CANCELLED`        | "Request cancelled."                                                 |
+| `INVALID_RESPONSE` | "Received an unexpected response from the assistant. …"               |
+| `UNKNOWN`          | "Something went wrong. Please try again."                            |
+
+The mapping lives in the exported `humanizeError(err)` function so
+`useChat` (and any future consumer) imports a single source of truth
+instead of duplicating the table. Raw SDK errors never reach the user.
+
+Retry policy: only `RATE_LIMIT`, `NETWORK`, and `TIMEOUT` are retried.
+`INVALID_API_KEY`, `QUOTA_EXCEEDED`, `INVALID_RESPONSE`, and `CANCELLED`
+are surfaced immediately. Backoff is `retryBackoffMs * 2^(attempt - 1)`.
+
+## 9.6 Streaming
+
+Responses stream token-by-token via the placeholder `onChunk` callback
+that Phase 1 already declared in `aiService.sendMessage`. `useChat` wires
+it to the new reducer action `APPEND_TO_MESSAGE`, which appends each
+piece to the assistant bubble's `content` field without a
+read-modify-write race. Empty chunks are coalesced before invoking the
+callback.
+
+The result is the assistant bubble **grows in real time** while tokens
+arrive, while the existing `TypingIndicator` continues to show during the
+first-token latency — exactly matching the premium feel described in
+the Phase 1 spec.
+
+## 9.7 Future knowledge injection points
+
+Two extension surfaces already exist in Phase 2 but ship empty:
+
+1. **`src/features/chatbot/services/systemPrompt.js`** owns
+   `buildSystemPrompt()`. Phase 3 will compose this with persona, tone,
+   and date-aware safe-harbour phrasing.
+
+2. **`src/features/chatbot/services/contextProvider.js`** owns
+   `async buildContext(userMessage)` which returns
+   `{ systemAdditions: string, retrievedChunks: RetrievedChunk[] }`.
+   `aiService.js` is already structured to splice `systemAdditions` into
+   the system instruction on every request — Phase 3 only changes the
+   *body* of `buildContext`, not the call sites.
+
+## 9.8 Future RAG integration
+
+Phase 3 will:
+
+1. Parse `knowledge/*.md` at build time (or runtime on first open) into
+   chunks.
+2. Embed each chunk with a lightweight embedding model.
+3. On each `sendMessage`, embed the user query, run a top-K vector
+   search, and populate `buildContext`'s `retrievedChunks`.
+4. `aiService.buildGenerationConfig` will then format the additions
+   string (`"Relevant context:\n<chunk1>\n<chunk2>\n…"`) and append to
+   the system instruction.
+
+The reply will transparently become knowledge-grounded without any
+component changes — the UI already surfaces `AssistantResponse.meta` as
+an extension point.
+
+## 9.9 Verification (Phase 2)
+
+```bash
+npm install
+npx eslint src/features/chatbot
+npx vite build
+```
+
+Then, with **no** `VITE_GEMINI_API_KEY` set:
+
+* Open the chat, send a message → friendly "missing API key" bubble +
+  banner. No console crash, no SDK import error at load.
+
+With a **valid** key:
+
+* Assistant bubble grows incrementally as tokens stream in.
+* Reload the page → previous transcript persists.
+* Send "and his skills?" after a portfolio question → assistant has the
+  previous turn's context (verifies history rebuild).
+* Force a timeout (set `timeoutMs: 50` in config) → friendly
+  "Request took too long" bubble.
+
+## 9.10 Things deliberately NOT done in Phase 2
+
+* No real personal information in the system prompt (still placeholder).
+* No markdown parsing, no embedding, no vector search, no RAG.
+* No indexing of `knowledge/*.md`.
+* No code generation or self-modification flows.
+* No automatic browser-tab eviction when the conversation gets long —
+  reuse `CHAT_SURFACE.maxMessages` for that.
