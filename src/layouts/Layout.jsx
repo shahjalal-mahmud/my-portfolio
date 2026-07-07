@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import Contact from "../sections/Contact";
 import OfflineBanner from "../shared/components/OfflineBanner";
 import InstallAppButton from "../shared/components/InstallAppButton";
+import ChatAssistant from "../features/chatbot";
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
@@ -20,6 +21,8 @@ const Layout = () => {
       <div className="hidden md:flex fixed bottom-6 right-6 z-40">
         <InstallAppButton variant="desktop" className="shadow-lg" />
       </div>
+      {/* Floating AI assistant — same mount point on both experiences. */}
+      <ChatAssistant />
     </>
   );
 };
