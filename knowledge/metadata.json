@@ -1,0 +1,105 @@
+{
+    "knowledge_base_name": "Md Shahajalal Mahmud — Portfolio AI Assistant Knowledge Base",
+    "version": "1.0.0",
+    "last_updated": "2026-07-08",
+    "source_documents": [
+        "GitHub Profile README",
+        "Master CV / Engineering Profile Documentation (last updated May 2026)",
+        "Career.md (last updated May 2026)"
+    ],
+    "person": {
+        "full_name": "Md Shahajalal Mahmud",
+        "location": "Khulna, Bangladesh",
+        "email": "mahmud.nubtk@gmail.com",
+        "phone": "+880 1889 793146",
+        "linkedin": "https://www.linkedin.com/in/md-shahajalal-mahmud",
+        "github": "https://github.com/shahjalal-mahmud",
+        "portfolio_urls": [
+            "https://shahajalalmahmud.netlify.app/",
+            "http://shahajalal.me/"
+        ],
+        "company_url": "https://appriyo.com",
+        "primary_roles": [
+            "Android Engineer",
+            "Backend Engineer",
+            "Fullstack Software Engineer",
+            "Founding Engineer"
+        ],
+        "current_status": [
+            "Founder & Lead Engineer at Appriyo",
+            "CSE Undergraduate at NUBTK (Expected Graduation 2027)"
+        ]
+    },
+    "files": [
+        {
+            "file": "about.md",
+            "description": "High-level overview: identity, professional summary, engineering philosophy, AI development philosophy, long-term goals."
+        },
+        {
+            "file": "bio.md",
+            "description": "One-line, short, extended, and recruiter-facing bios."
+        },
+        {
+            "file": "education.md",
+            "description": "Academic history: NUBTK (BSc CSE), HSC, SSC — institutions, dates, grades."
+        },
+        {
+            "file": "experience.md",
+            "description": "Professional experience: Founder & Lead Engineer at Appriyo; Freelance Software Developer."
+        },
+        {
+            "file": "skills.md",
+            "description": "Technical skills by category (languages, Android, backend, frontend, architecture, infra, AI/ML, soft skills), each with proficiency level, practical experience, and associated projects."
+        },
+        {
+            "file": "projects.md",
+            "description": "Full project portfolio grouped by status (production/active, completed, engineering practice, legacy), each with overview, problem solved, technologies, architecture, key features, challenges, achievements, and current status."
+        },
+        {
+            "file": "services.md",
+            "description": "Services offered through Appriyo and freelance work: Android development, backend/API development, fullstack/web development, SaaS product engineering, technical consulting."
+        },
+        {
+            "file": "achievements.md",
+            "description": "Summary table of achievements and engineering milestones."
+        },
+        {
+            "file": "certifications.md",
+            "description": "Formal certifications/licenses with issuer, date, and verification link."
+        },
+        {
+            "file": "awards.md",
+            "description": "Competition and academic awards/recognitions."
+        },
+        {
+            "file": "timeline.md",
+            "description": "Chronological career and education timeline."
+        },
+        {
+            "file": "opensource.md",
+            "description": "Open-source contributions and public GitHub repository index."
+        },
+        {
+            "file": "freelancing.md",
+            "description": "Freelance engagement history and client project details."
+        },
+        {
+            "file": "startup.md",
+            "description": "Appriyo company profile: role, products, achievements, founding story."
+        },
+        {
+            "file": "faq.md",
+            "description": "Pre-answered frequently asked questions for quick AI assistant responses."
+        },
+        {
+            "file": "contact.md",
+            "description": "Contact details and channels."
+        }
+    ],
+    "maintenance_notes": [
+        "This knowledge base was generated strictly from three uploaded source documents: GitHub README, Master CV, and Career.md. No facts were invented.",
+        "Where documents did not provide sufficient detail (e.g., architecture/challenges for some projects), files note 'Not detailed in source documents' rather than fabricating content.",
+        "Two portfolio URLs appear in source material (netlify.app and shahajalal.me) — flagged in contact.md for verification.",
+        "To keep this knowledge base current, re-run the generation process whenever the source CV/Career.md/README files are updated, and update 'last_updated' in this file accordingly."
+    ]
+}
