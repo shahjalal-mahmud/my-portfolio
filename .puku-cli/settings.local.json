@@ -7,7 +7,16 @@
       "Bash(node -e \":*)",
       "Bash(for icon:*)",
       "Bash(do if:*)",
-      "Bash(then echo:*)"
+      "Bash(then echo:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx vite:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "WebSearch",
+      "Bash(npm view:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:googleapis.github.io)"
     ]
   }
 }
