@@ -19,12 +19,18 @@
 //
 // On every state change the hook mirrors the transcript + conversation id to
 // localStorage so users don't lose context on reload.
+//
+// PHASE 2: sendMessage now streams the assistant reply via the
+// `onChunk` callback, patching the placeholder assistant bubble
+// incrementally. Errors are mapped to friendly text via the service's
+// `humanizeError()` rather than leaking raw SDK messages.
 
 import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 
 import {
   cancelRequest,
   clearConversation,
+  humanizeError,
   initializeChat,
   sendMessage as sendToProvider,
 } from "../services/aiService";
@@ -72,24 +78,22 @@ export function useChat() {
   );
 
   const lastRequestRef = useRef(0);
+  // Per-request AbortController so cancelRequest() can abort an in-flight
+  // stream without affecting future ones.
+  const requestControllerRef = useRef(/** @type {AbortController | null} */ (null));
 
   // Initialise provider on mount + load suggestions.
   useEffect(() => {
     initializeChat().catch(() => {
-      /* Phase 1: intentionally silent — surface swallows the typed error. */
+      /* Surface swallows the typed error from a missing key. */
     });
     const suggestions = getSuggestedQuestions();
     if (suggestions.length > 0) {
-      // Suggestions are static for Phase 1, but we dispatch so a future
+      // Suggestions are static for Phase 2, but we dispatch so a future
       // dynamic source can feed them in without touching this file.
       dispatch({ type: "SET_PENDING_INPUT", text: state.pendingInput });
-      // Use a small hack: piggy-back on the reducer's existing actions by
-      // dispatching again — but suggestions don't have a dedicated action
-      // yet (kept out of state shape to avoid bloat). For Phase 1 we just
-      // memoise them via the consumer-side useMemo below.
     }
-    // We deliberately do NOT depend on state.pendingInput here — initialising
-    // exactly once is intentional.
+    // Initialising exactly once is intentional.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -112,6 +116,10 @@ export function useChat() {
   const toggle = useCallback(() => dispatch({ type: "TOGGLE" }), []);
   const clear = useCallback(() => {
     cancelRequest();
+    if (requestControllerRef.current) {
+      requestControllerRef.current.abort();
+      requestControllerRef.current = null;
+    }
     dispatch({ type: "CLEAR" });
     clearConversation(state.conversationId).catch(() => {});
     if (CHAT_SURFACE.persistToStorage) {
@@ -121,6 +129,10 @@ export function useChat() {
 
   const reset = useCallback(() => {
     cancelRequest();
+    if (requestControllerRef.current) {
+      requestControllerRef.current.abort();
+      requestControllerRef.current = null;
+    }
     dispatch({ type: "RESET" });
     if (CHAT_SURFACE.persistToStorage) {
       removeKey(CHAT_SURFACE.storageKey);
@@ -131,9 +143,9 @@ export function useChat() {
    * Send a user message. Adds it optimistically to the transcript, then
    * delegates to the provider service for the assistant reply.
    *
-   * When the provider returns an error (Phase 1: always) we render a typed
-   * placeholder message in the assistant bubble so the user sees a graceful
-   * explanation.
+   * Phase 2: passes an `onChunk` callback to the service so the placeholder
+   * assistant bubble grows in real time as tokens stream in. Errors are
+   * translated to user-facing messages via `humanizeError`.
    *
    * @param {string} text
    */
@@ -158,7 +170,7 @@ export function useChat() {
       });
 
       // Insert a pending assistant placeholder so the typing indicator has
-      // a target row to attach to.
+      // a target row to attach to while the first tokens arrive.
       dispatch({
         type: "APPEND_ASSISTANT_MESSAGE",
         message: {
@@ -171,9 +183,24 @@ export function useChat() {
         },
       });
 
+      const controller = new AbortController();
+      requestControllerRef.current = controller;
+
       try {
-        const reply = await sendToProvider(trimmed);
-        // Guard against stale requests.
+        const reply = await sendToProvider(trimmed, {
+          signal: controller.signal,
+          onChunk: (piece) => {
+            // Guard against stale streams — only patch if this is still
+            // the active request. Uses APPEND_TO_MESSAGE so the assistant
+            // bubble grows token-by-token without a read-modify-write race.
+            if (requestId !== lastRequestRef.current) return;
+            dispatch({
+              type: "APPEND_TO_MESSAGE",
+              id: assistantMessageId,
+              text: piece,
+            });
+          },
+        });
         if (requestId !== lastRequestRef.current) return;
 
         dispatch({
@@ -189,24 +216,22 @@ export function useChat() {
       } catch (err) {
         if (requestId !== lastRequestRef.current) return;
 
-        const message =
-          err && typeof err === "object" && "message" in err
-            ? String(err.message)
-            : "Unknown error";
+        const friendly = humanizeError(err);
 
         dispatch({
           type: "UPDATE_MESSAGE",
           id: assistantMessageId,
           patch: {
-            content:
-              "The assistant is not available yet. Phase 1 architecture " +
-              "is in place — the live Gemini integration will land in a " +
-              "later phase.",
+            content: friendly,
             pending: false,
             error: true,
           },
         });
-        dispatch({ type: "SET_ERROR", error: message });
+        dispatch({ type: "SET_ERROR", error: friendly });
+      } finally {
+        if (requestControllerRef.current === controller) {
+          requestControllerRef.current = null;
+        }
       }
     },
     []
