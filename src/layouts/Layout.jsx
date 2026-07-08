@@ -17,9 +17,18 @@ const Layout = () => {
         <Contact />
         <Footer />
       </main>
-      {/* PWA install chip. Hidden on mobile (<768px) because MobileDrawer hosts it. */}
-      <div className="hidden md:flex fixed bottom-6 right-6 z-40">
-        <InstallAppButton variant="desktop" className="shadow-lg" />
+      {/*
+        Floating action stack — bottom-right column on desktop.
+        ┌─────────────────────────────┐
+        │ PWA install chip (when available)
+        │ ↕ 8px gap
+        │ Chat FAB (always)
+        └─────────────────────────────┘
+        Hidden on mobile (<768px) because MobileDrawer hosts the install
+        chip and the mobile FAB lives inside MobileNavBar.
+      */}
+      <div className="hidden md:flex fixed bottom-[88px] right-6 z-40">
+        <InstallAppButton variant="desktop" className="shadow-lg shadow-primary/10" />
       </div>
       {/* Floating AI assistant — same mount point on both experiences. */}
       <ChatAssistant />

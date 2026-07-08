@@ -94,7 +94,7 @@ export function ChatWindow({ open, onClose }) {
             ${
               isMobile
                 ? "inset-x-3 bottom-24 top-auto max-h-[80vh]"
-                : "right-6 bottom-24 w-[min(380px,calc(100vw-3rem))] h-[min(620px,calc(100vh-7rem))]"
+                : "right-6 bottom-[148px] w-[min(380px,calc(100vw-3rem))] h-[min(620px,calc(100vh-14rem))]"
             }
           `}
         >
