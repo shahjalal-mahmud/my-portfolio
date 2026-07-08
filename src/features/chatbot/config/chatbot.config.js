@@ -2,22 +2,22 @@
 //
 // Centralised configuration for the AI assistant. Every tunable lives here so
 // we never sprinkle magic numbers across components/services.
-//
-// PHASE 1 NOTE: this file ships PLACEHOLDERS only. No provider is wired up,
-// no model is contacted. The values below are realistic defaults for a future
-// Google Gemini Free Tier integration but are intentionally inert.
 
 /**
  * @typedef {Object} AiModelConfig
- * @property {string} provider                  "gemini" (only supported provider in scope).
- * @property {string} model                     Model identifier.
- * @property {number} temperature               Sampling temperature (0..1).
+ * @property {string} provider                  "kimchi" (only supported provider).
+ * @property {string} model                     Model identifier on Kimchi (e.g. "kimi-k2.7").
+ * @property {number} temperature               Sampling temperature (0..2 for Kimchi-compatible models).
  * @property {number} topP                      Nucleus sampling cutoff.
- * @property {number} topK                      Top-K sampling cutoff.
  * @property {number} maxOutputTokens           Cap on tokens per response.
  * @property {number} timeoutMs                 Per-request timeout.
  * @property {number} retryCount                Auto-retry attempts on transient errors.
  * @property {number} retryBackoffMs            Initial backoff between retries.
+ * @property {string} baseUrl                   Same-origin proxy base URL
+ *                                           (Vite dev / Netlify fn). The
+ *                                           browser never sees the Kimchi
+ *                                           host directly because Kimchi
+ *                                           does not allow browser CORS.
  */
 
 /**
@@ -32,20 +32,24 @@
  */
 
 /**
- * Provider/model placeholders. Swap `model` once the Gemini SDK is wired in.
+ * Kimchi defaults. Swap `model` to any chat-completions model id available
+ * on https://kimchi.dev (e.g. "kimi-k2.7").
+ *
  * @type {AiModelConfig}
  */
 export const AI_MODEL = Object.freeze({
-  provider: "gemini",
-  // Gemini Free Tier default. Change once the SDK is integrated.
-  model: "gemini-2.0-flash",
+  provider: "kimchi",
+  model: "kimi-k2.7",
   temperature: 0.7,
   topP: 0.95,
-  topK: 40,
   maxOutputTokens: 1024,
-  timeoutMs: 20_000,
+  timeoutMs: 30_000,
   retryCount: 2,
   retryBackoffMs: 600,
+  // Same-origin proxy. Resolved by:
+  //   • Vite dev-server proxy (vite.config.js)
+  //   • Netlify redirect → serverless function (netlify.toml + functions/kimchi.js)
+  baseUrl: "/api/kimchi",
 });
 
 /**
@@ -63,9 +67,7 @@ export const CHAT_SURFACE = Object.freeze({
 });
 
 /**
- * Placeholder suggestions rendered in the empty state. The component reads
- * these from the data file (which is dynamic-friendly); this list is the
- * Phase 1 default.
+ * Placeholder suggestions rendered in the empty state.
  *
  * @type {ReadonlyArray<{ id: string, text: string, category: string }>}
  */

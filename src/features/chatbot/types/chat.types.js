@@ -53,8 +53,8 @@
 
 /**
  * Payload returned by the assistant service for a single turn.
- * Today the service is a placeholder, but this shape matches Gemini's
- * generateContent response so wiring it in later is a drop-in change.
+ * Today the service is OpenRouter-backed (via fetch + SSE streaming); the
+ * shape below matches the assistant reply so consumers stay decoupled.
  *
  * @typedef {Object} AssistantResponse
  * @property {string} id                        Echo of the assistant message id.

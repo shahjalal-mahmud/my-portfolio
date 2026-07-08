@@ -3,7 +3,7 @@
 // Loads the markdown knowledge base under /knowledge into memory once,
 // parses each file into retrievable chunks (one chunk per Markdown section),
 // and caches the result. The retriever (./retriever.js) consumes this cache
-// to assemble the per-turn context for Gemini.
+// to assemble the per-turn context for the OpenRouter chat completion.
 //
 // PHASE 4 — lightweight, zero-dependency, keyword-scored retrieval.
 // No embeddings, no vector DB, no third-party libraries.

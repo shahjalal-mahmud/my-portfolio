@@ -10,9 +10,8 @@
 //   │  ChatInput               │  sticky
 //   └──────────────────────────┘
 //
-// Phase 1 has no real model; sending a message renders a typed
-// "not wired yet" assistant bubble so the user sees the full conversation
-// loop working without the live Gemini call.
+// The chat surface is wired to OpenRouter through `aiService.js`. Messages
+// stream in token-by-token via SSE and patch the assistant bubble live.
 
 import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";

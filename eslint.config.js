@@ -32,4 +32,16 @@ export default defineConfig([
       'no-unused-vars': 'off',
     },
   },
+  // Server-side / build-config files run in Node, not the browser, so they
+  // need Node globals (process, Buffer, …).
+  {
+    files: [
+      'vite.config.js',
+      'netlify/**/*.js',
+      'scripts/**/*.{js,cjs,mjs}',
+    ],
+    languageOptions: {
+      globals: { ...globals.node },
+    },
+  },
 ])

@@ -1,0 +1,29 @@
+# netlify.toml
+#
+# Build + redirect configuration for Netlify.
+#
+# • Build the Vite app and publish the contents of `dist/`.
+# • Rewrite every `/api/kimchi/*` request to the serverless function
+#   `netlify/functions/kimchi.js` so the client can hit a same-origin URL.
+
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+  functions = "netlify/functions"
+
+# Same-origin proxy for the Kimchi LLM API. Kimchi does not allow browser
+# CORS, so we always go through this function — both `npm run dev`
+# (via vite.config.js) and `netlify deploy` (via this redirect) expose the
+# route at `/api/kimchi/*`.
+[[redirects]]
+  from   = "/api/kimchi/*"
+  to     = "/.netlify/functions/kimchi/:splat"
+  status = 200
+  force  = true
+
+# Single-page-app fallback so client-side routes (e.g. /projects/:id)
+# resolve to index.html instead of 404.
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

@@ -1,12 +1,26 @@
 // src/features/chatbot/services/aiService.js
 //
-// PHASE 2 — Google Gemini Free Tier integration.
+// Kimchi AI integration (https://kimchi.dev).
 //
-// Public surface (signatures preserved from Phase 1 so no consumer changes):
-//   • initializeChat()                 — boot conversation, hydrate session
-//   • sendMessage(text, {onChunk, signal}) — stream a reply
-//   • clearConversation(id?)           — reset transcript + cached session
-//   • cancelRequest()                  — abort in-flight stream
+// Kimchi exposes an OpenAI-compatible `/chat/completions` endpoint but does
+// NOT send CORS headers for browser origins, so we cannot `fetch` it
+// directly from the client. We go through a same-origin proxy:
+//
+//   • Dev:    Vite dev-server proxy (configured in vite.config.js)
+//   • Prod:   Netlify serverless function  (netlify/functions/kimchi.js)
+//
+// Both expose the route at `/api/kimchi/*`. The client only ever talks to
+// `/api/kimchi/chat/completions`, so the proxy is transparent.
+//
+// We talk to it with `fetch` so we don't add any runtime dependency —
+// the entire SDK surface is one POST request.
+//
+// Public surface (signatures preserved from the OpenRouter era so no
+// consumer changes are needed):
+//   • initializeChat()                 — boot conversation, validate config
+//   • sendMessage(text, {onChunk, signal}) — request a reply
+//   • clearConversation(id?)           — reset cached state
+//   • cancelRequest()                  — abort in-flight request
 //   • isRequestActive()                — typing-indicator helper
 //   • TYPING_DELAY_MS                  — re-export from config
 //
@@ -14,9 +28,7 @@
 //   • AiServiceError                   — single typed error with `code`
 //   • AI_ERROR_CODES                   — string-enum of known codes
 //   • humanizeError(err)               — error → user-facing string
-//   • buildHistoryFromMessages(messages) — rebuild Gemini history from transcript
-
-import { GoogleGenAI } from "@google/genai";
+//   • buildHistoryFromMessages(messages) — rebuild OpenAI-style messages
 
 import { AI_MODEL, CHAT_SURFACE } from "../config/chatbot.config";
 import { buildSystemPrompt } from "./systemPrompt";
@@ -37,6 +49,8 @@ export const AI_ERROR_CODES = Object.freeze({
   NETWORK: "NETWORK",
   CANCELLED: "CANCELLED",
   INVALID_RESPONSE: "INVALID_RESPONSE",
+  MODEL_NOT_FOUND: "MODEL_NOT_FOUND",
+  SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE",
   UNKNOWN: "UNKNOWN",
 });
 
@@ -74,13 +88,15 @@ export function humanizeError(err) {
   const code = /** @type {{ code?: string }} */ (err).code;
   switch (code) {
     case AI_ERROR_CODES.MISSING_API_KEY:
-      return "The assistant isn't configured yet (missing API key). Add VITE_GEMINI_API_KEY to enable it.";
+      return "The assistant isn't configured yet. Please try again shortly.";
     case AI_ERROR_CODES.INVALID_API_KEY:
-      return "The API key was rejected. Please verify VITE_GEMINI_API_KEY and try again.";
+      return "The assistant rejected the request. Please try again shortly.";
     case AI_ERROR_CODES.RATE_LIMIT:
       return "Hit a rate limit just now. Wait a few seconds and try again.";
     case AI_ERROR_CODES.QUOTA_EXCEEDED:
-      return "The free-tier quota is exhausted for now. Please try again later.";
+      return "Your Kimchi credits are exhausted for now. Please try again later.";
+    case AI_ERROR_CODES.MODEL_NOT_FOUND:
+      return "The configured model is unavailable. Please try again later.";
     case AI_ERROR_CODES.TIMEOUT:
       return "The request took too long. Please try again.";
     case AI_ERROR_CODES.NETWORK:
@@ -89,16 +105,17 @@ export function humanizeError(err) {
       return "Request cancelled.";
     case AI_ERROR_CODES.INVALID_RESPONSE:
       return "Received an unexpected response from the assistant. Please try again.";
+    case AI_ERROR_CODES.SERVICE_UNAVAILABLE:
+      return "The assistant is temporarily unavailable — please try again shortly.";
     default:
       return "Something went wrong. Please try again.";
   }
 }
 
-// ─── Friendly error mapping from SDK errors ───────────────────────────────────
+// ─── Friendly error mapping ──────────────────────────────────────────────────
 
 /**
- * Translate a Gemini SDK / fetch error into a typed `AiServiceError`.
- * The SDK + browser fetch layer each throw differently; we inspect both.
+ * Translate a fetch / Kimchi error into a typed `AiServiceError`.
  *
  * @param {unknown} err
  * @returns {AiServiceError}
@@ -108,38 +125,43 @@ function normalizeError(err) {
 
   /** @type {any} */
   const e = err;
-  const status =
-    e?.status ||
-    e?.response?.status ||
-    e?.error?.code ||
-    e?.code ||
-    undefined;
+  const status = typeof e?.status === "number" ? e.status : undefined;
   const message = (typeof e?.message === "string" ? e.message : "") || "";
 
   // User-initiated cancellation always wins.
-  if (e?.name === "AbortError" || /aborted/i.test(message)) {
+  if (e?.name === "AbortError" || /aborted|cancelled/i.test(message)) {
     return new AiServiceError("Request was cancelled.", AI_ERROR_CODES.CANCELLED, /** @type {Error} */ (err));
   }
 
-  if (status === 401 || /api[_-]?key.*invalid/i.test(message) || /unauthenticated/i.test(message)) {
+  if (status === 401 || /api[_-]?key.*invalid/i.test(message) || /unauthenticated/i.test(message) || /no api key/i.test(message)) {
     return new AiServiceError("Invalid API key.", AI_ERROR_CODES.INVALID_API_KEY, /** @type {Error} */ (err));
   }
   if (status === 403 || /forbidden/i.test(message)) {
     return new AiServiceError("API key forbidden.", AI_ERROR_CODES.INVALID_API_KEY, /** @type {Error} */ (err));
   }
+  if (status === 404 || /model.*not.*found/i.test(message)) {
+    return new AiServiceError("Model not found.", AI_ERROR_CODES.MODEL_NOT_FOUND, /** @type {Error} */ (err));
+  }
+  if (status === 402 || /credits|payment|insufficient/i.test(message)) {
+    return new AiServiceError("Credits exhausted.", AI_ERROR_CODES.QUOTA_EXCEEDED, /** @type {Error} */ (err));
+  }
   if (status === 429) {
-    // Gemini uses 429 for both rate limit and quota. We treat "rateLimitExceeded"
-    // as transient (RATE_LIMIT, retried) and "quotaExceeded" / "RESOURCE_EXHAUSTED"
-    // as terminal (QUOTA_EXCEEDED, not retried).
-    const reason =
-      e?.error?.status || e?.errorDetails?.[0]?.reason || e?.details || "";
-    if (/quota/i.test(reason) || /RESOURCE_EXHAUSTED/i.test(message)) {
-      return new AiServiceError("Quota exceeded.", AI_ERROR_CODES.QUOTA_EXCEEDED, /** @type {Error} */ (err));
-    }
     return new AiServiceError("Rate limited.", AI_ERROR_CODES.RATE_LIMIT, /** @type {Error} */ (err));
   }
-  if (status === 400 || /invalid argument/i.test(message)) {
+  if (status === 408) {
+    return new AiServiceError("Timed out.", AI_ERROR_CODES.TIMEOUT, /** @type {Error} */ (err));
+  }
+  if (status === 400 || /invalid argument|invalid request/i.test(message)) {
     return new AiServiceError("Invalid request.", AI_ERROR_CODES.INVALID_RESPONSE, /** @type {Error} */ (err));
+  }
+  // 5xx from the proxy covers both:
+  //   • 500 — proxy itself misconfigured (e.g. KIMCHI_API_KEY missing)
+  //   • 502/503/504 — Kimchi upstream degraded or unreachable
+  // Surface all of them as a single "service unavailable" state so users
+  // see one consistent retry-able message instead of provider-specific
+  // jargon.
+  if (status === 500 || status === 502 || status === 503 || status === 504) {
+    return new AiServiceError("Provider unavailable.", AI_ERROR_CODES.SERVICE_UNAVAILABLE, /** @type {Error} */ (err));
   }
   if (typeof status === "number" && status >= 500) {
     return new AiServiceError("Provider error.", AI_ERROR_CODES.NETWORK, /** @type {Error} */ (err));
@@ -152,132 +174,40 @@ function normalizeError(err) {
 
 // ─── Client + session management ──────────────────────────────────────────────
 
-/** @type {GoogleGenAI | null} */
-let client = null;
+/** @type {AbortController | null} */
+let activeController = null;
 
 /**
- * Per-turn chat session. We rebuild the session on every `sendMessage`
- * because the system instruction changes per turn (knowledge-base
- * retrieval produces different additions). The Gemini `chats.create()`
- * call is cheap — no network — so per-turn is the simplest correct path.
- *
- * `lastSessionKey` lets us detect whether a cached session is still valid
- * (history version + previous-turn additions) so we can avoid a rebuild
- * for an identical re-send, but the common case rebuilds.
- *
- * @type {any | null}
- */
-let chatSession = null;
-/** @type {string | null} */
-let lastSessionKey = null;
-
-/**
- * Read the API key from Vite env. Returns empty string (NOT undefined) when
- * missing so callers can produce a single, clear error.
- *
- * @returns {string}
- */
-function readApiKey() {
-  // Vite exposes env vars through `import.meta.env`. VITE_* are inlined into
-  // the bundle at build time.
-  const key = import.meta.env.VITE_GEMINI_API_KEY;
-  return typeof key === "string" ? key.trim() : "";
-}
-
-/**
- * Lazily build the Gemini client. Throws a typed error if the key is
- * missing so consumers can surface it before any request is sent.
- *
- * @returns {GoogleGenAI}
- */
-function getClient() {
-  if (client) return client;
-  const apiKey = readApiKey();
-  if (!apiKey) {
-    throw new AiServiceError(
-      "VITE_GEMINI_API_KEY is not set.",
-      AI_ERROR_CODES.MISSING_API_KEY
-    );
-  }
-  // The new SDK uses `apiKey` (string) and accepts additional `httpOptions`
-  // for custom fetch impls. We keep it minimal.
-  client = new GoogleGenAI({ apiKey });
-  return client;
-}
-
-/**
- * Build the `config` block Gemini expects. Maps every AI_MODEL knob
- * one-to-one so config tweaks flow through automatically.
+ * Build the full system instruction: persona + per-turn knowledge chunks.
  *
  * @param {string} [systemInstructionAdditions]
- * @returns {Record<string, unknown>}
+ * @returns {string}
  */
-function buildGenerationConfig(systemInstructionAdditions = "") {
+function buildFullSystemInstruction(systemInstructionAdditions = "") {
   const baseInstruction = buildSystemPrompt();
-  const systemInstruction = systemInstructionAdditions
+  return systemInstructionAdditions
     ? `${baseInstruction}\n\n${systemInstructionAdditions}`
     : baseInstruction;
-
-  return {
-    systemInstruction,
-    temperature: AI_MODEL.temperature,
-    topP: AI_MODEL.topP,
-    topK: AI_MODEL.topK,
-    maxOutputTokens: AI_MODEL.maxOutputTokens,
-  };
 }
 
 /**
- * Map a transcript `Message` to a Gemini history entry.
+ * Map a transcript `Message` to an OpenAI-style chat-completion message.
  *
- * Gemini's chat history uses `{ role: "user" | "model", parts: [{text}] }`.
+ * Kimchi uses the OpenAI chat-completion shape: `{ role, content }`.
  * We skip empty / pending / error rows so the rebuild never feeds garbage
  * to the model.
  *
  * @param {import('../types/chat.types').Message[]} messages
- * @returns {Array<{ role: "user" | "model", parts: Array<{ text: string }> }>}
+ * @returns {Array<{ role: "user" | "assistant", content: string }>}
  */
 export function buildHistoryFromMessages(messages) {
   if (!Array.isArray(messages)) return [];
   return messages
     .filter((m) => m && !m.pending && !m.error && typeof m.content === "string" && m.content.length > 0)
     .map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content }],
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: m.content,
     }));
-}
-
-/**
- * Build a chat session for this turn. The session is rebuilt whenever the
- * per-turn additions or the transcript length changes — both are common
- * cases. The construction is local (no network) so per-turn rebuilds
- * cost effectively nothing.
- *
- * @param {Array<{ role: "user" | "model", parts: Array<{ text: string }> }>} history
- * @param {string} systemInstructionAdditions
- * @returns {any} The Gemini Chat object (SDK type elided for portability).
- */
-function getOrCreateChatSession(history, systemInstructionAdditions) {
-  const key = `${history.length}|${systemInstructionAdditions}`;
-  if (chatSession && lastSessionKey === key) return chatSession;
-
-  const ai = getClient();
-  chatSession = ai.chats.create({
-    model: AI_MODEL.model,
-    config: buildGenerationConfig(systemInstructionAdditions),
-    history,
-  });
-  lastSessionKey = key;
-  return chatSession;
-}
-
-/**
- * Drop the cached chat session so the next send starts fresh. Called from
- * `clearConversation()` so a user-initiated reset really clears the model.
- */
-function dropChatSession() {
-  chatSession = null;
-  lastSessionKey = null;
 }
 
 /**
@@ -296,13 +226,7 @@ function isRetryable(err) {
   return false;
 }
 
-/** @type {AbortController | null} */
-let activeController = null;
-
-/**
- * Sleep helper used for retry backoff.
- * @param {number} ms
- */
+/** @param {number} ms */
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -318,30 +242,26 @@ function sleep(ms) {
  * @returns {Promise<{ conversationId: string }>}
  */
 export async function initializeChat() {
-  // Eager validation — does NOT construct the client yet (lazy).
-  const apiKey = readApiKey();
-  if (!apiKey) {
-    // Resolve normally so the UI doesn't panic on boot. The next
-    // `sendMessage` will throw the typed error and surface it.
-    return { conversationId: `pending-${Date.now()}` };
-  }
-  // We don't construct the chat session here — it will be built lazily on
-  // first send, using the persisted transcript as history.
+  // The client no longer reads or validates the API key — that lives on
+  // the server (Vite dev proxy / Netlify function). We just return a
+  // stable conversation id so the UI can boot without panicking. If the
+  // proxy is misconfigured, the first `sendMessage` will surface the
+  // SERVICE_UNAVAILABLE error from `humanizeError`.
   return { conversationId: `ready-${Date.now()}` };
 }
 
 /**
- * Send a user message and stream the assistant reply chunk-by-chunk.
+ * Send a user message and obtain the assistant reply.
  *
- * The optional `onChunk` is invoked once per non-empty chunk as tokens
- * arrive, letting `useChat` patch the placeholder assistant bubble
- * incrementally. The returned promise resolves with the full
- * `AssistantResponse` once the stream ends (or rejects on error).
+ * The Kimchi integration is single-shot (non-streaming) to mirror the
+ * working Dart reference. The optional `onChunk` callback is preserved
+ * for API compatibility with the prior OpenRouter integration — for
+ * Kimchi it fires once with the full assembled content so the UI gets
+ * the same incremental-feedback experience.
  *
- * Phase 4: this function now also calls `buildContext(userMessage)` to
- * retrieve relevant knowledge chunks and splice them into the per-turn
- * system instruction. A broken knowledge file or empty retrieval must
- * never abort the request — `buildContext` degrades gracefully.
+ * The function calls `buildContext(userMessage)` to retrieve relevant
+ * knowledge chunks and splice them into the per-turn system instruction.
+ * A broken knowledge file or empty retrieval never aborts the request.
  *
  * @param {string} text
  * @param {object} [opts]
@@ -362,9 +282,8 @@ export async function sendMessage(text, opts = {}) {
     ? readTranscript()
     : [];
 
-  // Phase 4: retrieve relevant knowledge and splice into the system
-  // instruction. `buildContext` never throws — it returns an empty
-  // payload on failure so the assistant still works without KB.
+  // Retrieve relevant knowledge and splice into the system instruction.
+  // `buildContext` never throws — it returns an empty payload on failure.
   let context;
   try {
     context = await buildContext(trimmed);
@@ -382,7 +301,8 @@ export async function sendMessage(text, opts = {}) {
     if (signal.aborted) controller.abort();
     else signal.addEventListener("abort", externalAbort, { once: true });
   }
-  // Timeout via setTimeout, since the SDK doesn't accept AbortSignal today.
+  // Timeout via setTimeout so the user gets a clean TIMEOUT error rather
+  // than hanging on the fetch.
   let timedOut = false;
   const timer = setTimeout(() => {
     timedOut = true;
@@ -391,37 +311,100 @@ export async function sendMessage(text, opts = {}) {
 
   /** @type {string} */
   let assistantText = "";
-  /** @type {Record<string, unknown> | undefined} */
-  let meta;
 
   try {
+    // Build the request payload.
+    /** @type {{ role: "system" | "user" | "assistant", content: string }[]} */
+    const messages = [
+      { role: "system", content: buildFullSystemInstruction(context.systemAdditions) },
+      ...history,
+      { role: "user", content: trimmed },
+    ];
+
+    const body = JSON.stringify({
+      model: AI_MODEL.model,
+      messages,
+      temperature: AI_MODEL.temperature,
+      top_p: AI_MODEL.topP,
+      max_tokens: AI_MODEL.maxOutputTokens,
+    });
+
     // Retry loop for transient failures only.
     let attempt = 0;
     while (true) {
       try {
-        const chat = getOrCreateChatSession(history, context.systemAdditions);
-        const stream = await chat.sendMessageStream({ message: trimmed });
+        const response = await fetch(`${AI_MODEL.baseUrl}/chat/completions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body,
+          signal: controller.signal,
+        });
 
-        for await (const chunk of stream) {
-          if (controller.signal.aborted) {
-            throw new AiServiceError("Cancelled.", AI_ERROR_CODES.CANCELLED);
+        if (!response.ok) {
+          // Read the body once for error context, then throw a typed error
+          // that carries the status for normalizeError().
+          /** @type {any} */
+          let errorPayload = null;
+          try {
+            const text = await response.text();
+            try {
+              errorPayload = JSON.parse(text);
+            } catch {
+              errorPayload = { message: text };
+            }
+          } catch {
+            /* ignore body-read errors */
           }
-          // The SDK exposes text via `chunk.text` on each delta.
-          const piece = typeof chunk?.text === "string" ? chunk.text : "";
-          if (!piece) continue; // skip reasoning-only / empty chunks
-          assistantText += piece;
-          if (typeof onChunk === "function") onChunk(piece);
+          /** @type {any} */
+          const err = new Error(
+            errorPayload?.error?.message ||
+              errorPayload?.message ||
+              `Request failed with status ${response.status}`
+          );
+          err.status = response.status;
+          err.error = errorPayload?.error;
+          throw err;
         }
-        // Capture trailing metadata if the SDK attached any candidates.
-        const finalChunk = stream && /** @type {any} */ (stream).response;
-        if (finalChunk) meta = { provider: "gemini" };
+
+        /** @type {any} */
+        const decoded = await response.json();
+        const choices = Array.isArray(decoded?.choices) ? decoded.choices : null;
+
+        if (!choices || choices.length === 0) {
+          throw new AiServiceError(
+            "Empty response from Kimchi.",
+            AI_ERROR_CODES.INVALID_RESPONSE
+          );
+        }
+
+        const content =
+          (choices[0]?.message && typeof choices[0].message.content === "string"
+            ? choices[0].message.content
+            : "");
+
+        if (!content || !content.trim()) {
+          throw new AiServiceError(
+            "Empty response from Kimchi.",
+            AI_ERROR_CODES.INVALID_RESPONSE
+          );
+        }
+
+        assistantText = content.trim();
+
+        // Fire onChunk once with the full content so the UI gets the
+        // same incremental-feedback experience as the streaming
+        // OpenRouter path. Consumers remain unchanged.
+        if (typeof onChunk === "function") {
+          onChunk(assistantText);
+        }
 
         return {
           id: `asst-${startedAt}`,
           content: assistantText,
           latencyMs: Date.now() - startedAt,
           meta: {
-            provider: "gemini",
+            provider: "kimchi",
+            model: AI_MODEL.model,
             retrievedChunks: context.retrievedChunks.length,
             sources: Array.from(
               new Set(context.retrievedChunks.map((c) => c.source))
@@ -473,19 +456,20 @@ function readTranscript() {
 }
 
 /**
- * Clear the in-memory chat session so the next `sendMessage` rebuilds
- * history fresh from the (now empty) `localStorage` transcript.
+ * Clear any in-memory cached state for the conversation. The Kimchi
+ * integration is stateless (every request carries the full transcript in
+ * `messages`), so this is a no-op today — kept for API stability with the
+ * previous OpenRouter-era hook contract.
  *
  * @param {string} [_conversationId] Unused — kept for API stability.
  * @returns {Promise<void>}
  */
 export async function clearConversation(_conversationId) {
-  dropChatSession();
   return Promise.resolve();
 }
 
 /**
- * Abort the in-flight stream, if any. Idempotent.
+ * Abort the in-flight request, if any. Idempotent.
  *
  * @returns {void}
  */
@@ -497,7 +481,7 @@ export function cancelRequest() {
 }
 
 /**
- * Whether the assistant currently has an active streaming request.
+ * Whether the assistant currently has an active request.
  *
  * @returns {boolean}
  */

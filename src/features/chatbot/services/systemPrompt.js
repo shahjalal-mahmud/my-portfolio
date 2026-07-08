@@ -18,7 +18,7 @@
 // file only owns the persona + behavioural rules.
 
 /**
- * Build the system prompt for a Gemini chat session.
+ * Build the system prompt for an OpenRouter chat completion.
  *
  * @returns {string}
  */
