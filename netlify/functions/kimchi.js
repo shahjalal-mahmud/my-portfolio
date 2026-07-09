@@ -3,8 +3,9 @@
 // Same-origin proxy for the Kimchi LLM API. The browser cannot call Kimchi
 // directly because Kimchi does not send CORS headers for browser origins.
 // This function accepts a POST at `/api/kimchi/<path>` (rewritten by
-// netlify.toml) and forwards it to `https://llm.kimchi.dev/openai/v1/<path>`,
-// injecting the API key from `KIMCHI_API_KEY`.
+// netlify.toml / public/_redirects) and forwards it to
+// `https://llm.kimchi.dev/openai/v1/<path>`, injecting the API key from
+// `KIMCHI_API_KEY`.
 //
 // ─── DEPLOYMENT NOTE ──────────────────────────────────────────────────────
 // In the Netlify dashboard, set the env var to:
@@ -18,25 +19,61 @@
 // ──────────────────────────────────────────────────────────────────────────
 //
 // The Netlify Functions runtime is Node.js; we use the built-in `fetch`
-// (Node ≥18) so there are no dependencies. The `netlify/functions/package.json`
-// declares `"type": "module"` so this file is parsed as ESM (the root
-// `package.json` setting does NOT propagate into the function directory).
-
-import { logger } from "@netlify/functions";
+// (Node ≥18). This file deliberately has ZERO npm dependencies so the
+// Netlify bundler does not need to install anything for this function —
+// `@netlify/functions` is used only for JSDoc types (which the bundler
+// strips) and for an optional `logger` (which is just a console wrapper).
+// `netlify/functions/package.json` still declares `"type": "module"` so
+// this file is parsed as ESM (the root `package.json` setting does NOT
+// propagate into the function directory).
 
 const KIMCHI_BASE = "https://llm.kimchi.dev/openai/v1";
 const TIMEOUT_MS = 30_000;
 
 /**
- * @param {import('@netlify/functions').HandlerEvent} event
- * @param {import('@netlify/functions').HandlerContext} context
+ * @typedef {Object} NetlifyEvent
+ * @property {string} httpMethod
+ * @property {string} [path]
+ * @property {Record<string, string>} [headers]
+ * @property {string|null} [body]
+ * @property {Record<string, string>} [queryStringParameters]
+ *
+ * @typedef {Object} NetlifyContext
+ * @property {string} functionName
+ * @property {string} awsRequestId
+ * @property {(msg: string) => void} [log]
+ * @property {(msg: string) => void} [error]
  */
-export async function handler(event, context) {
+
+/**
+ * Best-effort structured log to the Netlify function log. Falls back to
+ * `console.log` if the context log helpers aren't available.
+ * @param {NetlifyContext} context
+ * @param {"info"|"error"} level
+ * @param {string} msg
+ */
+function logEvent(context, level, msg) {
+  const fn = level === "error" ? context?.error : context?.log;
+  if (typeof fn === "function") {
+    try {
+      fn(msg);
+      return;
+    } catch {
+      /* fall through to console */
+    }
+  }
+  if (level === "error") console.error(msg);
+  else console.log(msg);
+}
+
+/**
+ * @param {NetlifyEvent} event
+ * @param {NetlifyContext} [context]
+ */
+export async function handler(event, context = /** @type {NetlifyContext} */ ({})) {
   // Log every invocation so the Netlify function logs show the live path.
   // Helps confirm the function is actually being hit on prod deploys.
-  if (context && typeof context.log === "function") {
-    context.log(`kimchi: ${event.httpMethod} ${event.path}`);
-  }
+  logEvent(context, "info", `kimchi: ${event.httpMethod} ${event.path || "/"}`);
 
   // Health check: GET returns the configured key length so you can verify
   // the env var is loaded without burning a Kimchi credit. The key itself
@@ -67,7 +104,7 @@ export async function handler(event, context) {
 
   const apiKey = process.env.KIMCHI_API_KEY;
   if (!apiKey) {
-    logger?.error?.("KIMCHI_API_KEY is not set in the Netlify environment");
+    logEvent(context, "error", "KIMCHI_API_KEY is not set in the Netlify environment");
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
@@ -78,8 +115,8 @@ export async function handler(event, context) {
     };
   }
 
-  // The rewrite in netlify.toml strips `/api/kimchi` so `event.path` here
-  // is the upstream path, e.g. `/chat/completions`.
+  // The rewrite in netlify.toml / public/_redirects strips `/api/kimchi`
+  // so `event.path` here is the upstream path, e.g. `/chat/completions`.
   const upstreamPath = event.path || "/chat/completions";
   const url = `${KIMCHI_BASE}${upstreamPath.startsWith("/") ? upstreamPath : `/${upstreamPath}`}`;
 
@@ -89,7 +126,7 @@ export async function handler(event, context) {
   /** @type {Record<string, string>} */
   const headers = {
     "Content-Type":
-      event.headers["content-type"] || "application/json",
+      event.headers?.["content-type"] || "application/json",
     Authorization: `Bearer ${apiKey}`,
   };
 
@@ -116,7 +153,7 @@ export async function handler(event, context) {
     };
 
     if (!upstream.ok) {
-      logger?.error?.(`kimchi upstream ${upstream.status}: ${text.slice(0, 500)}`);
+      logEvent(context, "error", `kimchi upstream ${upstream.status}: ${text.slice(0, 500)}`);
     }
 
     return {
@@ -133,7 +170,7 @@ export async function handler(event, context) {
           ? String(err.message)
           : "Unknown upstream error";
 
-    logger?.error?.(`kimchi upstream error: ${message}`);
+    logEvent(context, "error", `kimchi upstream error: ${message}`);
 
     return {
       statusCode: 502,
