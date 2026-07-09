@@ -18,7 +18,11 @@
 // ──────────────────────────────────────────────────────────────────────────
 //
 // The Netlify Functions runtime is Node.js; we use the built-in `fetch`
-// (Node ≥18) so there are no dependencies.
+// (Node ≥18) so there are no dependencies. The `netlify/functions/package.json`
+// declares `"type": "module"` so this file is parsed as ESM (the root
+// `package.json` setting does NOT propagate into the function directory).
+
+import { logger } from "@netlify/functions";
 
 const KIMCHI_BASE = "https://llm.kimchi.dev/openai/v1";
 const TIMEOUT_MS = 30_000;
@@ -27,18 +31,43 @@ const TIMEOUT_MS = 30_000;
  * @param {import('@netlify/functions').HandlerEvent} event
  * @param {import('@netlify/functions').HandlerContext} context
  */
-export async function handler(event) {
-  // Only POST is allowed.
+export async function handler(event, context) {
+  // Log every invocation so the Netlify function logs show the live path.
+  // Helps confirm the function is actually being hit on prod deploys.
+  if (context && typeof context.log === "function") {
+    context.log(`kimchi: ${event.httpMethod} ${event.path}`);
+  }
+
+  // Health check: GET returns the configured key length so you can verify
+  // the env var is loaded without burning a Kimchi credit. The key itself
+  // is never echoed.
+  if (event.httpMethod === "GET") {
+    const apiKey = process.env.KIMCHI_API_KEY;
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ok: true,
+        path: event.path || "/",
+        apiKeyConfigured: Boolean(apiKey),
+        apiKeyLength: apiKey ? apiKey.length : 0,
+        node: process.version,
+      }),
+    };
+  }
+
+  // Only POST is allowed for proxied calls.
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      headers: { Allow: "POST", "Content-Type": "application/json" },
+      headers: { Allow: "GET, POST", "Content-Type": "application/json" },
       body: JSON.stringify({ error: "Method not allowed" }),
     };
   }
 
   const apiKey = process.env.KIMCHI_API_KEY;
   if (!apiKey) {
+    logger?.error?.("KIMCHI_API_KEY is not set in the Netlify environment");
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
@@ -86,6 +115,10 @@ export async function handler(event) {
         upstream.headers.get("content-type") || "application/json",
     };
 
+    if (!upstream.ok) {
+      logger?.error?.(`kimchi upstream ${upstream.status}: ${text.slice(0, 500)}`);
+    }
+
     return {
       statusCode: upstream.status,
       headers: responseHeaders,
@@ -99,6 +132,8 @@ export async function handler(event) {
         : err && typeof err === "object" && "message" in err
           ? String(err.message)
           : "Unknown upstream error";
+
+    logger?.error?.(`kimchi upstream error: ${message}`);
 
     return {
       statusCode: 502,
