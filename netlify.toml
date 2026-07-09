@@ -3,26 +3,23 @@
 # Build + redirect configuration for Netlify.
 #
 # • Build the Vite app and publish the contents of `dist/`.
-# • Rewrite every `/api/kimchi/*` request to the serverless function
-#   `netlify/functions/kimchi.js` so the client can hit a same-origin URL.
+# • Functions live in `netlify/functions/` (see `kimchi.js`).
+#
+# Note: The actual URL → function redirect lives in `public/_redirects`
+# (which Vite copies to `dist/_redirects` at build time). Netlify's
+# `_redirects` file is processed at the CDN edge with higher priority than
+# rules in `netlify.toml` for the same path, so the API redirect is
+# declared there to avoid the catch-all SPA rule from `public/_redirects`
+# shadowing it. We keep this file only for the function declaration
+# (`[build]` block) and as a safety net for the SPA fallback.
 
 [build]
   command   = "npm run build"
   publish   = "dist"
   functions = "netlify/functions"
 
-# Same-origin proxy for the Kimchi LLM API. Kimchi does not allow browser
-# CORS, so we always go through this function — both `npm run dev`
-# (via vite.config.js) and `netlify deploy` (via this redirect) expose the
-# route at `/api/kimchi/*`.
-[[redirects]]
-  from   = "/api/kimchi/*"
-  to     = "/.netlify/functions/kimchi/:splat"
-  status = 200
-  force  = true
-
-# Single-page-app fallback so client-side routes (e.g. /projects/:id)
-# resolve to index.html instead of 404.
+# Single-page-app fallback. Mirrors the rule in `public/_redirects`;
+# declared here as a safety net in case `_redirects` is ever removed.
 [[redirects]]
   from   = "/*"
   to     = "/index.html"

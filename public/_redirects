@@ -1,1 +1,17 @@
-/* /index.html 200
+# public/_redirects
+#
+# Netlify reads this file at deploy time. Rules are processed top-to-bottom
+# and the FIRST match wins, so order matters: the more specific (API)
+# rule MUST come before the catch-all SPA rule, otherwise the catch-all
+# swallows the request and we get a 404 / index.html in place of the
+# function response.
+
+# Same-origin proxy for the Kimchi LLM API. This is the rule the
+# `netlify.toml` redirect was supposed to provide, but on this site the
+# `public/_redirects` file is processed with higher priority at the CDN
+# edge, so we declare it here to be safe.
+/api/kimchi/*  /.netlify/functions/kimchi/:splat  200
+
+# Single-page-app fallback. Any request that is not a real static asset
+# resolves to index.html so client-side routes (e.g. /projects/:id) work.
+/*  /index.html  200
