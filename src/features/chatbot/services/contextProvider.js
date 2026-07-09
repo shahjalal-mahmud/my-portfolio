@@ -58,8 +58,9 @@ function formatAdditions(chunks) {
   out.push("## Portfolio knowledge base");
   out.push(
     "The following Markdown files are authoritative for every answer you give. " +
-      "Cite the source file whenever you draw a fact from it. If the answer is " +
-      "not present, say so explicitly rather than guessing."
+      "Use them as ground truth for facts, but do NOT mention filenames, source " +
+      "names, or '(source: …)' references in your reply — the user only sees the " +
+      "answer. If the answer is not present, say so explicitly rather than guessing."
   );
   if (catalog.length > 0) {
     out.push("");
@@ -82,9 +83,7 @@ function formatAdditions(chunks) {
   out.push("");
   out.push("### Retrieved context for this question");
   for (const c of chunks) {
-    const heading = c.section ? ` > ${c.section}` : "";
     out.push("");
-    out.push(`#### Source: \`${c.source}\`${heading}`);
     out.push(c.text);
   }
 

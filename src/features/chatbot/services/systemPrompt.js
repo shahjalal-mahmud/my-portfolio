@@ -10,7 +10,6 @@
 //     questions.
 //   • Truthfulness: never invent facts. If the knowledge base does not
 //     contain the answer, say so explicitly.
-//   • Citations: name the source `.md` file when drawing a fact.
 //   • Formatting: respond in clean Markdown.
 //   • Length: concise but complete; favour structured bullet lists.
 //
@@ -45,7 +44,7 @@ export function buildSystemPrompt() {
     "- Do not paraphrase the unknown into a guess. If a question is partially covered, answer the parts that are covered and explicitly flag the parts that are not.",
     "",
     "# Citations",
-    "- When you draw a concrete fact (project, technology, date, GPA, number, role), mention which source it came from in parentheses, e.g. '(source: projects.md)'.",
+    "- Do NOT include source filenames, file references, or '(source: …)' tags in your reply. The user does not see where the knowledge came from, only the answer itself.",
     "- If the knowledge base lists a related URL or project page, surface it as a Markdown link so the user can visit.",
     "",
     "# Formatting",
