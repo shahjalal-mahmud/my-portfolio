@@ -1,0 +1,97 @@
+# public/.htaccess
+#
+# Apache configuration for cPanel shared hosting deployment.
+# This file is copied verbatim to dist/.htaccess by Vite's build step.
+# Netlify's _redirects file is processed at the CDN edge with higher
+# priority than .htaccess, so on Netlify this file is effectively
+# ignored. On cPanel (and any Apache host) it is the primary config.
+#
+# Rule order matters: the API rewrite MUST come before the SPA
+# fallback, otherwise the catch-all would intercept /api/kimchi/* and
+# route it to index.html.
+
+# ─── URL rewriting ─────────────────────────────────────────────────────────
+
+RewriteEngine On
+
+# API proxy: route every /api/kimchi[/...] request to the PHP file
+# with the original path preserved as PATH_INFO. The optional trailing
+# group `(/.*)?$` makes the bare /api/kimchi health check match.
+RewriteRule ^api/kimchi(/.*)?$ /api/kimchi.php [L,QSA]
+
+# SPA fallback: any request that is not a real file/directory, has no
+# extension, and is not under /api/ resolves to index.html so
+# client-side routes (/projects/:slug, /contact, …) keep working.
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]+$
+RewriteRule ^ /index.html [L]
+
+# ─── MIME types ────────────────────────────────────────────────────────────
+# Some shared hosts serve .webmanifest or modern image formats with the
+# wrong content-type, breaking PWA installs and image rendering.
+
+<IfModule mod_mime.c>
+    AddType application/manifest+json   webmanifest
+    AddType image/webp                  webp
+    AddType image/avif                  avif
+    AddType font/woff                   woff
+    AddType font/woff2                  woff2
+</IfModule>
+
+# ─── Service worker ────────────────────────────────────────────────────────
+# sw.js must never be cached aggressively — a stale SW keeps serving
+# old app shells even after deploys.
+
+<IfModule mod_headers.c>
+    <FilesMatch "^sw\.js$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# ─── Security headers ──────────────────────────────────────────────────────
+# Modest defaults. CSP is intentionally NOT set here because the chat
+# fetches cross-origin (Kimchi via the same-origin proxy) and tightening
+# CSP without an inventory of all third-party origins can break the app.
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ─── Static asset caching ──────────────────────────────────────────────────
+# Hashed assets under /assets/ are content-addressed, so they can be
+# cached forever. Other static files (favicons, project images) get a
+# one-week cache as a middle ground.
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(js|css|png|jpg|jpeg|gif|webp|avif|svg|woff2?|ttf|otf|pdf)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# ─── Dotfile protection ────────────────────────────────────────────────────
+# Block accidental access to .env, .git, .htaccess, etc. if they ever
+# land inside public_html. Apache already denies .ht* by default; this
+# is belt-and-braces for the rest.
+
+<IfModule mod_rewrite.c>
+    RewriteRule "(^|/)\.(?!well-known)" - [F]
+</IfModule>
+
+# ─── Compression ───────────────────────────────────────────────────────────
+# Enable gzip for text-based assets. mod_deflate is standard on cPanel.
+# Note: .woff/.woff2 are deliberately NOT listed — they are already
+# compressed and re-deflating wastes CPU without shrinking the payload.
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE application/xml application/manifest+json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>

@@ -7,6 +7,10 @@
 // `https://llm.kimchi.dev/openai/v1/<path>`, injecting the API key from
 // `KIMCHI_API_KEY`.
 //
+// On cPanel (non-Netlify) hosts, the same proxy lives at
+// public/api/kimchi.php. Keep both files in sync when changing upstream
+// behaviour. The dev-server proxy lives in vite.config.js.
+//
 // ─── DEPLOYMENT NOTE ──────────────────────────────────────────────────────
 // In the Netlify dashboard, set the env var to:
 //

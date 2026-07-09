@@ -1,10 +1,17 @@
 # public/_redirects
 #
-# Netlify reads this file at deploy time. Rules are processed top-to-bottom
-# and the FIRST match wins, so order matters: the more specific (API)
-# rule MUST come before the catch-all SPA rule, otherwise the catch-all
-# swallows the request and we get a 404 / index.html in place of the
-# function response.
+# ─── NETLIFY-ONLY FILE ────────────────────────────────────────────────────
+# This file is processed by Netlify at the CDN edge. Apache (cPanel,
+# shared hosting) does NOT understand this format and will treat it as a
+# file with no special meaning. If you are deploying to cPanel, DELETE
+# dist/_redirects before uploading (the .htaccess in public/.htaccess
+# handles everything for Apache). See DEPLOYMENT_CPANEL.md.
+# ──────────────────────────────────────────────────────────────────────────
+#
+# Rules are processed top-to-bottom and the FIRST match wins, so order
+# matters: the more specific (API) rule MUST come before the catch-all
+# SPA rule, otherwise the catch-all swallows the request and we get a
+# 404 / index.html in place of the function response.
 
 # Same-origin proxy for the Kimchi LLM API. This is the rule the
 # `netlify.toml` redirect was supposed to provide, but on this site the
